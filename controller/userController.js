@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
+const validateJWT = require('../auth/validateJWT');
 const { Users } = require('../models');
 const userService = require('../service/userService');
 
@@ -35,6 +36,12 @@ router.post('/login', userService.validateLogin, async (req, res) => {
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
+});
+
+router.get('/user', validateJWT, async (req, res) => {
+  Users.findAll({ attributes: ['id', 'displayName', 'email', 'image'] })
+    .then((users) => res.status(200).json(users))
+    .catch((e) => res.status(500).json({ message: e.message }));
 });
 
 module.exports = router;
