@@ -27,7 +27,7 @@ module.exports = {
   C_ERR_EMAIL_REQ: {
     statusCode: 400,
     customCode: 'C_ERR_EMAIL_REQ',
-    customMessage: '"email" is required.',
+    customMessage: '"email" is required',
   },
   C_ERR_EMAIL_IN_USE: {
     statusCode: 409,

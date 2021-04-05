@@ -5,7 +5,7 @@ const controllers = require('../controllers/users');
 
 const users = express.Router();
 
-users.put('/post', controllers);
+users.post('/', controllers);
 // users.post('/register', controllers.register);
 
 module.exports = users;
