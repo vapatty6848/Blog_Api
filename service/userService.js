@@ -13,9 +13,9 @@ const validateFields = (req, res, next) => {
     return res.status(400).json({ message: 'Todos os campos devem ser preenchidos' });
   }
 
-  if (!email) res.status(400).json({ message: '"email" is required' });
+  if (!email) return res.status(400).json({ message: '"email" is required' });
 
-  if (!password) res.status(400).json({ message: '"password" is required' });
+  if (!password) return res.status(400).json({ message: '"password" is required' });
 
   if (typeof displayName !== 'string' || displayName.length < 8) {
     return res.status(400).json({ message: '"displayName" length must be at least 8 characters long' });
@@ -43,6 +43,17 @@ const validateFieldsCreate = async (req, res, next) => {
 
   next();
 };
+
+// const validateLogin = (req, res) => {
+//   const { email, password } = req.body;
+
+//   if (!email) res.status(400).json({ message: '"email" is required'});
+
+//   if (!password) res.status(400).json({ message: '"password" is required'});
+
+//   if (email === '') res.status(400).json({ message: '"email" is not allowed to be empty' });
+
+// }
 
 module.exports = {
   validateFields,
