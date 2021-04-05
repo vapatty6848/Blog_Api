@@ -75,7 +75,7 @@ Para fazer um post é necessário usuário e login, portanto será trabalhada a 
  
 ### Data de Entrega
 
-O projeto tem até a seguinte data: `15/03/2021 - 14:00h`. Para ser entregue a avaliação final.
+O projeto tem até a seguinte data: `15/04/2021 - 14:00h`. Para ser entregue a avaliação final.
 
 ---
 
@@ -276,7 +276,7 @@ Alguns exemplos:
     "id": "7706273476706534553",
     "title": "Latest updates, August 1st",
     "content": "The whole text for the blog post goes here in this key",
-    "user_id": "401465483996", // esse é o id que referência usuário que é o autor do post
+    "userId": "401465483996", // esse é o id que referência usuário que é o autor do post
     "published": "2011-08-01T19:58:00.000Z",
     "updated": "2011-08-01T19:58:51.947Z",
   }
