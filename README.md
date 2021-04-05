@@ -75,7 +75,7 @@ Para fazer um post é necessário usuário e login, portanto será trabalhada a 
  
 ### Data de Entrega
 
-O projeto tem até a seguinte data: `14/03/2021 - 14:00h`. Para ser entregue a avaliação final.
+O projeto tem até a seguinte data: `15/03/2021 - 14:00h`. Para ser entregue a avaliação final.
 
 ---
 
