@@ -1,4 +1,6 @@
 const express = require('express');
+const userController = require('./controllers/userController');
+// const validateToken = require('./auth/validateToken');
 
 const app = express();
 
@@ -8,5 +10,7 @@ app.use(express.json());
 app.get('/', (request, response) => {
   response.send();
 });
+
+app.use('/user', userController);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
