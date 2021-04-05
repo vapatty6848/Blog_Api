@@ -54,4 +54,21 @@ router.get('/user/:id', validateJWT, async (req, res) => {
   }
 });
 
+router.delete('/user/me', validateJWT, (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, secret);
+    const { id } = decoded.data;
+    Users.destroy({
+      where: {
+        id,
+      },
+    });
+
+    return res.send(204);
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
 module.exports = router;
