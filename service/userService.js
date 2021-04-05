@@ -17,7 +17,6 @@ const validateFields = (req, res, next) => {
 
   if (!password) res.status(400).json({ message: '"password" is required' });
 
-
   if (typeof displayName !== 'string' || displayName.length < 8) {
     return res.status(400).json({ message: '"displayName" length must be at least 8 characters long' });
   }
