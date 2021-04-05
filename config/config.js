@@ -1,3 +1,6 @@
+require('dotenv/config');
+require('mysql2/promise');
+
 module.exports = {
   development: {
     username: process.env.MYSQL_USER,
