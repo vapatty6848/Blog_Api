@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use('/user', routes.users);
-app.use('/post', routes.posts);
+// app.use('/post', routes.posts);
 app.use('*', routes.notFound);
 
 app.use(middlewares.handleError);
