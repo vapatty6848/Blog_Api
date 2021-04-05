@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const userRouter = require('./controllers/userController');
+const loginRouter = require('./controllers/loginController');
 require('dotenv').config();
 
 const app = express();
@@ -13,5 +14,6 @@ app.get('/', (_request, response) => {
 app.use(bodyParser.json());
 
 app.use('/user', userRouter);
+app.use('/login', loginRouter);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));

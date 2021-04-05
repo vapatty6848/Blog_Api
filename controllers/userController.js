@@ -2,7 +2,6 @@ const { Router } = require('express');
 const { createToken } = require('../middlewares/auth');
 const { validateUser } = require('../middlewares/validateUser');
 const models = require('../models');
-// const { userServices } = require('../Services');
 
 const userRouter = Router();
 
