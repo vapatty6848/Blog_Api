@@ -44,18 +44,26 @@ const validateFieldsCreate = async (req, res, next) => {
   next();
 };
 
-// const validateLogin = (req, res) => {
-//   const { email, password } = req.body;
+const validateLogin = async (req, res, next) => {
+  const { email, password } = req.body;
 
-//   if (!email) res.status(400).json({ message: '"email" is required'});
+  if (email === '') return res.status(400).json({ message: '"email" is not allowed to be empty' });
 
-//   if (!password) res.status(400).json({ message: '"password" is required'});
+  if (password === '') return res.status(400).json({ message: '"password" is not allowed to be empty' });
 
-//   if (email === '') res.status(400).json({ message: '"email" is not allowed to be empty' });
+  if (!email) return res.status(400).json({ message: '"email" is required' });
 
-// }
+  if (!password) return res.status(400).json({ message: '"password" is required' });
+
+  const existingUser = await Users.findOne({ where: { email } });
+
+  if (!existingUser) return res.status(400).json({ message: 'Campos inválidos' });
+
+  next();
+};
 
 module.exports = {
   validateFields,
   validateFieldsCreate,
+  validateLogin,
 };
