@@ -44,4 +44,14 @@ router.get('/user', validateJWT, async (req, res) => {
     .catch((e) => res.status(500).json({ message: e.message }));
 });
 
+router.get('/user/:id', validateJWT, async (req, res) => {
+  try {
+    const user = await Users.findByPk(req.params.id);
+    if (user) return res.status(200).json(user);
+    return res.status(404).json({ message: 'Usuário não existe' });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
 module.exports = router;
