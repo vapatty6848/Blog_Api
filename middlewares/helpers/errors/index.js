@@ -1,4 +1,9 @@
 module.exports = {
+  DEFAULT: {
+    statusCode: 500,
+    customCode: '',
+    customMessage: 'Erro indefinido.',
+  },
   C_ERR_USER_NOT_FOUND: {
     statusCode: 404,
     customCode: 'C_ERR_USER_NOT_FOUND',

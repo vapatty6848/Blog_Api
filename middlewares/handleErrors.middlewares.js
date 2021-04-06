@@ -7,7 +7,8 @@ const checkCustomError = (message) => {
 
 const handleErrorObject = (error, boolean) => {
   if (!boolean) return error;
-  return { ...ERROR[error.err.message], err: error.err.stack };
+  const customError = (ERROR[error.err.message]) ? ERROR[error.err.message] : ERROR.DEFAULT;
+  return { ...customError, err: error.err.stack };
 };
 
 module.exports = (error, _req, res, _next) => {
