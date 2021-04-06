@@ -1,16 +1,35 @@
 const express = require('express');
 const { User } = require('../models');
+const createToken = require('../auth/createToken');
+const userService = require('../services/userService');
+
+const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const router = express.Router();
 
 router.post('/', async (req, res) => {
   const { displayName, email, password, image } = req.body;
-  User.create({ displayName, email, password, image })
-    .then((user) => res.status(201).json(user))
-    .catch((erro) => {
-      console.log(erro.message);
-      res.status(500).send({ message: 'Algo deu errado' });
-    });
+  if (!email) {
+    return res.status(400).json({ message: '"email" is required' });
+  }
+  if (!password) {
+    return res.status(400).json({ message: '"password" is required' });
+  }
+  if (password.length < 6) {
+    return res.status(400).json({ message: '"password" length must be 6 characters long' });
+  }
+  if (displayName.length < 8) {
+    return res.status(400).json({ message: '"displayName" length must be at least 8 characters long' });
+  }
+  if (!regexEmail.test(email)) {
+    return res.status(400).json({ message: '"email" must be a valid email' });
+  }
+  const emailNotExist = await userService.emailExist(email);
+  if (!emailNotExist) return res.status(409).json({ message: 'Usuário já existe' });
+  await User.create({ displayName, email, password, image });
+  const payload = { password };
+  const token = createToken.createToken(payload);
+  res.status(201).json({ token });
 });
 
 module.exports = router;
