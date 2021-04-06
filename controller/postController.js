@@ -2,6 +2,7 @@ const { Router } = require('express');
 const jwt = require('jsonwebtoken');
 const validateJWT = require('../auth/validateJWT');
 const { BlogPosts, Users } = require('../models');
+const postService = require('../service/postService');
 
 const router = Router();
 
@@ -39,6 +40,8 @@ router.get('/post', validateJWT, (req, res) => {
     .then((answer) => res.status(200).json(answer))
     .catch((e) => res.status(500).json({ message: e.message }));
 });
+
+router.get('/post/search', validateJWT, postService.findBlogPosts);
 
 router.get('/post/:id', validateJWT, async (req, res) => {
   try {
