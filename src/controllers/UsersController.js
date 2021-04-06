@@ -27,7 +27,13 @@ const deleteUser = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  res.status(200).json({ message: 'login' });
+  const { email, password } = req.body;
+
+  const payload = createJWTPayload({ email, password });
+
+  const token = jwtSign(payload, secret, jwtConfig);
+
+  res.status(status.ok).json({ token });
 };
 
 module.exports = {

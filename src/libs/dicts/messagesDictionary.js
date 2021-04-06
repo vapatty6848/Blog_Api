@@ -6,6 +6,9 @@ const errorMessages = {
   missingPassword: '"password" is required',
   duplicatedEmail: 'Usuário já existe',
   invalidBody: 'Invalid request body',
+  emptyEmail: '"email" is not allowed to be empty',
+  emptyPassword: '"password" is not allowed to be empty',
+  invalidFields: 'Campos inválidos',
 };
 
 module.exports = errorMessages;

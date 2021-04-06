@@ -5,8 +5,12 @@ const isEmailValid = (email) => {
   return regexEmail.test(email.toLowerCase());
 };
 
+const isEmailEmpty = (email) => typeof email === 'string' && email.length === 0;
+
+const isPasswordEmpty = (password) => typeof password === 'string' && password.length === 0;
+
 const isPasswordValid = (password) => password.length === 6;
 
 module.exports = {
-  isEmailValid, isNameValid, isPasswordValid,
+  isEmailValid, isNameValid, isPasswordValid, isEmailEmpty, isPasswordEmpty,
 };
