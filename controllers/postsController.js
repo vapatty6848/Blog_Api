@@ -52,4 +52,15 @@ postsRouter.put('/:id', validateToken, validatePost, async (req, res) => {
   return res.status(200).json({ title, content, userId });
 });
 
+postsRouter.delete('/:id', validateToken, async (req, res) => {
+  const { id: userId } = req.payload.data;
+  const { id } = req.params;
+
+  const post = await models.BlogPosts.findOne({ where: { id } });
+  if (!post) return res.status(404).json({ message: 'Post não existe' });
+  if (post.userId !== userId) return res.status(401).json({ message: 'Usuário não autorizado' });
+  await models.BlogPosts.destroy({ where: { id } });
+  return res.status(204).send();
+});
+
 module.exports = postsRouter;
