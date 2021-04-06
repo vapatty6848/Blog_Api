@@ -21,8 +21,15 @@ const createNewUser = rescue(async (req, res) => {
   return res.status(Status.code201).json({ token });
 });
 
+const destroyUser = rescue(async (req, res) => {
+  const { email } = req.decodedUser;
+  await Users.destroy({ where: { email } });
+  return res.status(Status.code204).send();
+});
+
 module.exports = {
   getAllUsers,
   createNewUser,
   getUserById,
+  destroyUser,
 };

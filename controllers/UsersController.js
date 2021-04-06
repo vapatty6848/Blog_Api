@@ -8,5 +8,6 @@ const Route = new Router();
 Route.get('/', validateToken, UsersServices.getAllUsers);
 Route.get('/:id', validateToken, ValidateUser.UserExistsByID, UsersServices.getUserById);
 Route.post('/', ValidateUser.FormatOfUserInfos, ValidateUser.ExistOrNot, UsersServices.createNewUser);
+Route.delete('/me', validateToken, UsersServices.destroyUser);
 
 module.exports = Route;
