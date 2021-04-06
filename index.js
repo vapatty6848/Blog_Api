@@ -3,10 +3,12 @@ const express = require('express');
 const app = express();
 
 const UsersController = require('./controllers/UsersController');
+const loginController = require('./controllers/loginController');
 
 app.use(express.json());
 
 app.use('/user', UsersController);
+app.use('/login', loginController);
 
 app.get('/', (_req, res) => res.send('Hello World! o/'));
 
