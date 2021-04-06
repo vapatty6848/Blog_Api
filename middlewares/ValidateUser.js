@@ -2,6 +2,8 @@ const { Users } = require('../models');
 const Status = require('./StatusCode');
 
 const errorMsg = (status, mess) => ({ statusCode: status, message: { message: mess } });
+const emailRegex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
+const passRegex = /.{6,}/;
 
 const ExistOrNot = async (req, _res, next) => {
   const { email } = req.body;
@@ -12,8 +14,6 @@ const ExistOrNot = async (req, _res, next) => {
 
 const FormatOfUserInfos = async (req, _res, next) => {
   const { displayName, email, password } = req.body;
-  const emailRegex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
-  const passRegex = /.{6,}/;
 
   if (!displayName || displayName.length < 8) {
     return next(errorMsg(Status.code400, '"displayName" length must be at least 8 characters long'));
