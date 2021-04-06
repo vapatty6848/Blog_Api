@@ -13,6 +13,19 @@ const create = async (body, userId) => {
   return newPost;
 };
 
+const update = async (id, body, userId) => {
+  const { title, content } = body;
+  authNewPost(title, content);
+  const postToUpdate = await BlogPosts.findOne({ where: { id } });
+  if (postToUpdate.user_id !== userId) throw new Error('C_ERR_POST_NOT_AUTH');
+  await BlogPosts.update(
+    { title, content },
+    { where: { id } },
+  );
+  const newPost = { userId, title, content };
+  return newPost;
+};
+
 const getAll = async () => {
   const getPosts = await BlogPosts.findAll({ include: { model: Users, as: 'user' } });
   return getPosts;
@@ -20,7 +33,7 @@ const getAll = async () => {
 
 const getOne = async (id) => {
   const getPost = await BlogPosts.findOne({
-    where: { user_id: id },
+    where: { id },
     include: { model: Users, as: 'user' },
   });
   if (!getPost) throw new Error('C_ERR_POST_NOT_FOUND');
@@ -29,6 +42,7 @@ const getOne = async (id) => {
 
 module.exports = {
   create,
+  update,
   getAll,
   getOne,
 };

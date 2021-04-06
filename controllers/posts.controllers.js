@@ -11,6 +11,16 @@ const create = async (req, res, next) => {
   }
 };
 
+const updateOne = async (req, res, next) => {
+  try {
+    const { userId, body, params: { id } } = req;
+    const newPost = await posts.update(id, body, userId);
+    res.status(StatusCodes.OK).json(newPost);
+  } catch (err) {
+    return next({ err });
+  }
+};
+
 const getAll = async (_req, res, next) => {
   try {
     const getPosts = await posts.getAll();
@@ -32,6 +42,7 @@ const getOne = async (req, res, next) => {
 
 module.exports = {
   create,
+  updateOne,
   getAll,
   getOne,
 };

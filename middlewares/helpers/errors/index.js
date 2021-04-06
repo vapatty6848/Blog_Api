@@ -64,6 +64,11 @@ module.exports = {
     customCode: 'C_ERR_POST_NOT_FOUND',
     customMessage: 'Post não existe',
   },
+  C_ERR_POST_NOT_AUTH: {
+    statusCode: 401,
+    customCode: 'C_ERR_POST_NOT_FOUND',
+    customMessage: 'Usuário não autorizado',
+  },
   C_ERR_NO_TOKEN: {
     statusCode: 401,
     customCode: 'C_ERR_NO_TOKEN',
