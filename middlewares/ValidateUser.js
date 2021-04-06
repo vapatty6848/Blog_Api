@@ -32,4 +32,13 @@ const FormatOfUserInfos = async (req, _res, next) => {
   next();
 };
 
-module.exports = { ExistOrNot, FormatOfUserInfos };
+const UserExistsByID = async (req, _res, next) => {
+  const { id } = req.params;
+
+  const userExists = await Users.findOne({ where: { id } });
+  if (!userExists) return next(errorMsg(Status.code404, 'Usuário não existe'));
+
+  next();
+};
+
+module.exports = { ExistOrNot, FormatOfUserInfos, UserExistsByID };

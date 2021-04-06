@@ -8,6 +8,12 @@ const getAllUsers = rescue(async (_req, res) => {
   res.status(Status.code200).json(users);
 });
 
+const getUserById = rescue(async (req, res) => {
+  const { id } = req.params;
+  const user = await Users.findOne({ where: { id } });
+  res.status(Status.code200).json(user);
+});
+
 const createNewUser = rescue(async (req, res) => {
   const { displayName, email, password } = req.body;
   await Users.create({ displayName, email, password });
@@ -18,4 +24,5 @@ const createNewUser = rescue(async (req, res) => {
 module.exports = {
   getAllUsers,
   createNewUser,
+  getUserById,
 };
