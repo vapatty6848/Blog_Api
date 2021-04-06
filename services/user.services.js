@@ -24,8 +24,15 @@ const getAll = async () => {
   return getUsers;
 };
 
+const removeOne = async (id) => {
+  const removeUser = await Users.destroy({ where: { id } });
+  if (!removeUser) throw new Error('C_ERR_USER_NOT_FOUND');
+  return null;
+};
+
 module.exports = {
   create,
   getOne,
   getAll,
+  removeOne,
 };

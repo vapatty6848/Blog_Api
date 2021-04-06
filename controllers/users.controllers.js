@@ -23,8 +23,18 @@ const getAll = async (_req, res, next) => {
 const getOne = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const getUser = await users.getOne(id);
-    res.status(StatusCodes.OK).json(getUser);
+    await users.getOne(id);
+    res.status(StatusCodes.NO_CONTENT).json();
+  } catch (err) {
+    return next({ err });
+  }
+};
+
+const removeOne = async (req, res, next) => {
+  try {
+    const { userId } = req;
+    await users.removeOne(userId);
+    res.status(StatusCodes.NO_CONTENT).json();
   } catch (err) {
     return next({ err });
   }
@@ -34,4 +44,5 @@ module.exports = {
   create,
   getOne,
   getAll,
+  removeOne,
 };

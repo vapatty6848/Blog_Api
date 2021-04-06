@@ -1,7 +1,6 @@
 const { isFalsy, isTruthy, isLessThan, isEmailInvalid } = require('./helpers');
 
 module.exports = (newUser, emailIsUsed) => {
-  console.log('email in validation', newUser.email);
   switch (true) {
     case isFalsy(newUser): throw new Error('C_ERR_NOT_FOUND');
     case isFalsy(newUser.displayName): throw new Error('C_ERR_NAME_REQ');
