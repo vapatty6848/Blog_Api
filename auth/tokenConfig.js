@@ -13,24 +13,19 @@ const createToken = (payload) => {
   return token;
 };
 
-const verifyToken = (token) => {
-  try {
-    return jwt.verify(token, secret);
-  } catch (e) {
-    return null;
-  }
-};
-
 const validateToken = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
 
-  const payload = verifyToken(authorization);
+  try {
+    const decoded = jwt.verify(authorization, secret);
+    req.decodedUser = decoded;
 
-  if (!payload) return res.status(401).json({ message: 'Token expirado ou inválido' });
-
-  next();
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Token expirado ou inválido' });
+  }
 };
 
 module.exports = {

@@ -42,4 +42,13 @@ router.get('/user/:id', validateToken, async (req, res) => {
   return res.status(404).json({ message: 'Usuário não existe' });
 });
 
+router.delete('/user/me', validateToken, async (req, res) => {
+  const { id } = req.decodedUser;
+  // console.log(req.decodedUser.id);
+
+  await Users.destroy({ where: { id } });
+
+  return res.status(204).end();
+});
+
 module.exports = router;
