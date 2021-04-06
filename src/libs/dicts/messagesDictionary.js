@@ -9,6 +9,8 @@ const errorMessages = {
   emptyEmail: '"email" is not allowed to be empty',
   emptyPassword: '"password" is not allowed to be empty',
   invalidFields: 'Campos inválidos',
+  tokenNotFound: 'Token não encontrado',
+  invalidToken: 'Token expirado ou inválido',
 };
 
 module.exports = errorMessages;

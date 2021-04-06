@@ -19,7 +19,9 @@ const getUserById = async (req, res) => {
 };
 
 const getAllUsers = async (req, res) => {
-  res.status(200).json({ message: 'getAllUsers' });
+  const users = await Users.findAll({});
+  console.log(users);
+  res.status(status.ok).json(users);
 };
 
 const deleteUser = async (req, res) => {
