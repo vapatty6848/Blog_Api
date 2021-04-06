@@ -10,10 +10,16 @@ const PostsController = new Router();
 const {
   createPost,
   getPosts,
+  getPostById,
+  // getByQuery,
 } = require('../services/PostsService');
 
 PostsController.post('/', TokenValidation, TokenDecodification, PostsValidation, createPost);
 
 PostsController.get('/', TokenValidation, TokenDecodification, getPosts);
+
+// PostsController.get('/search', getByQuery);
+
+PostsController.get('/:id', TokenValidation, TokenDecodification, getPostById);
 
 module.exports = PostsController;
