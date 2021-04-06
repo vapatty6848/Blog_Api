@@ -5,10 +5,13 @@ const BlogPosts = (sequelize, DataTypes) => {
     userId: DataTypes.STRING,
     published: DataTypes.DATE,
     updated: DataTypes.DATE,
+  },
+  {
+    timestamps: false,
   });
 
   blogposts.associate = (model) => {
-    blogposts.belongsTo(model.User, { foreignKey: 'userId', as: 'User' });
+    blogposts.belongsTo(model.User, { foreignKey: 'userId', as: 'Users' });
   };
   // belongsTo - Crie uma nova instância do modelo associado e associe-a a este.
 
