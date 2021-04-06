@@ -54,9 +54,22 @@ const getOne = async (id) => {
   return getPost;
 };
 
+const removeOne = async (id, userId) => {
+  const postToRemove = await BlogPosts.findOne({ where: { id } });
+  console.log('achou o post? ', postToRemove);
+
+  if (!postToRemove) throw new Error('C_ERR_POST_NOT_FOUND');
+  if (postToRemove.user_id !== userId) throw new Error('C_ERR_POST_NOT_AUTH');
+
+  const removePost = await BlogPosts.destroy({ where: { id } });
+  if (!removePost) throw new Error('C_ERR_POST_NOT_FOUND');
+  return null;
+};
+
 module.exports = {
   create,
   update,
   getPosts,
   getOne,
+  removeOne,
 };

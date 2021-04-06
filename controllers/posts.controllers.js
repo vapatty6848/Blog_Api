@@ -41,9 +41,20 @@ const getOne = async (req, res, next) => {
   }
 };
 
+const removeOne = async (req, res, next) => {
+  try {
+    const { userId, params: { id } } = req;
+    await posts.removeOne(id, userId);
+    res.status(StatusCodes.NO_CONTENT).json();
+  } catch (err) {
+    return next({ err });
+  }
+};
+
 module.exports = {
   create,
   updateOne,
   getPosts,
   getOne,
+  removeOne,
 };

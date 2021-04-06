@@ -11,7 +11,6 @@ routes.use('/login', router.session);
 routes.use('/user', router.users);
 routes.use('/post', router.posts);
 
-// routes.use('/images', express.static(path.join(__dirname, './images')));
 routes.use(handleError);
 
 routes.use(router.notFound);

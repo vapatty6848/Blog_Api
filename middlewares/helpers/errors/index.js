@@ -39,16 +39,6 @@ module.exports = {
     customCode: 'C_ERR_EMAIL_IN_USE',
     customMessage: 'Usuário já existe',
   },
-  C_ERR_NAME_REQ: {
-    statusCode: 400,
-    customCode: 'C_ERR_NAME_REQ',
-    customMessage: 'Name field is required.',
-  },
-  C_ERR_NAME_INVALID: {
-    statusCode: 400,
-    customCode: 'C_ERR_NAME_INVALID',
-    customMessage: '"displayName" length must be at least 8 characters long',
-  },
   C_ERR_POST_TITLE_REQ: {
     statusCode: 400,
     customCode: 'C_ERR_POST_TITLE_REQ',
@@ -83,20 +73,5 @@ module.exports = {
     statusCode: 400,
     customCode: 'C_ERR_LOGIN_NOT_FOUND',
     customMessage: 'Campos inválidos',
-  },
-  C_ERR_ACC_DND: {
-    statusCode: 403,
-    customCode: 'C_ERR_ACC_DND',
-    customMessage: 'Access denied.',
-  },
-  C_ERR_NOT_FOUND: {
-    statusCode: 404,
-    customCode: 'C_ERR_NOT_FOUND',
-    customMessage: 'Not found.',
-  },
-  C_ERR_NO_USER_TOKEN: {
-    statusCode: 500,
-    customCode: 'C_ERR_NO_USER_TOKEN',
-    customMessage: 'Unexpected token error',
   },
 };
