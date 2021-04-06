@@ -1,11 +1,12 @@
 const express = require('express');
 
-const controllers = require('../controllers');
-// const middlewares = require('../middlewares');
+const { users } = require('../controllers');
+const middlewares = require('../middlewares');
 
-const users = express.Router();
+const userRoute = express.Router();
 
-users.post('/', controllers.users);
+userRoute.get('/', users.getAll);
+userRoute.post('/', middlewares.validateToken, users.create);
 // users.post('/register', controllers.register);
 
-module.exports = users;
+module.exports = userRoute;

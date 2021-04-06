@@ -13,6 +13,6 @@ routes.use('/user', router.users);
 // routes.use('/images', express.static(path.join(__dirname, './images')));
 routes.use(handleError);
 
-routes.use('*', router.notFound);
+routes.use(router.notFound);
 
 module.exports = routes;

@@ -57,7 +57,12 @@ module.exports = {
   C_ERR_NO_TOKEN: {
     statusCode: 401,
     customCode: 'C_ERR_NO_TOKEN',
-    customMessage: 'Authentication token is missing.',
+    customMessage: 'Token não encontrado',
+  },
+  C_ERR_INVALID_TOKEN: {
+    statusCode: 401,
+    customCode: 'C_ERR_INVALID_TOKEN',
+    customMessage: 'Token expirado ou inválido',
   },
   C_ERR_ACC_DND: {
     statusCode: 403,

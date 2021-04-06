@@ -13,6 +13,12 @@ const create = async ({ displayName, email, password, image }) => {
   return { token };
 };
 
+const getAll = async () => {
+  const getUsers = await Users.findAll();
+  return getUsers;
+};
+
 module.exports = {
   create,
+  getAll,
 };
