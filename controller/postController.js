@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
 const validateJWT = require('../auth/validateJWT');
-const { BlogPosts } = require('../models');
+const { BlogPosts, Users } = require('../models');
 
 const router = Router();
 
@@ -27,6 +27,17 @@ router.post('/post', validateJWT, (req, res) => {
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
+});
+
+router.get('/post', validateJWT, (req, res) => {
+  BlogPosts.findAll({
+    include: [{
+      model: Users, as: 'user', attributes: { exclude: ['password'] },
+    }],
+    attributes: { exclude: ['userId'] },
+  })
+    .then((answer) => res.status(200).json(answer))
+    .catch((e) => res.status(500).json({ message: e.message }));
 });
 
 module.exports = router;
