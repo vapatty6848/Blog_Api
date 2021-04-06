@@ -39,6 +39,16 @@ module.exports = {
     customCode: 'C_ERR_EMAIL_IN_USE',
     customMessage: 'Usuário já existe',
   },
+  C_ERR_NAME_REQ: {
+    statusCode: 400,
+    customCode: 'C_ERR_NAME_REQ',
+    customMessage: 'Name field is required.',
+  },
+  C_ERR_NAME_INVALID: {
+    statusCode: 400,
+    customCode: 'C_ERR_NAME_INVALID',
+    customMessage: '"displayName" length must be at least 8 characters long',
+  },
   C_ERR_POST_TITLE_REQ: {
     statusCode: 400,
     customCode: 'C_ERR_POST_TITLE_REQ',
