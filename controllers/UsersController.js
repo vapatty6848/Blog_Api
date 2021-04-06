@@ -5,11 +5,12 @@ const UsersController = Router();
 const { User } = require('../models');
 const createToken = require('../auth/createToken');
 const { validateDisplayName, validateEmail, validatePassword } = require('../middlewares/userValidation');
+const { validateToken } = require('../middlewares/tokenValidation');
 
-UsersController.get('/', async (_req, res) => {
-  const users = await User.findAll();
+UsersController.get('/', validateToken, async (_req, res) => {
+  const allUsers = await User.scope('withoutPassword').findAll();
 
-  res.status(200).json(users);
+  res.status(200).json(allUsers);
 });
 
 UsersController.post('/', validateDisplayName, validateEmail, validatePassword, async (req, res) => {

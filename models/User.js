@@ -6,6 +6,11 @@ const createUser = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
   }, {
     timestamps: false,
+    scopes: {
+      withoutPassword: {
+        attributes: { exclude: ['password'] },
+      },
+    },
   });
 
   // User.associate = (models) => {
