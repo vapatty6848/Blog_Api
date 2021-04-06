@@ -1,5 +1,4 @@
 const express = require('express');
-const { User, BlogPost } = require('../models');
 
 const app = express();
 
