@@ -6,7 +6,9 @@ const { Users } = require('../models');
 
 const { createToken } = require('../auth/token');
 
-const { isTheDisplayNameValid, isTheEmailValid, isThePasswordValid } = require('../middlewares/userValidation');
+const authToken = require('../middlewares/authToken');
+
+const { isTheDisplayNameValid, isTheEmailValid, isThePasswordValid } = require('../services/userValidation');
 
 router.post('/', async (request, response) => {
   const nameCheck = await isTheDisplayNameValid(request.body.displayName);
@@ -24,7 +26,16 @@ router.post('/', async (request, response) => {
     const token = createToken({ newUser });
     return response.status(201).json({ token });
   } catch {
-    return { err: { status: 500, message: 'Algo deu errado' } };
+    return { err: { status: 500, message: 'Internal Error' } };
+  }
+});
+
+router.get('/', authToken, async (_request, response) => {
+  try {
+    const allUsers = await Users.findAll();
+    response.status(200).json(allUsers);
+  } catch {
+    response.status(500).send({ message: 'Internal Error' });
   }
 });
 

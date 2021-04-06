@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const secret = 'hashzaoGigante';
 
 const headers = {
-  expiresIn: '60m',
+  expiresIn: '7d',
   algorithm: 'HS256',
 };
 
@@ -13,8 +13,8 @@ const createToken = (payload) => {
 };
 
 const verifyToken = (token) => {
-  const verifiedToken = jwt.verify(token, secret);
-  return verifiedToken;
+  const decodedToken = jwt.verify(token, secret);
+  return decodedToken;
 };
 
 module.exports = {

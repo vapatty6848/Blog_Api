@@ -2,7 +2,7 @@ const express = require('express');
 
 const { createToken } = require('../auth/token');
 
-const { loginValidation } = require('../middlewares/loginValidation');
+const { loginValidation } = require('../services/loginValidation');
 
 const router = express.Router();
 
