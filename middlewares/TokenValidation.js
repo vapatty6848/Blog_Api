@@ -8,12 +8,12 @@ const TokenValidation = async (req, res, next) => {
   const token = req.headers.authorization;
   try {
     if (!token) {
-      return res.status(STATUS_UNAUTHORIZED).json({ message: 'missing auth token' });
+      return res.status(STATUS_UNAUTHORIZED).json({ message: 'Token não encontrado' });
     }
     try {
       jwt.verify(token, secret);
     } catch (error) {
-      return res.status(STATUS_UNAUTHORIZED).json({ message: 'jwt malformed' });
+      return res.status(STATUS_UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
     }
     next();
   } catch (err) {

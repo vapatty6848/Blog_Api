@@ -1,6 +1,7 @@
 const { Users } = require('../models');
 const TokenCreation = require('../middlewares/TokenCreation');
 
+const STATUS_OK = 200;
 const STATUS_CREATED = 201;
 const CONFLICT = 409;
 
@@ -17,6 +18,12 @@ const createUser = async (req, res) => {
   res.status(STATUS_CREATED).json({ token });
 };
 
+const getUsers = async (req, res) => {
+  const users = await Users.findAll();
+  res.status(STATUS_OK).json(users);
+};
+
 module.exports = {
   createUser,
+  getUsers,
 };
