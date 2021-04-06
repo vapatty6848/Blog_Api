@@ -13,6 +13,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      content: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       published: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -23,7 +27,7 @@ module.exports = {
         allowNull: false,
         defaultValue: new Date(),
       },
-      user_id: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         onUpdate:'CASCADE',
