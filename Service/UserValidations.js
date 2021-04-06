@@ -1,4 +1,5 @@
 const { usermodel } = require('../models');
+
 const emailRegex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/;
 
 const createError = (message, status) => ({ message, status });

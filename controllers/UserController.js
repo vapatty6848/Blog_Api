@@ -1,5 +1,6 @@
 const express = require('express');
 const { usermodel } = require('../models');
+const userService = require('../Service/UserValidations');
 
 const userRouter = express.Router();
 
@@ -12,7 +13,7 @@ userRouter.get('/', (req, res, _next) => {
   });
 });
 
-userRouter.post('/', (req, res, next) => {
+userRouter.post('/', userService.nameVerification, userService.emailVerification, userService.passwordVerification, (req, res, _next) => {
   const { displayName, email, password, image } = req.body;
   usermodel.create({ displayName, email, password, image }).then((user) => {
     res.status(201).json(user);
