@@ -60,8 +60,8 @@ router.get('/post/:id', validateJWT, async (req, res) => {
 router.put('/post/:id', validateJWT, async (req, res) => {
   try {
     const { title, content } = req.body;
-    if (!title) return res.status(400).json({ message: '"title" is required'});
-    if (!content) return res.status(400).json({ message: '"content" is required'});
+    if (!title) return res.status(400).json({ message: '"title" is required' });
+    if (!content) return res.status(400).json({ message: '"content" is required' });
     const post = await BlogPosts.findByPk(req.params.id);
 
     const token = req.headers.authorization;
