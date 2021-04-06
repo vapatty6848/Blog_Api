@@ -9,11 +9,16 @@ const UserController = new Router();
 
 UserController.get('/', validateToken, async (request, response) => {
   const users = await User.findAll({});
-  response.status(200).json(users);
+  return response.status(200).json(users);
 });
 
-UserController.get('/:id', async (request, response) => {
-  response.status(200).json({ message: 'UserController' });
+UserController.get('/:id', validateToken, async (request, response) => {
+  const { id } = request.params;
+  const user = await User.findByPk(id);
+  if (!user) {
+    return response.status(404).json({ message: 'Usuário não existe' });
+  }
+  return response.status(200).json(user);
 });
 
 UserController.post('/', validateUserData, async (request, response) => {
@@ -32,8 +37,10 @@ UserController.post('/', validateUserData, async (request, response) => {
   return response.status(201).json({ token });
 });
 
-UserController.delete('/me', async (request, response) => {
-  response.status(200).json({ message: 'UserController' });
+UserController.delete('/me', validateToken, async (request, response) => {
+  const { email } = request.user;
+  await User.destroy({ where: { email } });
+  return response.status(204).json({});
 });
 
 module.exports = UserController;
