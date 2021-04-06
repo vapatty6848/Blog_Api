@@ -86,4 +86,28 @@ router.put('/post/:id', validateJWT, async (req, res) => {
   }
 });
 
+router.delete('/post/:id', validateJWT, async (req, res) => {
+  try {
+    const post = await BlogPosts.findByPk(req.params.id);
+
+    if (!post) return res.status(404).json({ message: 'Post não existe' });
+
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, secret);
+    const { id } = decoded.data;
+
+    if (post.userId !== id) return res.status(401).json({ message: 'Usuário não autorizado' });
+
+    BlogPosts.destroy({
+      where: {
+        id: req.params.id,
+      },
+    })
+      .then(() => res.send(204))
+      .catch((e) => res.status(500).json({ message: e.message }));
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
 module.exports = router;
