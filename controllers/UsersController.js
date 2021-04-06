@@ -1,27 +1,26 @@
 const { Router } = require('express');
 const { User } = require('../models');
-const userValidation = require('../schemas/userValidation');
+const { validateUser } = require('../schemas/userValidation');
+const createToken = require('../auth/createToken');
 
 const router = new Router();
 
-const SUCCESS = 201
-const BAD_REQUEST = 400;
-const AUTH_ERROR = 401;
+const SUCCESS = 201;
+const CONFLICT = 409;
 const INTERNAL_SERVER_ERROR = 500;
 
-router.post('/', userValidation, async(req, res) => {
+router.post('/', validateUser, async (req, res) => {
   try {
-    const {
-      displayName, email, password, image,
-    } = req.body;
+    const { displayName, email, password, image } = req.body;
 
     const user = await User.findOne({ where: { email } });
 
-    if(user) return res.status(AUTH_ERROR).json({ message: 'Usuário já existe'});
+    if (user) return res.status(CONFLICT).json({ message: 'Usuário já existe' });
 
     const newUser = await User.create({ displayName, email, password, image });
+    const token = createToken(newUser);
 
-    return res.status(SUCCESS).json(newUser);
+    return res.status(SUCCESS).json({ token });
   } catch (err) {
     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
