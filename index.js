@@ -1,15 +1,15 @@
 const express = require('express');
 
 const app = express();
-const { PORT } = process.env;
-const User = require('./controllers/UserController');
+// const { PORT } = process.env;
+const PORT = 3000;
+const controllers = require('./controllers');
 
 app.use(express.json());
-app.use(User);
+app.use('/', controllers.UserController);
 
-app.listen(PORT, () => console.log(`Ouvindo em ${PORT}`));
-
-// não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (request, response) => {
   response.send();
 });
+
+app.listen(PORT, () => console.log(`Ouvindo em ${PORT}`));

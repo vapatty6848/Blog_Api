@@ -14,12 +14,14 @@
   "scripts": {
     "prestart": "npx sequelize-cli db:create && npx sequelize-cli db:migrate $",
     "start": "node index.js",
+    "dev": "nodemon index.js",
     "drop": "npx sequelize-cli db:drop $",
     "seed": "npx sequelize-cli db:seed:all $",
     "test": "jest --runInBand",
     "test-coverage": "jest --runInBand --coverage",
     "debug": "nodemon index.js",
-    "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json ."
+    "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json .",
+    "restart": "npx sequelize db:migrate && npm run seed"
   },
   "devDependencies": {
     "eslint": "6.8.0",
@@ -28,6 +30,7 @@
     "eslint-plugin-sonarjs": "0.5.0",
     "frisby": "2.1.2",
     "jest": "26.0.1",
+    "nodemon": "^2.0.7",
     "sequelize-cli": "6.2.0",
     "supertest": "4.0.2"
   }
