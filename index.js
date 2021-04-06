@@ -17,4 +17,6 @@ app.use('/user', controllers.UsersController);
 
 app.use('/post', controllers.BlogPostsController);
 
+app.use('/login', controllers.LoginController);
+
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));

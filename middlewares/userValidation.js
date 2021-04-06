@@ -11,6 +11,9 @@ function validateEmail(req, res, next) {
   const emailRegex = /(([^<>()[\]\\.!*|?/,;:\s@"]+(\.[^<>()[\]\\.!*|?/,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))/;
   const isEmailAValidRegex = emailRegex.test(email);
 
+  if (email === '') {
+    return res.status(400).json({ message: '"email" is not allowed to be empty' });
+  }
   if (!email) {
     return res.status(400).json({ message: '"email" is required' });
   }
@@ -22,6 +25,9 @@ function validateEmail(req, res, next) {
 
 function validatePassword(req, res, next) {
   const { password } = req.body;
+  if (password === '') {
+    return res.status(400).json({ message: '"password" is not allowed to be empty' });
+  }
   if (!password) {
     return res.status(400).json({ message: '"password" is required' });
   }
