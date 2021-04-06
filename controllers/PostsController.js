@@ -11,6 +11,7 @@ const {
   createPost,
   getPosts,
   getPostById,
+  editPost,
   // getByQuery,
 } = require('../services/PostsService');
 
@@ -21,5 +22,7 @@ PostsController.get('/', TokenValidation, TokenDecodification, getPosts);
 // PostsController.get('/search', getByQuery);
 
 PostsController.get('/:id', TokenValidation, TokenDecodification, getPostById);
+
+PostsController.put('/:id', TokenValidation, TokenDecodification, PostsValidation, editPost);
 
 module.exports = PostsController;

@@ -2,7 +2,7 @@ const { BlogPosts, Users } = require('../models');
 
 const STATUS_OK = 200;
 const STATUS_CREATED = 201;
-// const STATUS_NO_CONTENT = 204;
+const STATUS_UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
 const INTERNAL_ERROR = 500;
 
@@ -36,6 +36,24 @@ const getPostById = async (req, res) => {
   return res.status(STATUS_OK).json(post);
 };
 
+const editPost = async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const post = await BlogPosts.findByPk(id);
+  const email = req.user.data;
+  const user = await Users.findOne({ where: { email } });
+  if (user.dataValues.id !== post.dataValues.userId) {
+    return res.status(STATUS_UNAUTHORIZED).json({ message: 'Usuário não autorizado' });
+  }
+  await BlogPosts.update(
+    { title, content },
+    {
+      where: { id },
+    },
+  );
+  return res.status(STATUS_OK).json({ title, content, userId: post.dataValues.userId });
+};
+
 // const getByQuery = (req, res) => {
 //   const { q } = req.query;
 //   res.status(STATUS_OK).json(q);
@@ -45,5 +63,6 @@ module.exports = {
   createPost,
   getPosts,
   getPostById,
+  editPost,
   // getByQuery,
 };
