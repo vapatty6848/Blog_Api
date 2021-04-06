@@ -5,8 +5,13 @@ const models = require('../models');
 
 const postsRouter = Router();
 
-postsRouter.get('/', async (_req, res) => {
-  const posts = await models.BlogPosts.findAll({});
+postsRouter.get('/', validateToken, async (req, res) => {
+  const { id } = req.payload.data;
+  const posts = await models.BlogPosts.findAll({
+    where: { userId: id },
+    attributes: { exclude: 'userId' },
+    include: { model: models.User, as: 'user', attributes: { exclude: 'password' } },
+  });
   return res.status(200).json(posts);
 });
 
