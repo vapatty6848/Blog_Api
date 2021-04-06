@@ -1,11 +1,11 @@
 const { Router } = require('express');
-const { createToken } = require('../middlewares/auth');
+const { createToken, validateToken } = require('../middlewares/auth');
 const { validateUser } = require('../middlewares/validateUser');
 const models = require('../models');
 
 const userRouter = Router();
 
-userRouter.get('/', async (_req, res) => {
+userRouter.get('/', validateToken, async (_req, res) => {
   const users = await models.User.findAll({});
   return res.status(200).json(users);
 });
