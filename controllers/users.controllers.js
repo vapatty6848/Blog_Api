@@ -20,7 +20,18 @@ const getAll = async (_req, res, next) => {
   }
 };
 
+const getOne = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const getUser = await users.getOne(id);
+    res.status(StatusCodes.OK).json(getUser);
+  } catch (err) {
+    return next({ err });
+  }
+};
+
 module.exports = {
   create,
+  getOne,
   getAll,
 };

@@ -13,6 +13,12 @@ const create = async ({ displayName, email, password, image }) => {
   return { token };
 };
 
+const getOne = async (id) => {
+  const getUser = await Users.findOne({ where: { id } });
+  if (!getUser) throw new Error('C_ERR_USER_NOT_FOUND');
+  return getUser;
+};
+
 const getAll = async () => {
   const getUsers = await Users.findAll();
   return getUsers;
@@ -20,5 +26,6 @@ const getAll = async () => {
 
 module.exports = {
   create,
+  getOne,
   getAll,
 };

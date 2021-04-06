@@ -1,8 +1,8 @@
 module.exports = {
   C_ERR_USER_NOT_FOUND: {
-    statusCode: 400,
+    statusCode: 404,
     customCode: 'C_ERR_USER_NOT_FOUND',
-    customMessage: 'Campos inválidos',
+    customMessage: 'Usuário não existe',
   },
   C_ERR_INVALID_CRED: {
     statusCode: 401,
@@ -63,6 +63,11 @@ module.exports = {
     statusCode: 401,
     customCode: 'C_ERR_INVALID_TOKEN',
     customMessage: 'Token expirado ou inválido',
+  },
+  C_ERR_LOGIN_NOT_FOUND: {
+    statusCode: 400,
+    customCode: 'C_ERR_LOGIN_NOT_FOUND',
+    customMessage: 'Campos inválidos',
   },
   C_ERR_ACC_DND: {
     statusCode: 403,
