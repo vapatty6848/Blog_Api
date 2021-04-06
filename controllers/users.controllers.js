@@ -23,8 +23,8 @@ const getAll = async (_req, res, next) => {
 const getOne = async (req, res, next) => {
   try {
     const { id } = req.params;
-    await users.getOne(id);
-    res.status(StatusCodes.NO_CONTENT).json();
+    const getUser = await users.getOne(id);
+    res.status(StatusCodes.OK).json(getUser);
   } catch (err) {
     return next({ err });
   }

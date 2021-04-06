@@ -1,32 +1,18 @@
-const { users, utils } = require('../models');
-const { generateToken } = require('../security');
-const { authRegisterUser, utils: { validateUserName } } = require('../schemas');
+const { BlogPosts } = require('../models');
+const { authNewPost } = require('../schemas');
 
-const create = async (body) => {
-  const data = body;
-  const { name, email } = data;
-
-  const [isEmailAvailable] = await utils.getByFilter({
-    table: 'users',
-    filter: 'email',
-    value: email,
+const create = async (body, userId) => {
+  const { title, content } = body;
+  authNewPost(title, content);
+  await BlogPosts.create({
+    user_id: userId,
+    title,
+    content,
   });
-  authRegisterUser(data, isEmailAvailable);
-
-  data.role = (data.isVendor) ? 'administrator' : 'client';
-  const newUserId = await users.insertNewUser(data);
-
-  const token = generateToken(newUserId, data.role);
-  const { role } = data;
-  return { name, email, token, role };
-};
-
-const updateName = async (name, id) => {
-  validateUserName(name);
-  return users.updateNameByEmail(name, id);
+  const newPost = { userId, title, content };
+  return newPost;
 };
 
 module.exports = {
   create,
-  updateName,
 };

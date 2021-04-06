@@ -4,11 +4,6 @@ module.exports = {
     customCode: 'C_ERR_USER_NOT_FOUND',
     customMessage: 'Usuário não existe',
   },
-  C_ERR_INVALID_CRED: {
-    statusCode: 401,
-    customCode: 'C_ERR_INVALID_CRED',
-    customMessage: 'Login failed. Invalid credentials.',
-  },
   C_ERR_PASS_REQ: {
     statusCode: 400,
     customCode: 'C_ERR_PASS_REQ',
@@ -54,6 +49,16 @@ module.exports = {
     customCode: 'C_ERR_NAME_INVALID',
     customMessage: '"displayName" length must be at least 8 characters long',
   },
+  C_ERR_POST_TITLE_REQ: {
+    statusCode: 400,
+    customCode: 'C_ERR_POST_TITLE_REQ',
+    customMessage: '"title" is required',
+  },
+  C_ERR_POST_CONT_REQ: {
+    statusCode: 400,
+    customCode: 'C_ERR_POST_CONT_REQ',
+    customMessage: '"content" is required',
+  },
   C_ERR_NO_TOKEN: {
     statusCode: 401,
     customCode: 'C_ERR_NO_TOKEN',
@@ -79,29 +84,9 @@ module.exports = {
     customCode: 'C_ERR_NOT_FOUND',
     customMessage: 'Not found.',
   },
-  C_ERR_NO_PRODS: {
-    statusCode: 400,
-    customCode: 'C_ERR_NO_PRODS',
-    customMessage: 'There are no products in this sale.',
-  },
-  C_ERR_INVALID_PRODS: {
-    statusCode: 400,
-    customCode: 'C_ERR_INVALID_PRODS',
-    customMessage: 'Invalid products id or quantity',
-  },
-  C_ERR_INVALID_DELV: {
-    statusCode: 400,
-    customCode: 'C_ERR_INVALID_DELV',
-    customMessage: 'Invalid delivery adress or number',
-  },
   C_ERR_NO_USER_TOKEN: {
     statusCode: 500,
     customCode: 'C_ERR_NO_USER_TOKEN',
     customMessage: 'Unexpected token error',
-  },
-  C_ERR_PRICE: {
-    statusCode: 400,
-    customCode: 'C_ERR_PRICE',
-    customMessage: 'price inconsistency',
   },
 };

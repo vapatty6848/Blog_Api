@@ -1,11 +1,10 @@
 const express = require('express');
 
 const controllers = require('../controllers');
-// const middlewares = require('../middlewares');
+const middlewares = require('../middlewares');
 
-const posts = express.Router();
+const postsRouter = express.Router();
 
-posts.put('/post', controllers.posts);
-// posts.post('/register', controllers.register);
+postsRouter.post('/', middlewares.validateToken, controllers.posts);
 
-module.exports = posts;
+module.exports = postsRouter;

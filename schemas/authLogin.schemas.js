@@ -1,7 +1,6 @@
 const { isFalsy, isLessThan, isEmailInvalid } = require('./helpers');
 
 module.exports = (email, password) => {
-  console.log('run login validation');
   switch (true) {
     case (isFalsy(email) && email !== ''): throw new Error('C_ERR_EMAIL_REQ');
     case (isFalsy(password) && password !== ''): throw new Error('C_ERR_PASS_REQ');

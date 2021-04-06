@@ -1,11 +1,11 @@
 const { StatusCodes } = require('http-status-codes');
-const { users } = require('../services');
+const { posts } = require('../services');
 
 module.exports = async (req, res, next) => {
   try {
-    const { body } = req;
-    const user = await users.create(body);
-    res.status(StatusCodes.CREATED).json(user);
+    const { userId, body } = req;
+    const newPost = await posts.create(body, userId);
+    res.status(StatusCodes.CREATED).json(newPost);
   } catch (err) {
     return next({ err });
   }
