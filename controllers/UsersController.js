@@ -5,6 +5,6 @@ const { ValidateUser } = require('../middlewares');
 const Route = new Router();
 
 Route.get('/', UsersServices.getAllUsers);
-Route.post('/', ValidateUser.ExistOrNot, ValidateUser.FormatOfUserInfos, UsersServices.createNewUser);
+Route.post('/', ValidateUser.FormatOfUserInfos, ValidateUser.ExistOrNot, UsersServices.createNewUser);
 
 module.exports = Route;
