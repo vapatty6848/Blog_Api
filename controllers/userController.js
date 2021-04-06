@@ -21,4 +21,16 @@ router.get('/', async (req, res) => {
   return res.status(200).json(users);
 });
 
+router.post('/login', userService.loginValidate, async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await Users.findOne({ where: { email } });
+
+  if (user.password !== password || user.email !== email) return res.status(400).json({ message: 'Campos inválidos' });
+
+  const token = createToken(user);
+
+  return res.status(200).json({ token });
+});
+
 module.exports = router;
