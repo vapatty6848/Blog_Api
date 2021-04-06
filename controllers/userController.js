@@ -33,4 +33,13 @@ router.get('/user', validateToken, async (req, res) => {
   return res.status(200).json(users);
 });
 
+router.get('/user/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+
+  const user = await Users.findByPk(id, { attributes: { exclude: ['password'] } });
+
+  if (user) return res.status(200).json(user);
+  return res.status(404).json({ message: 'Usuário não existe' });
+});
+
 module.exports = router;
