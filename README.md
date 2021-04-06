@@ -257,7 +257,7 @@ Alguns exemplos:
 
 - O seu projeto deverá usar um `ORM` para criar e atualizar o seu banco. A clonagem do projeto seguida de um comando de migrate deve deixá-lo em sua forma esperada.
 
-- Deve conter uma tabela chamada **Users**, contendo os seguinte dados:
+- Deve conter uma tabela chamada **Users**, contendo dados com a seguinte estrutura:
 
   ```json
   {
@@ -269,7 +269,7 @@ Alguns exemplos:
   }
   ```
 
-- Deve conter uma tabela chamada **BlogPosts**, contendo os seguinte dados:
+- Deve conter uma tabela chamada **BlogPosts**, contendo dados com a seguinte estrutura:
 
   ```json
   {
@@ -308,7 +308,7 @@ Alguns exemplos:
   {
     "displayName": "Brett Wiltshire",
     "email": "brett@email.com",
-    "password": 123456,
+    "password": "123456",
     "image": "http://4.bp.blogspot.com/_YA50adQ-7vQ/S1gfR_6ufpI/AAAAAAAAAAk/1ErJGgRWZDg/S45/brett.png"
   }
   ```
