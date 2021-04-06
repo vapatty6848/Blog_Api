@@ -18,7 +18,17 @@ const getAll = async () => {
   return getPosts;
 };
 
+const getOne = async (id) => {
+  const getPost = await BlogPosts.findOne({
+    where: { user_id: id },
+    include: { model: Users, as: 'user' },
+  });
+  if (!getPost) throw new Error('C_ERR_POST_NOT_FOUND');
+  return getPost;
+};
+
 module.exports = {
   create,
   getAll,
+  getOne,
 };

@@ -6,6 +6,7 @@ const middlewares = require('../middlewares');
 const postsRouter = express.Router();
 
 postsRouter.post('/', middlewares.validateToken, posts.create);
+postsRouter.get('/:id', middlewares.validateToken, posts.getOne);
 postsRouter.get('/', middlewares.validateToken, posts.getAll);
 
 module.exports = postsRouter;

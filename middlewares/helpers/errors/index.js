@@ -59,6 +59,11 @@ module.exports = {
     customCode: 'C_ERR_POST_CONT_REQ',
     customMessage: '"content" is required',
   },
+  C_ERR_POST_NOT_FOUND: {
+    statusCode: 404,
+    customCode: 'C_ERR_POST_NOT_FOUND',
+    customMessage: 'Post não existe',
+  },
   C_ERR_NO_TOKEN: {
     statusCode: 401,
     customCode: 'C_ERR_NO_TOKEN',
