@@ -5,13 +5,13 @@ const BlogPost = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     published: DataTypes.STRING,
     updated: DataTypes.STRING,
-  });
+  }, { timestamps: false });
 
   blogPost.associate = (model) => {
     blogPost.belongsTo(model.User, { foreignKey: 'userId', as: 'user' });
   };
 
-  return BlogPost;
+  return blogPost;
 };
 
 module.exports = BlogPost;

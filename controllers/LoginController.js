@@ -8,7 +8,6 @@ const LoginController = new Router();
 
 LoginController.post('/', validateLogin, async (request, response) => {
   const { email } = request.body;
-  const token = createToken(email);
 
   const user = await User.findOne({ where: { email } });
 
@@ -16,6 +15,7 @@ LoginController.post('/', validateLogin, async (request, response) => {
     return response.status(400).json({ message: 'Campos inválidos' });
   }
 
+  const token = createToken(email);
   return response.status(200).json({ token });
 });
 
