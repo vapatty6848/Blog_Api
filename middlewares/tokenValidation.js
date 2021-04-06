@@ -17,9 +17,11 @@ async function validateToken(req, res, next) {
     if (!emailExists) {
       return res.status(401).json({ message: 'Token expirado ou inválido' });
     }
-    return decodedToken;
+    req.user = decodedToken;
+    next();
   });
-  next();
+
+  // next();
 }
 
 module.exports = {

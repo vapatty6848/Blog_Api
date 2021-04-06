@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const rescue = require('express-rescue');
 
 const UsersController = Router();
 
@@ -43,5 +44,13 @@ UsersController.post('/', validateDisplayName, validateEmail, validatePassword, 
 
   res.status(201).json({ token: generatedToken });
 });
+
+UsersController.delete('/me', validateToken, rescue(async (req, res) => {
+  const { email } = req.user;
+
+  await User.destroy({ where: { email } });
+
+  res.status(204).json({});
+}));
 
 module.exports = UsersController;
