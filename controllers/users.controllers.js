@@ -14,7 +14,7 @@ const create = async (req, res, next) => {
 const getAll = async (_req, res, next) => {
   try {
     const getUsers = await users.getAll();
-    res.status(StatusCodes.CREATED).json(getUsers);
+    res.status(StatusCodes.OK).json(getUsers);
   } catch (err) {
     return next({ err });
   }

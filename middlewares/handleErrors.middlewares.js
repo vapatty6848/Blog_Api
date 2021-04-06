@@ -13,7 +13,12 @@ const handleErrorObject = (error, boolean) => {
 module.exports = (error, _req, res, _next) => {
   const isCustomError = checkCustomError(error.err.message);
   const errorObject = handleErrorObject(error, isCustomError);
-  console.error({ error });
+  const filterError = {
+    status: errorObject.statusCode,
+    code: errorObject.customCode,
+    message: errorObject.customMessage,
+  };
+  console.error(filterError);
 
   const { statusCode, customMessage, customCode } = errorObject;
   const ERR = {
