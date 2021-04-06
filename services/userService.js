@@ -17,7 +17,7 @@ const dataValidate = async (req, res, next) => {
   if (password.length !== 6) return res.status(400).json({ message: '"password" length must be 6 characters long' });
 
   const findEmailBD = await Users.findOne({ where: { email } });
-  if (findEmailBD) res.status(409).json({ message: 'Usuário já existe' });
+  if (findEmailBD) return res.status(409).json({ message: 'Usuário já existe' });
 
   next();
 };
@@ -32,7 +32,7 @@ const loginValidate = async (req, res, next) => {
   if (!password) return res.status(400).json({ message: '"password" is required' });
 
   const findEmailBD = await Users.findOne({ where: { email } });
-  if (!findEmailBD) res.status(400).json({ message: 'Campos inválidos' });
+  if (!findEmailBD) return res.status(400).json({ message: 'Campos inválidos' });
 
   next();
 };
