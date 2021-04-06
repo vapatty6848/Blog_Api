@@ -8,10 +8,13 @@ const UserController = new Router();
 const {
   createUser,
   getUsers,
+  getUserById,
 } = require('../services/UserService');
 
 UserController.post('/', UserValidation, createUser);
 
 UserController.get('/', TokenValidation, getUsers);
+
+UserController.get('/:id', TokenValidation, getUserById);
 
 module.exports = UserController;

@@ -3,6 +3,7 @@ const TokenCreation = require('../middlewares/TokenCreation');
 
 const STATUS_OK = 200;
 const STATUS_CREATED = 201;
+const NOT_FOUND = 404;
 const CONFLICT = 409;
 
 const createUser = async (req, res) => {
@@ -23,7 +24,17 @@ const getUsers = async (req, res) => {
   res.status(STATUS_OK).json(users);
 };
 
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+  const user = await Users.findByPk(id);
+  if (!user) {
+    return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
+  }
+  res.status(STATUS_OK).json(user);
+};
+
 module.exports = {
   createUser,
   getUsers,
+  getUserById,
 };
