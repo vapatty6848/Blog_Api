@@ -3,6 +3,7 @@ const TokenCreation = require('../middlewares/TokenCreation');
 
 const STATUS_OK = 200;
 const STATUS_CREATED = 201;
+const STATUS_NO_CONTENT = 204;
 const NOT_FOUND = 404;
 const CONFLICT = 409;
 
@@ -33,8 +34,19 @@ const getUserById = async (req, res) => {
   res.status(STATUS_OK).json(user);
 };
 
+const excludeUser = async (req, res) => {
+  const email = req.user.data;
+  await Users.destroy(
+    {
+      where: { email },
+    },
+  );
+  return res.status(STATUS_NO_CONTENT).send();
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUserById,
+  excludeUser,
 };
