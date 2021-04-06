@@ -11,6 +11,7 @@ const errorMessages = {
   invalidFields: 'Campos inválidos',
   tokenNotFound: 'Token não encontrado',
   invalidToken: 'Token expirado ou inválido',
+  userNotFound: 'Usuário não existe',
 };
 
 module.exports = errorMessages;

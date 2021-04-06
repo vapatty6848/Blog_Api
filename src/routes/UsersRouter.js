@@ -1,14 +1,14 @@
 const { Router } = require('express');
 const { UsersController } = require('../controllers');
-const { validateUserCreation, validateGetUsers } = require('../middlewares/validations');
+const { validateUserCreation, validateToken } = require('../middlewares/validations');
 
 const UsersRouter = new Router();
 
 UsersRouter.post('/', validateUserCreation, UsersController.createUser);
 
-UsersRouter.get('/:id', UsersController.getUserById);
+UsersRouter.get('/:id', validateToken, UsersController.getUserById);
 
-UsersRouter.get('/', validateGetUsers, UsersController.getAllUsers);
+UsersRouter.get('/', validateToken, UsersController.getAllUsers);
 
 UsersRouter.delete('/me', UsersController.deleteUser);
 

@@ -3,9 +3,8 @@ const { secret } = require('../../authentication/jwtConfig');
 const { status, messages } = require('../../libs/dicts');
 const { ThrowError } = require('../errorHandler/utils');
 
-const validateGetUsers = async (req, res, next) => {
+const validateToken = async (req, res, next) => {
   const { authorization } = req.headers;
-  console.log(authorization);
 
   try {
     if (!authorization || authorization.length === 0) {
@@ -21,4 +20,4 @@ const validateGetUsers = async (req, res, next) => {
   }
 };
 
-module.exports = validateGetUsers;
+module.exports = validateToken;
