@@ -40,4 +40,23 @@ router.get('/post', validateJWT, (req, res) => {
     .catch((e) => res.status(500).json({ message: e.message }));
 });
 
+router.get('/post/:id', validateJWT, async (req, res) => {
+  try {
+    const post = await BlogPosts.findAll({
+      where: { id: req.params.id },
+      include: [{
+        model: Users, as: 'user', attributes: { exclude: ['password'] },
+      }],
+      attributes: { exclude: ['userId'] },
+    });
+
+    console.log(post);
+
+    if (post.length > 0) return res.status(200).json(post[0]);
+    return res.status(404).json({ message: 'Post não existe' });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
 module.exports = router;
