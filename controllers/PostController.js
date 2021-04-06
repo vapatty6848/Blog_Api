@@ -47,8 +47,26 @@ PostController.post('/', validateToken, async (request, response) => {
 });
 
 PostController.put('/:id', validateToken, async (request, response) => {
-  console.log('put post');
-  return response.status(200).json({ message: 'PostController' });
+  const { title, content } = request.body;
+  const { email } = request.user;
+  const { id } = request.params;
+  const user = await User.findOne({ where: { email } });
+  const userId = user.dataValues.id;
+  if (!title) {
+    return response.status(400).json({ message: '"title" is required' });
+  }
+  if (!content) {
+    return response.status(400).json({ message: '"content" is required' });
+  }
+  const post = await BlogPost.findOne({ where: { id } });
+  if (!post) {
+    return response.status(404).json({ message: 'Post não existe' });
+  }
+  if (post.dataValues.userId !== userId) {
+    return response.status(401).json({ message: 'Usuário não autorizado' });
+  }
+  await BlogPost.update({ title, content }, { where: { userId, id } });
+  return response.status(200).json({ title, content, userId });
 });
 
 PostController.delete('/:id', validateToken, async (request, response) => {
