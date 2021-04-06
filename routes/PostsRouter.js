@@ -1,16 +1,16 @@
 const { Router } = require('express');
-const PostsController = require('../controllers');
+const { PostsController } = require('../controllers');
 
 const PostsRouter = new Router();
 
-PostsRouter.post('/', PostsRouter.createPost);
+PostsRouter.post('/', PostsController.createPost);
 
-PostsRouter.put('/:search?q=:searchTerm', PostsRouter.searchPost);
+PostsRouter.put('/search?q=:searchTerm', PostsController.searchPost);
 
-PostsRouter.get('/:id', PostsRouter.getPostById);
+PostsRouter.get('/:id', PostsController.getPostById);
 
-PostsRouter.get('/', PostsRouter.getAllPosts);
+PostsRouter.get('/', PostsController.getAllPosts);
 
-PostsRouter.put('/:id', PostsRouter.updatePost);
+PostsRouter.put('/:id', PostsController.updatePost);
 
 module.exports = PostsRouter;
