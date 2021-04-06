@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const { posts } = require('../services');
 
-module.exports = async (req, res, next) => {
+const create = async (req, res, next) => {
   try {
     const { userId, body } = req;
     const newPost = await posts.create(body, userId);
@@ -9,4 +9,18 @@ module.exports = async (req, res, next) => {
   } catch (err) {
     return next({ err });
   }
+};
+
+const getAll = async (_req, res, next) => {
+  try {
+    const getPosts = await posts.getAll();
+    res.status(StatusCodes.OK).json(getPosts);
+  } catch (err) {
+    return next({ err });
+  }
+};
+
+module.exports = {
+  create,
+  getAll,
 };
