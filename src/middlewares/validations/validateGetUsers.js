@@ -14,6 +14,9 @@ const validateGetUsers = async (req, res, next) => {
     jwt.verify(authorization, secret);
     next();
   } catch (error) {
+    if (error.message === messages.tokenNotFound) {
+      next(error);
+    }
     res.status(status.unauthorized).json({ message: messages.invalidToken });
   }
 };
