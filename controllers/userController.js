@@ -12,7 +12,7 @@ router.post('/', checkUser, async (req, res) => {
   const payload = { displayName, email, password, image };
   const token = await createToken(payload);
   await Users.create({ displayName, email, password, image });
-  res.status(201).json(token);
+  res.status(201).json({ token });
 });
 
 module.exports = router;

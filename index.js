@@ -6,7 +6,7 @@ app.use(bodyParser.json());
 
 const UserController = require('./controllers/userController');
 
-app.use('/users', UserController);
+app.use('/user', UserController);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
 
