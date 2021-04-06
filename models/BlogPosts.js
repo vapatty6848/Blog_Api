@@ -6,6 +6,9 @@ const createBlogsPosts = (sequelize, DataTypes) => {
     userId: { type: DataTypes.INTEGER, foreignKey: true },
     published: DataTypes.DATE,
     updated: DataTypes.DATE,
+  },
+  {
+    timestamps: false,
   });
 
   BlogPosts.associate = (models) => {
