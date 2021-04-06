@@ -38,18 +38,21 @@ router.get('/', validateToken, async (_req, res) => {
   res.status(200).json(users);
 });
 
-router.get('/:id', async (_req, res) => {
-  const users = await User.findByPk();
+router.get('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const users = await User.findByPk(id);
+  if (!users) return res.status(404).json({ message: 'Usuário não existe' });
   res.status(200).json(users);
 });
 
-router.delete('/:id', async (req, _res) => {
+router.delete('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
   await User.destroy(
     {
       where: { id },
     },
   );
+  res.status(204);
 });
 
 module.exports = router;
