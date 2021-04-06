@@ -9,8 +9,11 @@ const TokenDecodification = require('../middlewares/TokenDecodification');
 const PostsController = new Router();
 const {
   createPost,
+  getPosts,
 } = require('../services/PostsService');
 
 PostsController.post('/', TokenValidation, TokenDecodification, PostsValidation, createPost);
+
+PostsController.get('/', TokenValidation, TokenDecodification, getPosts);
 
 module.exports = PostsController;
