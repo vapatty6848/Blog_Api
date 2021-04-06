@@ -13,7 +13,7 @@ const createToken = (payload) => {
   return token;
 };
 
-const validateToken = (token) => {
+const verifyToken = (token) => {
   try {
     return jwt.verify(token, secret);
   } catch (e) {
@@ -21,19 +21,19 @@ const validateToken = (token) => {
   }
 };
 
-const authorizationToken = (req, res, next) => {
+const validateToken = (req, res, next) => {
   const { authorization } = req.headers;
 
-  if (!authorization) return res.status(401).json({ message: 'missing auth token' });
+  if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
 
-  const payload = validateToken(authorization);
+  const payload = verifyToken(authorization);
 
-  if (!payload) return res.status(401).json({ message: 'jwt malformed' });
+  if (!payload) return res.status(401).json({ message: 'Token expirado ou inválido' });
 
   next();
 };
 
 module.exports = {
   createToken,
-  authorizationToken,
+  validateToken,
 };
