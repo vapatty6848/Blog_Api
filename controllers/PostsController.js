@@ -12,14 +12,14 @@ const {
   getPosts,
   getPostById,
   editPost,
-  // getByQuery,
+  getByQuery,
 } = require('../services/PostsService');
 
 PostsController.post('/', TokenValidation, TokenDecodification, PostsValidation, createPost);
 
 PostsController.get('/', TokenValidation, TokenDecodification, getPosts);
 
-// PostsController.get('/search', getByQuery);
+PostsController.get('/search', TokenValidation, TokenDecodification, getByQuery);
 
 PostsController.get('/:id', TokenValidation, TokenDecodification, getPostById);
 

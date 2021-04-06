@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPosts, Users } = require('../models');
 
 const STATUS_OK = 200;
@@ -22,6 +23,9 @@ const createPost = async (req, res) => {
 const getPosts = async (req, res) => {
   const email = req.user.data;
   const user = await Users.findOne({ where: { email } });
+  if (!user) {
+    return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
+  }
   const { id } = user.dataValues;
   const posts = await BlogPosts.findAll({ include: { model: Users, as: 'user', attributes: { exclude: 'password' } }, where: { userId: id } });
   res.status(STATUS_OK).json(posts);
@@ -29,7 +33,14 @@ const getPosts = async (req, res) => {
 
 const getPostById = async (req, res) => {
   const { id } = req.params;
-  const post = await BlogPosts.findByPk(id, { include: { model: Users, as: 'user', attributes: { exclude: 'password' } }, where: { userId: id } });
+  const post = await BlogPosts.findByPk(id, {
+    include: {
+      model: Users,
+      as: 'user',
+      attributes: { exclude: 'password' },
+    },
+    where: { userId: id },
+  });
   if (!post) {
     return res.status(NOT_FOUND).json({ message: 'Post não existe' });
   }
@@ -54,15 +65,34 @@ const editPost = async (req, res) => {
   return res.status(STATUS_OK).json({ title, content, userId: post.dataValues.userId });
 };
 
-// const getByQuery = (req, res) => {
-//   const { q } = req.query;
-//   res.status(STATUS_OK).json(q);
-// };
+const getByQuery = async (req, res) => {
+  const email = req.user.data;
+  const user = await Users.findOne({ where: { email } });
+  const { id } = user.dataValues;
+  const { q } = req.query;
+  const targetedPosts = await BlogPosts.findAll({
+    include: { model: Users, as: 'user', attributes: { exclude: 'password' } },
+    where: {
+      userId: id,
+      [Op.or]: [
+        { title: { [Op.like]: `%${q}%` } },
+        { content: { [Op.like]: `%${q}%` } },
+      ],
+    } });
+  if (q === '') {
+    const allPosts = await BlogPosts.findAll({
+      include: { model: Users, as: 'user', attributes: { exclude: 'password' } },
+      where: { userId: id },
+    });
+    return res.status(STATUS_OK).json(allPosts);
+  }
+  return res.status(STATUS_OK).json(targetedPosts);
+};
 
 module.exports = {
   createPost,
   getPosts,
   getPostById,
   editPost,
-  // getByQuery,
+  getByQuery,
 };
