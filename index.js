@@ -2,17 +2,12 @@ const express = require('express');
 require('dotenv').config();
 const bodyParser = require('body-parser');
 
-const routes = require('./routes');
-const middlewares = require('./middlewares');
+const routes = require('./main.routes');
 
 const app = express();
 app.use(bodyParser.json());
 
-app.use('/user', routes.users);
-// app.use('/post', routes.posts);
-app.use('*', routes.notFound);
-
-app.use(middlewares.handleError);
+app.use(routes);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
 

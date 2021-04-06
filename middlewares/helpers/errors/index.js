@@ -1,8 +1,8 @@
 module.exports = {
   C_ERR_USER_NOT_FOUND: {
-    statusCode: 404,
+    statusCode: 400,
     customCode: 'C_ERR_USER_NOT_FOUND',
-    customMessage: 'Login failed. User not found.',
+    customMessage: 'Campos inválidos',
   },
   C_ERR_INVALID_CRED: {
     statusCode: 401,
@@ -14,20 +14,30 @@ module.exports = {
     customCode: 'C_ERR_PASS_REQ',
     customMessage: '"password" is required',
   },
+  C_ERR_PASS_EMPTY: {
+    statusCode: 400,
+    customCode: 'C_ERR_PASS_EMPTY',
+    customMessage: '"password" is not allowed to be empty',
+  },
   C_ERR_PASS_INVALID: {
     statusCode: 400,
     customCode: 'C_ERR_PASS_INVALID',
     customMessage: '"password" length must be 6 characters long',
   },
-  C_ERR_EMAIL_INVALID: {
-    statusCode: 400,
-    customCode: 'C_ERR_EMAIL_INVALID',
-    customMessage: '"email" must be a valid email',
-  },
   C_ERR_EMAIL_REQ: {
     statusCode: 400,
     customCode: 'C_ERR_EMAIL_REQ',
     customMessage: '"email" is required',
+  },
+  C_ERR_EMAIL_EMPTY: {
+    statusCode: 400,
+    customCode: 'C_ERR_EMAIL_EMPTY',
+    customMessage: '"email" is not allowed to be empty',
+  },
+  C_ERR_EMAIL_INVALID: {
+    statusCode: 400,
+    customCode: 'C_ERR_EMAIL_INVALID',
+    customMessage: '"email" must be a valid email',
   },
   C_ERR_EMAIL_IN_USE: {
     statusCode: 409,
