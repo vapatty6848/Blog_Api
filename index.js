@@ -1,5 +1,6 @@
 const express = require('express');
 const UserController = require('./controllers/UserController');
+const LoginController = require('./controllers/LoginController');
 
 const app = express();
 
@@ -12,6 +13,8 @@ app.get('/', (request, response) => {
 app.use(express.json());
 
 app.use('/user', UserController);
+
+app.use('/login', LoginController);
 
 // __________________________________________________________
 

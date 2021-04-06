@@ -1,12 +1,12 @@
 const { Router } = require('express');
 
-const FieldsValidation = require('../middlewares/FieldsValidation');
+const { UserValidation } = require('../middlewares/FieldsValidation');
 
 const UserController = new Router();
 const {
   createUser,
 } = require('../services/UserService');
 
-UserController.post('/', FieldsValidation, createUser);
+UserController.post('/', UserValidation, createUser);
 
 module.exports = UserController;
