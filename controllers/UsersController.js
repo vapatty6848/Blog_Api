@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const { UsersServices } = require('../services');
 const { ValidateUser } = require('../middlewares');
+const validateToken = require('../auth/validateToken');
 
 const Route = new Router();
 
-Route.get('/', UsersServices.getAllUsers);
+Route.get('/', validateToken, UsersServices.getAllUsers);
 Route.post('/', ValidateUser.FormatOfUserInfos, ValidateUser.ExistOrNot, UsersServices.createNewUser);
 
 module.exports = Route;

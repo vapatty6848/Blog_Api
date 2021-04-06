@@ -8,7 +8,6 @@ const InputsFormatAndUserExists = async (req, _res, next) => {
 
   if (email === '') return next(errorMsg(Status.code400, '"email" is not allowed to be empty'));
   if (!email) return next(errorMsg(Status.code400, '"email" is required'));
-  console.log(password);
   if (password === '') return next(errorMsg(Status.code400, '"password" is not allowed to be empty'));
   if (!password) return next(errorMsg(Status.code400, '"password" is required'));
 
