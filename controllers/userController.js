@@ -28,4 +28,10 @@ userRouter.get('/:id', validateToken, async (req, res) => {
   return res.status(200).json(user);
 });
 
+userRouter.delete('/me', validateToken, async (req, res) => {
+  const { email } = req.payload.data;
+  const userDeleted = await models.User.destroy({ where: { email } });
+  return res.status(204).json(userDeleted);
+});
+
 module.exports = userRouter;
