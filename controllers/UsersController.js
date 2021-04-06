@@ -20,7 +20,7 @@ UsersController.get('/:id', validateToken, async (req, res) => {
   const userExists = await User.scope('withoutPassword').findOne({ where: { id } });
 
   if (!userExists) {
-    return res.status(409).json({ message: 'Usuário não existe' });
+    return res.status(404).json({ message: 'Usuário não existe' });
   }
 
   res.status(200).json(userExists);
