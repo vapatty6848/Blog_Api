@@ -50,10 +50,34 @@ router.get('/post/:id', validateJWT, async (req, res) => {
       attributes: { exclude: ['userId'] },
     });
 
-    console.log(post);
-
     if (post.length > 0) return res.status(200).json(post[0]);
     return res.status(404).json({ message: 'Post não existe' });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+router.put('/post/:id', validateJWT, async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    if (!title) return res.status(400).json({ message: '"title" is required'});
+    if (!content) return res.status(400).json({ message: '"content" is required'});
+    const post = await BlogPosts.findByPk(req.params.id);
+
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, secret);
+    const { id } = decoded.data;
+
+    if (post.userId !== id) return res.status(401).json({ message: 'Usuário não autorizado' });
+
+    await BlogPosts.update(
+      { title, content },
+      { where: { id: req.params.id } },
+    );
+
+    const postUpdated = await BlogPosts.findByPk(req.params.id);
+
+    return res.status(200).json(postUpdated);
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
