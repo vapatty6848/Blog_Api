@@ -2,7 +2,7 @@ const { User } = require('../models');
 
 const isString = (name) => typeof (name) === 'string';
 const isLessThan = (name, number) => name.toString().length < number;
-const isBlank = (field) => !field || field === '';
+const isBlank = (field) => field === '';
 
 const isEmailValid = (email) => {
   const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -22,7 +22,7 @@ const doesEmailAlreadyExists = async (email) => {
 
   if (result.length === 0) return false;
 
-  return true;
+  return result;
 };
 
 const validateUser = async (displayName, email, password) => {
@@ -30,14 +30,46 @@ const validateUser = async (displayName, email, password) => {
 
   switch (true) {
     case !isDisplayNameValid(displayName): return { status: 400, message: 'displayMsg' };
-    case isBlank(email): return { status: 400, message: 'emailRequiredMsg' };
+    case !email || isBlank(email): return { status: 400, message: 'emailRequiredMsg' };
     case !isEmailValid(email): return { status: 400, message: 'emailInvalidMsg' };
-    case isBlank(password): return { status: 400, message: 'passwordRequiredMsg' };
+    case !password || isBlank(password): return { status: 400, message: 'passwordRequiredMsg' };
     case isLessThan(password, 6): return { status: 400, message: 'passwordLengthMsg' };
-    case isUserAlreadyregistered: return { status: 409, message: 'emailAlreadyExistsMsg' };
+    case isUserAlreadyregistered !== false: return { status: 409, message: 'emailAlreadyExistsMsg' };
 
     default: return {};
   }
 };
 
-module.exports = validateUser;
+const validateLoginFields = async (email, password) => {
+  const isUserAlreadyregistered = await doesEmailAlreadyExists(email);
+
+  if (!password) return false;
+  if (!isEmailValid(email) || isLessThan(password, 6) || !isUserAlreadyregistered) {
+    return false;
+  }
+
+  const userPassword = isUserAlreadyregistered[0].dataValues.password;
+
+  if (parseInt(password, 10) !== userPassword) return false;
+
+  return true;
+};
+
+const validateLogin = async (email, password) => {
+  const areFieldsValid = await validateLoginFields(email, password);
+
+  switch (true) {
+    case isBlank(email): return { status: 400, message: 'emailEmptyMsg' };
+    case !email: return { status: 400, message: 'emailRequiredMsg' };
+    case isBlank(password): return { status: 400, message: 'passwordEmptyMsg' };
+    case !password: return { status: 400, message: 'passwordRequiredMsg' };
+    case !areFieldsValid: return { status: 400, message: 'invalidFieldsMsg' };
+
+    default: return {};
+  }
+};
+
+module.exports = {
+  validateUser,
+  validateLogin,
+};

@@ -6,6 +6,9 @@ const getMessage = (message) => {
     case 'passwordLengthMsg': return '"password" length must be 6 characters long';
     case 'passwordRequiredMsg': return '"password" is required';
     case 'emailAlreadyExistsMsg': return 'Usuário já existe';
+    case 'emailEmptyMsg': return '"email" is not allowed to be empty';
+    case 'passwordEmptyMsg': return '"password" is not allowed to be empty';
+    case 'invalidFieldsMsg': return 'Campos inválidos';
 
     default: return '';
   }
