@@ -1,5 +1,6 @@
 const { Router } = require('express');
-const { createToken } = require('../middlewares/auth');
+const jwt = require('jsonwebtoken');
+const { SECRET, config } = require('../middlewares/auth');
 const { validateLogin } = require('../middlewares/validateLogin');
 const models = require('../models');
 
@@ -11,7 +12,7 @@ loginRouter.post('/', validateLogin, async (req, res) => {
   if (!user) return res.status(400).json({ message: 'Campos inválidos' });
   if (password !== user.dataValues.password) return res.status(400).json({ message: 'Campos inválidos' });
 
-  const token = await createToken(user);
+  const token = jwt.sign({ data: user }, SECRET, config);
 
   return res.status(200).json({ token });
 });
