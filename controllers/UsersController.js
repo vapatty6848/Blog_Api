@@ -13,6 +13,18 @@ UsersController.get('/', validateToken, async (_req, res) => {
   res.status(200).json(allUsers);
 });
 
+UsersController.get('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+
+  const userExists = await User.scope('withoutPassword').findOne({ where: { id } });
+
+  if (!userExists) {
+    return res.status(409).json({ message: 'Usuário não existe' });
+  }
+
+  res.status(200).json(userExists);
+});
+
 UsersController.post('/', validateDisplayName, validateEmail, validatePassword, async (req, res) => {
   const { displayName, email, password, image } = req.body;
   const emailExists = await User.findOne({ where: { email } });
