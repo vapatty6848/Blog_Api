@@ -2,6 +2,7 @@ const express = require('express');
 const { User } = require('../models');
 const createToken = require('../auth/createToken');
 const userService = require('../services/userService');
+const validateToken = require('../auth/validateToken');
 
 const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -30,6 +31,25 @@ router.post('/', async (req, res) => {
   const payload = { password };
   const token = createToken.createToken(payload);
   res.status(201).json({ token });
+});
+
+router.get('/', validateToken, async (_req, res) => {
+  const users = await User.findAll();
+  res.status(200).json(users);
+});
+
+router.get('/:id', async (_req, res) => {
+  const users = await User.findByPk();
+  res.status(200).json(users);
+});
+
+router.delete('/:id', async (req, _res) => {
+  const { id } = req.params;
+  await User.destroy(
+    {
+      where: { id },
+    },
+  );
 });
 
 module.exports = router;
