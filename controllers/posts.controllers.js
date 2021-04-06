@@ -21,10 +21,11 @@ const updateOne = async (req, res, next) => {
   }
 };
 
-const getAll = async (_req, res, next) => {
+const getPosts = async (req, res, next) => {
   try {
-    const getPosts = await posts.getAll();
-    res.status(StatusCodes.OK).json(getPosts);
+    const { q } = req.query;
+    const filterPosts = await posts.getPosts(q);
+    res.status(StatusCodes.OK).json(filterPosts);
   } catch (err) {
     return next({ err });
   }
@@ -43,6 +44,6 @@ const getOne = async (req, res, next) => {
 module.exports = {
   create,
   updateOne,
-  getAll,
+  getPosts,
   getOne,
 };

@@ -6,8 +6,9 @@ const middlewares = require('../middlewares');
 const postsRouter = express.Router();
 
 postsRouter.post('/', middlewares.validateToken, posts.create);
-postsRouter.get('/:id', middlewares.validateToken, posts.getOne);
 postsRouter.put('/:id', middlewares.validateToken, posts.updateOne);
-postsRouter.get('/', middlewares.validateToken, posts.getAll);
+postsRouter.get('/search', middlewares.validateToken, posts.getPosts);
+postsRouter.get('/:id', middlewares.validateToken, posts.getOne);
+postsRouter.get('/', middlewares.validateToken, posts.getPosts);
 
 module.exports = postsRouter;

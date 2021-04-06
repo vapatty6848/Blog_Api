@@ -1,3 +1,4 @@
+const sequelize = require('sequelize');
 const { BlogPosts, Users } = require('../models');
 const { authNewPost } = require('../schemas');
 
@@ -26,9 +27,22 @@ const update = async (id, body, userId) => {
   return newPost;
 };
 
-const getAll = async () => {
-  const getPosts = await BlogPosts.findAll({ include: { model: Users, as: 'user' } });
-  return getPosts;
+const getPosts = async (search = '') => {
+  const lowerCaseSearch = search.toLowerCase();
+  let filterPosts;
+  if (lowerCaseSearch) {
+    filterPosts = await BlogPosts.findAll({
+      where: {
+        [sequelize.Op.or]: [
+          { title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', `%${lowerCaseSearch}%`) },
+          { content: sequelize.where(sequelize.fn('LOWER', sequelize.col('content')), 'LIKE', `%${lowerCaseSearch}%`) },
+        ],
+      },
+      include: { model: Users, as: 'user' } });
+  } else {
+    filterPosts = await BlogPosts.findAll({ include: { model: Users, as: 'user' } });
+  }
+  return filterPosts;
 };
 
 const getOne = async (id) => {
@@ -43,6 +57,6 @@ const getOne = async (id) => {
 module.exports = {
   create,
   update,
-  getAll,
+  getPosts,
   getOne,
 };
