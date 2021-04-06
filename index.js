@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const errorHandler = require('./middlewares/errorHandler/errorHandler');
 
 const { LoginRouter, PostsRouter, UsersRouter } = require('./routes');
 
@@ -15,5 +16,7 @@ app.get('/', (request, response) => {
 app.use('/user', UsersRouter);
 app.use('/login', LoginRouter);
 app.use('/post', PostsRouter);
+
+app.use(errorHandler);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
