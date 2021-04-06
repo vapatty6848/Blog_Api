@@ -13,10 +13,10 @@ router.get('/', async (_req, res) => {
   res.status(200).json(users);
 });
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  res.status(200).json({});
-});
+// router.get('/:id', async (req, res) => {
+//   const { id } = req.params;
+//   res.status(200).json({});
+// });
 
 router.post('/', service.validateCreateUser, async (req, res) => {
   const { displayName, email, password, image } = req.body;
@@ -27,16 +27,16 @@ router.post('/', service.validateCreateUser, async (req, res) => {
   res.status(201).json({ token });
 });
 
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const { } = req.body;
-  res.status(200).json({});
-});
+// router.put('/:id', async (req, res) => {
+//   const { id } = req.params;
+//   const { } = req.body;
+//   res.status(200).json({});
+// });
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
+// router.delete('/:id', async (req, res) => {
+//   const { id } = req.params;
 
-  res.status(200).json({});
-});
+//   res.status(200).json({});
+// });
 
 module.exports = router;
