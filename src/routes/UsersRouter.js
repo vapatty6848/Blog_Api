@@ -1,9 +1,10 @@
 const { Router } = require('express');
 const { UsersController } = require('../controllers');
+const { validateUserCreation } = require('../middlewares/validations');
 
 const UsersRouter = new Router();
 
-UsersRouter.post('/', UsersController.createUser);
+UsersRouter.post('/', validateUserCreation, UsersController.createUser);
 
 UsersRouter.get('/:id', UsersController.getUserById);
 

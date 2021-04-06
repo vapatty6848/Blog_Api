@@ -1,4 +1,4 @@
-export const sendError = (err, res) => {
+const sendError = (err, res) => {
   const { statusCode, message } = err;
 
   res.status(statusCode).json({
@@ -6,10 +6,15 @@ export const sendError = (err, res) => {
   });
 };
 
-export class ThrowError extends Error {
+class ThrowError extends Error {
   constructor(statusCode, message) {
     super();
     this.statusCode = statusCode;
     this.message = message;
   }
 }
+
+module.exports = {
+  sendError,
+  ThrowError,
+};

@@ -11,4 +11,4 @@ const status = {
   unprocessableEntity: 422,
 };
 
-export default status;
+module.exports = status;
