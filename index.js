@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { userController, postController } = require('./controllers');
+const { userController, postController, loginController } = require('./controllers');
 const { INTERNAL_SERVER_ERROR } = require('./utils/allStatusCode');
 
 const app = express();
@@ -27,6 +27,8 @@ app.use(bodyParser.json());
 app.use('/user', userController);
 
 app.use('/post', postController);
+
+app.use('/login', loginController);
 
 app.use((err, _req, res, _next) => {
   console.error({ err });

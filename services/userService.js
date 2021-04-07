@@ -12,7 +12,7 @@ const {
   validateName,
 } = require('../utils/funcsValidations');
 
-const registerValidation = (dataUser) => {
+const registerValidationData = (dataUser) => {
   const { displayName, email, password } = dataUser;
 
   switch (false) {
@@ -45,7 +45,7 @@ const registerUserService = async (req, res) => {
   const resError = (error) => res.status(error.status).json(objErrRes(error.err));
 
   let error;
-  error = registerValidation(dataUser);
+  error = registerValidationData(dataUser);
   if (error) return resError(error);
 
   error = await emailAlreadyRegistered(dataUser.email);
