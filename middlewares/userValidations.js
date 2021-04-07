@@ -47,10 +47,6 @@ const emailExists = async (req, res, next) => {
   const { email } = req.body;
   const emailFound = await UserService.findEmail(email);
 
-  /*   if (!emailFound) {
-    return res.status(BAD_REQUEST).json({ message: 'Campos inválidos' });
-  } */
-
   if (emailFound.length !== 0) {
     return res.status(CONFLICT).json({ message: 'Usuário já existe' });
   }

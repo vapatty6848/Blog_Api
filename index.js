@@ -7,6 +7,7 @@ const controllers = require('./controllers');
 
 app.use(express.json());
 app.use('/', controllers.UserController);
+app.use('/', controllers.PostController);
 
 app.get('/', (request, response) => {
   response.send();

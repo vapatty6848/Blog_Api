@@ -8,14 +8,12 @@ const findEmail = (userEmail) => Users.findAll({
   where: { email: userEmail },
 });
 
-const findUserByEmailAndPassword = (userEmail, userPassword) => {
-  Users.findAll({
-    where: {
-      email: userEmail,
-      password: userPassword,
-    },
-  });
-};
+const findUserByEmailAndPassword = (userEmail, userPassword) => Users.findAll({
+  where: {
+    email: userEmail,
+    password: userPassword,
+  },
+});
 
 const deleteUser = (userId) => {
   Users.destroy({
