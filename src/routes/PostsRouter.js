@@ -6,7 +6,7 @@ const PostsRouter = new Router();
 
 PostsRouter.post('/', validateToken, validatePostCreation, PostsController.createPost);
 
-PostsRouter.put('/search?q=:searchTerm', PostsController.searchPost);
+PostsRouter.get('/search', validateToken, PostsController.searchPost);
 
 PostsRouter.get('/:id', validateToken, PostsController.getPostById);
 

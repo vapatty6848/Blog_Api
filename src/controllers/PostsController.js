@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPosts, Users } = require('../../models');
 const { status, messages } = require('../libs/dicts');
 const { ThrowError } = require('../middlewares/errorHandler/utils');
@@ -13,7 +14,29 @@ const createPost = async (req, res) => {
 };
 
 const searchPost = async (req, res) => {
-  res.status(200).json({ message: 'searchPost' });
+  const { q } = req.query;
+  let posts = [];
+  if (q.length === 0) {
+    posts = await BlogPosts.findAll({
+      include: { model: Users, as: 'user' },
+      attributes: { exclude: ['userId'] },
+    });
+    res.status(status.ok).json(posts);
+  } else {
+    posts = await BlogPosts.findAll(
+      {
+        where: {
+          [Op.or]: [
+            { title: { [Op.substring]: q } },
+            { content: { [Op.substring]: q } },
+          ],
+        },
+        include: { model: Users, as: 'user' },
+        attributes: { exclude: ['userId'] },
+      },
+    );
+    res.status(status.ok).json(posts);
+  }
 };
 
 const getPostById = async (req, res, next) => {
