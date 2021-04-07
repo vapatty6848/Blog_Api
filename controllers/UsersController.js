@@ -4,7 +4,7 @@ const { validateUser } = require('../schemas/userValidation');
 const verifyAuth = require('../schemas/verifyAuth');
 const createToken = require('../auth/createToken');
 const {
-  OK, CONFLICT, SUCCESS, INTERNAL_SERVER_ERROR,
+  OK, CONFLICT, SUCCESS, INTERNAL_SERVER_ERROR, NOT_FOUND,
 } = require('../document/HTTPStatus');
 
 const router = new Router();
@@ -30,6 +30,20 @@ router.get('/', verifyAuth, async (_req, res) => {
     const users = await User.findAll();
 
     return res.status(OK).json(users);
+  } catch (err) {
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.get('/:id', verifyAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
+
+    if (!user) return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
+
+    return res.status(OK).json(user);
   } catch (err) {
     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
