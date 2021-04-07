@@ -23,8 +23,9 @@ const uniqueEmail = async (email) => {
 
 const loginCorrect = async (email, password) => {
   if (!email || !password) return false;
-  const user = await User.findOne({ where: { email } });
-  if (password === user.dataValues.password) {
+  const user = await User.findAll({ where: { email } });
+  if (user.length === 0) return false;
+  if (password === user[0].dataValues.password) {
     return true;
   }
   return false;
@@ -56,17 +57,17 @@ const validateCreateUser = async (req, res, next) => {
 const validateLogin = async (req, res, next) => {
   const { email, password } = req.body;
   const loginOK = await loginCorrect(email, password);
-  if (email === undefined) {
-    return res.status(BAD_REQUEST).send({ message: '"email" is required' });
-  }
-  if (password === undefined) {
-    return res.status(BAD_REQUEST).send({ message: '"password" is required' });
-  }
   if (email === '') {
     return res.status(BAD_REQUEST).send({ message: '"email" is not allowed to be empty' });
   }
+  if (!email) {
+    return res.status(BAD_REQUEST).send({ message: '"email" is required' });
+  }
   if (password === '') {
     return res.status(BAD_REQUEST).send({ message: '"password" is not allowed to be empty' });
+  }
+  if (password === undefined) {
+    return res.status(BAD_REQUEST).send({ message: '"password" is required' });
   }
   if (!loginOK) {
     return res.status(BAD_REQUEST).send({ message: 'Campos inválidos' });

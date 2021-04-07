@@ -7,7 +7,7 @@ const SUCCESS = 200;
 // Desafio 2 - Login
 const login = async (req, res) => {
   const { email } = req.body;
-  const user = await User.findOne({ where: { email } });
+  const user = await User.findAll({ where: { email } });
   const token = jwt.sign({ data: user }, SECRET, CONFIG);
 
   return res.status(SUCCESS).json({ token });
