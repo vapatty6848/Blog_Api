@@ -11,7 +11,7 @@ const validate = async (req, res, next) => {
   if (!email) return res.status(400).json({ message: '"email" is required' });
   if (!password) return res.status(400).json({ message: '"password" is required' });
   if (!image || !displayName) {
-    return res.status(400).json({ message: 'Todos os campos devem ser preenchidos' });
+    return res.status(400).json({ message: 'the field is required' });
   }
   if (typeof displayName !== 'string' || displayName.length < 8) {
     return res.status(400).json({ message: '"displayName" length must be at least 8 characters long' });

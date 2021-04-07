@@ -27,21 +27,17 @@ router.get('/user', validateToken, async (req, res) => {
   return res.status(200).json(users);
 });
 
-// router.get('/user/:id', validateToken, async (req, res) => {
-//   try {
-//     const user = await Users.findByPk(req.params.id);
-//     if (user) {
-//       return res.status(200).json(user);
-//     }
-//   } catch (err) {
-//     return res.status(500).json({ message: err.message });
-//   }
-// });
+router.get('/user/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const user = await Users.findByPk(id, { attributes: { exclude: ['password'] } });
+  if (user) return res.status(200).json(user);
+  return res.status(404).json({ message: 'Usuário não existe' });
+});
 
-// router.delete('user/me', validateToken, async (req, res) => {
-//   const { id } = req.decodeUser;
-//   await Users.destroy({ where: { id } });
-//   return res.status(204).end();
-// });
+router.delete('/user/me', validateToken, async (req, res) => {
+  const { id } = req.decodeUser;
+  await Users.destroy({ where: { id } });
+  return res.status(204).end();
+});
 
 module.exports = router;
