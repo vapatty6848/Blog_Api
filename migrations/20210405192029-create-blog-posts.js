@@ -21,9 +21,6 @@ module.exports = {
         onDelete: 'CASCADE',
         references: { model: 'Users', key: 'id' },
       },
-      image: {
-        type: Sequelize.STRING,
-      },
       published: {
         type: Sequelize.DATE,
       },

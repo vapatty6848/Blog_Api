@@ -38,9 +38,12 @@ const getPosts = async (search = '') => {
           { content: sequelize.where(sequelize.fn('LOWER', sequelize.col('content')), 'LIKE', `%${lowerCaseSearch}%`) },
         ],
       },
-      include: { model: Users, as: 'user' } });
+      include: { model: Users, as: 'user', attributes: { exclude: ['password'] } },
+    });
   } else {
-    filterPosts = await BlogPosts.findAll({ include: { model: Users, as: 'user' } });
+    filterPosts = await BlogPosts.findAll({
+      include: { model: Users, as: 'user', attributes: { exclude: ['password'] } },
+    });
   }
   return filterPosts;
 };
@@ -48,7 +51,9 @@ const getPosts = async (search = '') => {
 const getOne = async (id) => {
   const getPost = await BlogPosts.findOne({
     where: { id },
-    include: { model: Users, as: 'user' },
+    include: [
+      { model: Users, as: 'user', attributes: { exclude: ['password'] } },
+    ],
   });
   if (!getPost) throw new Error('C_ERR_POST_NOT_FOUND');
   return getPost;

@@ -1,5 +1,9 @@
 const ERROR = require('./helpers/errors');
 
+/* HandleError middleware feito pelo monstrão
+Phelipe Ohlsen e usado em nosso projeto Trybeer.
+Coisa phyna! */
+
 const checkCustomError = (message) => {
   const arr = message.split('_');
   return arr[0] === 'C' && arr[1] === 'ERR';
@@ -7,7 +11,7 @@ const checkCustomError = (message) => {
 
 const handleErrorObject = (error, boolean) => {
   if (!boolean) return error;
-  const customError = (ERROR[error.err.message]) ? ERROR[error.err.message] : ERROR.DEFAULT;
+  const customError = ERROR[error.err.message];
   return { ...customError, err: error.err.stack };
 };
 
@@ -25,7 +29,8 @@ module.exports = (error, _req, res, _next) => {
   const ERR = {
     message: customMessage || 'Erro interno',
     code: customCode || 'INTERNAL_ERROR',
+    statusCode: statusCode || 500,
   };
 
-  res.status(statusCode).json(ERR);
+  res.status(ERR.statusCode).json(ERR);
 };
