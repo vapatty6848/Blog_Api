@@ -44,7 +44,7 @@ PostController.post('/', validateToken, validatePostData, async (request, respon
   const user = await User.findOne({ where: { email } });
   const userId = user.dataValues.id;
   const post = await BlogPost.create({ userId, title, content });
-  return response.status(200).json(post);
+  return response.status(201).json(post);
 });
 
 PostController.put('/:id', validateToken, validatePostData, async (request, response) => {

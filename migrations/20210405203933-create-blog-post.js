@@ -24,11 +24,9 @@ module.exports = {
         references: { model: 'Users', key: 'id'},
       },
       published: {
-        allowNull: false,
         type: Sequelize.DATE,
       },
       updated: {
-        allowNull: false,
         type: Sequelize.DATE,
       }
     });
