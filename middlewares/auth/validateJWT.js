@@ -12,7 +12,9 @@ module.exports = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, secret);
-    const { email } = decoded.data.userData;
+    console.log('decoded:', decoded);
+
+    const { email } = decoded.data;
 
     const user = await User.findAll({ where: { email } });
 

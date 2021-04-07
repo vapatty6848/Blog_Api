@@ -8,10 +8,11 @@ const createToken = (req, res) => {
 
   const jwtConfig = { expiresIn: '7d', algorithm: 'HS256' };
 
-  User.findAll({ where: { email } })
+  User.findOne({ where: { email }, attributes: { exclude: ['password'] } })
     .then((user) => {
-      const userData = user[0].dataValues;
-      const token = jwt.sign({ data: { userData } }, secret, jwtConfig);
+      const data = user.dataValues;
+      const token = jwt
+        .sign({ data }, secret, jwtConfig);
 
       res.status(req.status).json({ token });
     })

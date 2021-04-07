@@ -18,9 +18,9 @@ const isDisplayNameValid = (displayName) => {
 
 const doesEmailAlreadyExists = async (email) => {
   if (!email) return false;
-  const result = await User.findAll({ where: { email } });
+  const result = await User.findOne({ where: { email } });
 
-  if (result.length === 0) return false;
+  if (result === null) return false;
 
   return result;
 };
@@ -48,7 +48,7 @@ const validateLoginFields = async (email, password) => {
     return false;
   }
 
-  const userPassword = isUserAlreadyregistered[0].dataValues.password;
+  const userPassword = isUserAlreadyregistered.dataValues.password;
 
   if (parseInt(password, 10) !== userPassword) return false;
 
