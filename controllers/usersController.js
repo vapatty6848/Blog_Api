@@ -53,4 +53,14 @@ router.get('/', authToken, async (_request, response) => {
   }
 });
 
+router.delete('/me', authToken, async (request, response) => {
+  try {
+    const { email } = request.user;
+    await Users.destroy({ where: { email } });
+    return response.status(204).send();
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 module.exports = router;

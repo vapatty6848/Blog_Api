@@ -11,6 +11,8 @@ const authToken = async (request, response, next) => {
 
     const tokenDecoded = verifyToken(token);
 
+    console.log(tokenDecoded.user);
+
     const userInfoFromDataBase = await Users.findOne({ where: { email: tokenDecoded.user.email } });
 
     const isTokenValid = checkInformationFromToken(tokenDecoded, userInfoFromDataBase);
