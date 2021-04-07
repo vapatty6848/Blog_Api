@@ -1,8 +1,11 @@
 const { Router } = require('express');
 const { User } = require('../models');
 const { validateUser } = require('../schemas/userValidation');
+const verifyAuth = require('../schemas/verifyAuth');
 const createToken = require('../auth/createToken');
-const { CONFLICT, SUCCESS, INTERNAL_SERVER_ERROR } = require('../document/HTTPStatus');
+const {
+  OK, CONFLICT, SUCCESS, INTERNAL_SERVER_ERROR
+} = require('../document/HTTPStatus');
 
 const router = new Router();
 
@@ -17,6 +20,16 @@ router.post('/', validateUser, async (req, res) => {
     const token = createToken(newUser);
 
     return res.status(SUCCESS).json({ token });
+  } catch (err) {
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.get('/', verifyAuth, async (_req, res) => {
+  try {
+    const users = await User.findAll();
+
+    return res.status(OK).json(users);
   } catch (err) {
     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }

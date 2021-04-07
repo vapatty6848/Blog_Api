@@ -1,17 +1,15 @@
 const validateToken = require('../auth/validateToken');
-
-const UNAUTHORIZED = 401;
-const INTERNAL_SERVER_ERROR = 500;
+const { UNAUTHORIZED, INTERNAL_SERVER_ERROR } = require('../document/HTTPStatus');
 
 module.exports = (req, res, next) => {
   try {
     const { authorization: token } = req.headers;
 
-    if (!token) return res.status(UNAUTHORIZED).json({ message: 'missing auth token' });
+    if (!token) return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
 
     const payload = validateToken(token);
 
-    if (!payload) res.status(UNAUTHORIZED).json({ message: 'jwt malformed' });
+    if (!payload) res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
 
     next();
   } catch (err) {
