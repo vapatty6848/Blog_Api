@@ -17,6 +17,10 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'User',
+          key: 'id',
+        }
       },
       published: {
         type: 'TIMESTAMP',
