@@ -1,5 +1,5 @@
-const generateToken = require('./generateToken');
-const validateToken = require('./validateToken');
+const generateToken = require('./GenerateToken');
+const validateToken = require('./ValidateToken');
 
 module.exports = {
   generateToken,

@@ -16,4 +16,19 @@ const verifyBodyData = (req, res, next) => {
   next();
 };
 
-module.exports = { verifyBodyData };
+const verifyBodyLogin = (req, res, next) => {
+  const { email, password } = req.body;
+  let message;
+  message = '"email" is not allowed to be empty';
+  if (email === '') return res.status(400).json({ message });
+  message = '"email" is required';
+  if (!email) return res.status(400).json({ message });
+  message = '"password" is not allowed to be empty';
+  if (password === '') return res.status(400).json({ message });
+  message = '"password" is required';
+  if (!password) return res.status(400).json({ message });
+
+  next();
+};
+
+module.exports = { verifyBodyData, verifyBodyLogin };
