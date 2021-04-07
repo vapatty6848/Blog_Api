@@ -1,18 +1,17 @@
 const { Users } = require('../models');
-const Status = require('./StatusCode');
-
-const errorMsg = (status, mess) => ({ statusCode: status, message: { message: mess } });
+const { EMAIL_REQUIRED, EMAIL_NOT_FILLED, PASSWORD_REQUIRED,
+  PASSWORD_NOT_FILLED, BAD_FILL } = require('../dictionary/errorDictionary');
 
 const InputsFormatAndUserExists = async (req, _res, next) => {
   const { email, password } = req.body;
 
-  if (email === '') return next(errorMsg(Status.code400, '"email" is not allowed to be empty'));
-  if (!email) return next(errorMsg(Status.code400, '"email" is required'));
-  if (password === '') return next(errorMsg(Status.code400, '"password" is not allowed to be empty'));
-  if (!password) return next(errorMsg(Status.code400, '"password" is required'));
+  if (email === '') return next(EMAIL_NOT_FILLED);
+  if (!email) return next(EMAIL_REQUIRED);
+  if (password === '') return next(PASSWORD_NOT_FILLED);
+  if (!password) return next(PASSWORD_REQUIRED);
 
   const userExists = await Users.findOne({ where: { email } });
-  if (!userExists) return next(errorMsg(Status.code400, 'Campos inválidos'));
+  if (!userExists) return next(BAD_FILL);
 
   next();
 };

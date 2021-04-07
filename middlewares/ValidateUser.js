@@ -1,43 +1,31 @@
 const { Users } = require('../models');
-const Status = require('./StatusCode');
+const { USER_ALREADY_EXIST, USER_NOT_FOUND, DYSPLAYNAME_SIZE, EMAIL_REQUIRED, EMAIL_BAD_FORMAT,
+  PASSWORD_REQUIRED, PASSWORD_BAD_FORMAT } = require('../dictionary/errorDictionary');
 
-const errorMsg = (status, mess) => ({ statusCode: status, message: { message: mess } });
 const emailRegex = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
 const passRegex = /.{6,}/;
 
 const ExistOrNot = async (req, _res, next) => {
   const { email } = req.body;
   const userExists = await Users.findOne({ where: { email } });
-  if (userExists) return next(errorMsg(Status.code409, 'Usuário já existe'));
-  next();
-};
-
-const FormatOfUserInfos = async (req, _res, next) => {
-  const { displayName, email, password } = req.body;
-
-  if (!displayName || displayName.length < 8) {
-    return next(errorMsg(Status.code400, '"displayName" length must be at least 8 characters long'));
-  }
-
-  if (!email || email === '') return next(errorMsg(Status.code400, '"email" is required'));
-  if (!emailRegex.test(email)) {
-    return next(errorMsg(Status.code400, '"email" must be a valid email'));
-  }
-
-  if (!password || password === '') return next(errorMsg(Status.code400, '"password" is required'));
-  if (!passRegex.test(password)) {
-    return next(errorMsg(Status.code400, '"password" length must be 6 characters long'));
-  }
-
+  if (userExists) return next(USER_ALREADY_EXIST);
   next();
 };
 
 const UserExistsByID = async (req, _res, next) => {
   const { id } = req.params;
-
   const userExists = await Users.findOne({ where: { id } });
-  if (!userExists) return next(errorMsg(Status.code404, 'Usuário não existe'));
+  if (!userExists) return next(USER_NOT_FOUND);
+  next();
+};
 
+const FormatOfUserInfos = async (req, _res, next) => {
+  const { displayName, email, password } = req.body;
+  if (!displayName || displayName.length < 8) return next(DYSPLAYNAME_SIZE);
+  if (!email || email === '') return next(EMAIL_REQUIRED);
+  if (!emailRegex.test(email)) return next(EMAIL_BAD_FORMAT);
+  if (!password || password === '') return next(PASSWORD_REQUIRED);
+  if (!passRegex.test(password)) return next(PASSWORD_BAD_FORMAT);
   next();
 };
 

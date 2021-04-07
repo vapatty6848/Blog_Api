@@ -1,11 +1,11 @@
 const Error = require('./Error');
-const Status = require('./StatusCode');
 const ValidateUser = require('./ValidateUser');
 const ValidateLogin = require('./ValidateLogin');
+const ValidatePosts = require('./ValidatePosts');
 
 module.exports = {
   Error,
-  Status,
   ValidateUser,
   ValidateLogin,
+  ValidatePosts,
 };

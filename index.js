@@ -1,4 +1,4 @@
-const path = require('path');
+// const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const controller = require('./controllers');
@@ -10,10 +10,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/user', controller.UsersController);
 app.use('/login', controller.LoginController);
+app.use('/post', controller.PostsController);
 
-app.use('/images', express.static(path.join(__dirname, '/images')));
+// app.use('/images', express.static(path.join(__dirname, '/images')));
 
-// não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (request, response) => {
   response.send();
 });
