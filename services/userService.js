@@ -1,7 +1,13 @@
 const { User } = require('../models');
 const createToken = require('../JWT/createToken');
 
-const { BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR, CONFLICT } = require('../utils/allStatusCode');
+const {
+  BAD_REQUEST,
+  CREATED,
+  INTERNAL_SERVER_ERROR,
+  CONFLICT,
+  OK,
+} = require('../utils/allStatusCode');
 const {
   objErrValidation,
   objErrRes,
@@ -39,7 +45,7 @@ const emailAlreadyRegistered = async (email) => {
   if (emailRegistered.length !== 0) return objErrValidation('Usuário já existe', CONFLICT);
 };
 
-const registerUserService = async (req, res) => {
+const RegisterUserService = async (req, res) => {
   const dataUser = req.body;
 
   const resError = (error) => res.status(error.status).json(objErrRes(error.err));
@@ -62,6 +68,19 @@ const registerUserService = async (req, res) => {
     });
 };
 
+const GetAllUserService = async (_req, res) => {
+  User.findAll({
+    attributes: ['id', 'displayName', 'email', 'image'],
+  })
+    .then((data) => {
+      res.status(OK).json(data);
+    })
+    .catch(() => {
+      res.status(500).json({ message: 'erro interno' });
+    });
+};
+
 module.exports = {
-  registerUserService,
+  RegisterUserService,
+  GetAllUserService,
 };

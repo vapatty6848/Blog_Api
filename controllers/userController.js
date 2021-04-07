@@ -1,5 +1,10 @@
 const { Router } = require('express');
-const { registerUserService } = require('../services/userService');
+
+const {
+  RegisterUserService,
+  GetAllUserService,
+} = require('../services/userService');
+const VerifyAuthorization = require('../middlewares/VerifyAuthorization');
 // const { User, BlogPost } = require('../models');
 
 const userController = new Router();
@@ -14,8 +19,8 @@ const userController = new Router();
 //     });
 // });
 
-userController.post('/', registerUserService);
-// userController.get('/:id', getAdminOrder);
+userController.get('/', VerifyAuthorization, GetAllUserService);
+userController.post('/', RegisterUserService);
 // userController.put('/:id', updateAdminOrderStatus);
 
 module.exports = userController;

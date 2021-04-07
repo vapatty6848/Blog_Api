@@ -23,7 +23,7 @@ const loginValidationData = (dataLogin) => {
   }
 };
 
-const loginService = async (req, res) => {
+const LoginService = async (req, res) => {
   const dataLogin = req.body;
 
   const resError = (error) => res.status(error.status).json(objErrRes(error.err));
@@ -50,5 +50,5 @@ const loginService = async (req, res) => {
 };
 
 module.exports = {
-  loginService,
+  LoginService,
 };
