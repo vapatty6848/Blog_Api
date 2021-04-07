@@ -2,6 +2,8 @@ const { Router } = require('express');
 const { User } = require('../models');
 const createToken = require('../auth/createToken');
 const userValidations = require('../middlewares/userValidations');
+const comebackResponse = require('../util/comebackResponse');
+const messages = require('../util/returnedMessages');
 
 const UserController = Router();
 
@@ -19,5 +21,14 @@ UserController.post('/',
 
 UserController.get('/', userValidations.validateTokenLogin, async (_req, res) => res
   .send(await User.findAll({ attributes: ['id', 'displayName', 'email', 'image'] })));
+
+UserController.get('/:id', userValidations.validateTokenLogin, async (req, res) => {
+  const foundUser = await User.findOne({
+    attributes: ['id', 'displayName', 'email', 'image'],
+    where: { id: req.params.id },
+  });
+  if (!foundUser) return comebackResponse(res, 404, messages.userNotFound);
+  return res.send(foundUser);
+});
 
 module.exports = UserController;

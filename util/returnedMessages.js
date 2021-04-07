@@ -10,4 +10,5 @@ module.exports = {
   invalidFields: 'Campos inválidos',
   tokenNotFound: 'Token não encontrado',
   expiredToken: 'Token expirado ou inválido',
+  userNotFound: 'Usuário não existe',
 };
