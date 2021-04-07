@@ -27,6 +27,8 @@ const LoginValidation = async (req, res, next) => {
     });
   }
 
+  req.status = 200;
+
   next();
 };
 

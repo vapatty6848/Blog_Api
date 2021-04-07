@@ -3,8 +3,6 @@ const { User } = require('../../models');
 
 const secret = 'segredo';
 
-const SUCESS = 200;
-
 const createToken = (req, res) => {
   const { email } = req.body;
 
@@ -12,9 +10,10 @@ const createToken = (req, res) => {
 
   User.findAll({ where: { email } })
     .then((user) => {
-      const token = jwt.sign({ data: { user } }, secret, jwtConfig);
+      const userData = user[0].dataValues;
+      const token = jwt.sign({ data: { userData } }, secret, jwtConfig);
 
-      res.status(SUCESS).json({ token });
+      res.status(req.status).json({ token });
     })
     .catch((e) => {
       console.log(e.message);

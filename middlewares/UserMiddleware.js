@@ -1,10 +1,6 @@
-const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 
-const secret = 'segredo';
-
 const SUCESS = 200;
-const CREATED = 201;
 
 const getAllUsers = (req, res) => {
   User.findAll()
@@ -15,16 +11,14 @@ const getAllUsers = (req, res) => {
     });
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { displayName, email, password, image } = req.body;
 
-  const jwtConfig = { expiresIn: '7d', algorithm: 'HS256' };
-
   User.create({ displayName, email, password, image })
-    .then((user) => {
-      const token = jwt.sign({ data: { user } }, secret, jwtConfig);
+    .then(() => {
+      req.status = 201;
 
-      res.status(CREATED).json({ token });
+      next();
     })
     .catch((e) => {
       console.log(e.message);

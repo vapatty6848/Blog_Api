@@ -1,25 +1,25 @@
 const jwt = require('jsonwebtoken');
-const usersService = require('../../services/Users');
+const { User } = require('../../models');
 
-const secret = 'seusecretdetoken';
+const secret = 'segredo';
 
 module.exports = async (req, res, next) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    return next({ statusCode: 401, customMessage: 'missing auth token' });
+    return next({ statusCode: 401, customMessage: 'tokenNotFound' });
   }
 
   try {
     const decoded = jwt.verify(token, secret);
-    const user = await usersService.findUserByEmail(decoded.data.email);
+    const { email } = decoded.data.userData;
 
-    if (!user) {
-      return next({ statusCode: 401, customMessage: 'token user not found' });
+    const user = await User.findAll({ where: { email } });
+
+    if (user.length === 0) {
+      return next({ statusCode: 401, customMessage: 'tokenNotFound' });
     }
 
-    req.user = user;
-
     next();
-  } catch (err) { return next({ statusCode: 401, customMessage: 'jwt malformed' }); }
+  } catch (err) { return next({ statusCode: 401, customMessage: 'invalidToken' }); }
 };
