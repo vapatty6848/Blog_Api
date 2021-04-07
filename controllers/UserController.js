@@ -5,6 +5,7 @@ const {
   validateEmail,
   validateUniqueEmail,
 } = require('../middlewares');
+const statusCode = require('../dicts/statusCodesHTTP');
 
 const router = Router();
 
@@ -17,7 +18,7 @@ router.post('/',
     const newUser = { displayName, email, password, image };
 
     const token = await UserService.create(newUser);
-    return response.json({ token });
+    return response.status(statusCode.CREATED).json({ token });
   });
 
 module.exports = router;
