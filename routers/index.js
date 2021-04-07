@@ -6,13 +6,15 @@ const userController = require('../controllers/UsersController');
 const loginController = require('../controllers/LoginController');
 
 const { validateCreateUser, validateLogin, validateToken } = require('../services/Validation');
+const { createTok } = require('../middleware/createTok');
 
 // Rotas de User
 router.get('/user', validateToken, userController.getUserAll);
 router.get('/user/:id', validateToken, userController.getUserId);
-router.post('/user', validateCreateUser, userController.createUser);
+router.delete('/user/me', validateToken, userController.deleteUser);
+router.post('/user', validateCreateUser, userController.createUser, createTok);
 
 // Rota de Login
-router.post('/login', validateLogin, loginController.login);
+router.post('/login', validateLogin, createTok);
 
 module.exports = router;

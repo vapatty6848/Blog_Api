@@ -1,6 +1,7 @@
 const { verifyToken } = require('./Auth');
 const { User } = require('../models');
 
+const SUCCESS = 200;
 const BAD_REQUEST = 400;
 const CONFLICT = 409;
 const UNAUTHORIZED = 401;
@@ -74,6 +75,7 @@ const validateLogin = async (req, res, next) => {
   if (!loginOK) {
     return res.status(BAD_REQUEST).send({ message: 'Campos inválidos' });
   }
+  req.status = SUCCESS;
   next();
 };
 
@@ -85,11 +87,13 @@ const validateToken = async (req, res, next) => {
   }
   try {
     const decoded = verifyToken(token);
-    const { email } = decoded.data[0];
-    const user = await User.findAll({ where: { email } });
-    if (user.length === 0) {
+    console.log('Decoded : ', decoded);
+    const { email } = decoded;
+    const user = await User.findOne({ where: { email } });
+    if (user === null) {
       return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
     }
+    req.user = user.dataValues;
     next();
   } catch (err) {
     return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
