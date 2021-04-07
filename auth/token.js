@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+
 const secret = 'blogsAPI';
 
 const headers = {
@@ -29,7 +30,7 @@ const authorizationToken = (req, res, next) => {
     return res.status(401).json({ message: 'jwt malformed' });
   }
   next();
-}
+};
 
 module.exports = {
   createToken,

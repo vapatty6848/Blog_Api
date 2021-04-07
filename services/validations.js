@@ -2,7 +2,7 @@ const { Users } = require('../models');
 
 const validate = async (req, res, next) => {
   const { displayName, email, password, image } = req.body;
-  const regex = '/^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i';
+  const regex = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/i;
   if (!email) return res.status(400).json({ message: '"email" is required' });
   if (!password) return res.status(400).json({ message: '"password" is required' });
   if (!image || !displayName) {
