@@ -1,4 +1,4 @@
-const { BlogPosts } = require('../../models');
+const { BlogPosts, Users } = require('../../models');
 const { status } = require('../libs/dicts');
 
 const createPost = async (req, res) => {
@@ -20,7 +20,11 @@ const getPostById = async (req, res) => {
 };
 
 const getAllPosts = async (req, res) => {
-  res.status(200).json({ message: 'getAllPosts' });
+  const responsePayload = await BlogPosts.findAll({
+    include: { model: Users, as: 'user' },
+    attributes: { exclude: ['userId'] },
+  });
+  res.status(200).json(responsePayload);
 };
 
 const updatePost = async (req, res) => {

@@ -10,7 +10,7 @@ PostsRouter.put('/search?q=:searchTerm', PostsController.searchPost);
 
 PostsRouter.get('/:id', PostsController.getPostById);
 
-PostsRouter.get('/', PostsController.getAllPosts);
+PostsRouter.get('/', validateToken, PostsController.getAllPosts);
 
 PostsRouter.put('/:id', PostsController.updatePost);
 
