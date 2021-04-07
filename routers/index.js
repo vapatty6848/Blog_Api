@@ -9,6 +9,7 @@ const { validateCreateUser, validateLogin, validateToken } = require('../service
 
 // Rotas de User
 router.get('/user', validateToken, userController.getUserAll);
+router.get('/user/:id', validateToken, userController.getUserId);
 router.post('/user', validateCreateUser, userController.createUser);
 
 // Rota de Login
