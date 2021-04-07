@@ -27,11 +27,11 @@ const verifyToken = (token) => {
 const validateToken = (req, res, next) => {
   const { authorization: token } = req.headers;
 
-  if (!token) return res.status(Unauthorized).json({ message: 'missing auth token' });
+  if (!token) return res.status(Unauthorized).json({ message: 'Token não encontrado' });
 
   req.payload = verifyToken(token);
 
-  if (!req.payload) return res.status(Unauthorized).json({ message: 'jwt malformed' });
+  if (!req.payload) return res.status(Unauthorized).json({ message: 'Token expirado ou inválido' });
 
   return next();
 };
