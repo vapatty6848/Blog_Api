@@ -1,6 +1,7 @@
 const { Router } = require('express');
 
 const { User, BlogPost } = require('../models');
+const { validatePostData } = require('../middlewares/validatePostData');
 const { validateToken } = require('../auth/token');
 
 const PostController = new Router();
@@ -16,7 +17,7 @@ PostController.get('/', validateToken, async (request, response) => {
   return response.status(200).json(posts);
 });
 
-PostController.get('/search', async (request, response) => {
+PostController.get('/search', validateToken, async (request, response) => {
   console.log(request.query.q);
   return response.status(200).json({ message: 'PostController' });
 });
@@ -37,7 +38,7 @@ PostController.get('/:id', validateToken, async (request, response) => {
   return response.status(200).json(post);
 });
 
-PostController.post('/', validateToken, async (request, response) => {
+PostController.post('/', validateToken, validatePostData, async (request, response) => {
   const { title, content } = request.body;
   const { email } = request.user;
   const user = await User.findOne({ where: { email } });
@@ -46,18 +47,13 @@ PostController.post('/', validateToken, async (request, response) => {
   return response.status(200).json(post);
 });
 
-PostController.put('/:id', validateToken, async (request, response) => {
+PostController.put('/:id', validateToken, validatePostData, async (request, response) => {
   const { title, content } = request.body;
   const { email } = request.user;
   const { id } = request.params;
   const user = await User.findOne({ where: { email } });
   const userId = user.dataValues.id;
-  if (!title) {
-    return response.status(400).json({ message: '"title" is required' });
-  }
-  if (!content) {
-    return response.status(400).json({ message: '"content" is required' });
-  }
+
   const post = await BlogPost.findOne({ where: { id } });
   if (!post) {
     return response.status(404).json({ message: 'Post não existe' });

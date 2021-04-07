@@ -35,19 +35,19 @@ const validateUserData = (request, response, next) => {
 const validateLogin = (request, response, next) => {
   const { email, password } = request.body;
   let message;
-  if (email && email.length === 0) {
-    message = '"email" is not allowed to be empty';
-    return response.status(BAD_REQUEST).json({ message });
-  }
-  if (!email) {
+  if (!email && email !== '') {
     message = '"email" is required';
     return response.status(BAD_REQUEST).json({ message });
   }
-  if (!password) {
+  if (email.length < 1) {
+    message = '"email" is not allowed to be empty';
+    return response.status(BAD_REQUEST).json({ message });
+  }
+  if (!password && password !== '') {
     message = '"password" is required';
     return response.status(BAD_REQUEST).json({ message });
   }
-  if (password.length === 0) {
+  if (password.length < 1) {
     message = '"password" is not allowed to be empty';
     return response.status(BAD_REQUEST).json({ message });
   }
