@@ -22,7 +22,7 @@ const {
   validateName,
 } = require('../utils/funcsValidations');
 
-const registerValidationData = (dataUser) => {
+const registerValidationDataUser = (dataUser) => {
   const { displayName, email, password } = dataUser;
 
   switch (false) {
@@ -54,7 +54,7 @@ const RegisterUserService = async (req, res) => {
   const resError = (error) => res.status(error.status).json(objErrRes(error.err));
 
   let error;
-  error = registerValidationData(dataUser);
+  error = registerValidationDataUser(dataUser);
   if (error) return resError(error);
 
   error = await emailAlreadyRegistered(dataUser.email);
@@ -71,7 +71,7 @@ const RegisterUserService = async (req, res) => {
     });
 };
 
-const GetAllUserService = async (_req, res) => {
+const GetAllUserService = (_req, res) => {
   User.findAll({
     attributes: ['id', 'displayName', 'email', 'image'],
   })
@@ -83,7 +83,7 @@ const GetAllUserService = async (_req, res) => {
     });
 };
 
-const GetUserByIdService = async (req, res) => {
+const GetUserByIdService = (req, res) => {
   const { id } = req.params;
   User.findAll({
     attributes: ['id', 'displayName', 'email', 'image'],
@@ -98,7 +98,7 @@ const GetUserByIdService = async (req, res) => {
     });
 };
 
-const DeleteUserService = async (req, res) => {
+const DeleteUserService = (req, res) => {
   const { authorization: token } = req.headers;
   const payload = jwt.decode(token);
   const { id } = payload;

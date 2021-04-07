@@ -21,10 +21,13 @@ const userController = new Router();
 //     });
 // });
 
-userController.get('/', VerifyAuthorization, GetAllUserService);
-userController.get('/:id', VerifyAuthorization, GetUserByIdService);
 userController.post('/', RegisterUserService);
-userController.delete('/me', VerifyAuthorization, DeleteUserService);
+
+userController.use(VerifyAuthorization);
+
+userController.get('/', GetAllUserService);
+userController.get('/:id', GetUserByIdService);
+userController.delete('/me', DeleteUserService);
 
 // userController.put('/:id', updateAdminOrderStatus);
 
