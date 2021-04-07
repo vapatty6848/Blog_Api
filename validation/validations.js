@@ -1,23 +1,21 @@
 const {
-    DISPLAY_NAME_TOO_SHORT,
-  } = require('../dictionary/errorMessages');
-  const { BAD_REQUEST } = require('../dictionary/statusCodes');
+  DISPLAY_NAME_TOO_SHORT,
+} = require('../dictionary/errorMessages');
+const { BAD_REQUEST } = require('../dictionary/statusCodes');
 
 const validateNameLength = async (request, response, next) => {
-    const { displayName } = request.body;
-    const isDisplayNameOfIncorrectLength = displayName.length < 8;
-    console.log("*********************************************", displayName)
+  const { displayName } = request.body;
+  const isDisplayNameOfIncorrectLength = displayName.length < 8;
 
-    if (isDisplayNameOfIncorrectLength) {
-            console.log("*********************************************", 'lol')
-      return response
-        .status(BAD_REQUEST)
-        .send({ message: DISPLAY_NAME_TOO_SHORT });
-    }
-  
-    next();
-  };
+  if (isDisplayNameOfIncorrectLength) {
+    return response
+      .status(BAD_REQUEST)
+      .send({ message: DISPLAY_NAME_TOO_SHORT });
+  }
 
-  module.exports = {
-    validateNameLength,
-  };
+  next();
+};
+
+module.exports = {
+  validateNameLength,
+};

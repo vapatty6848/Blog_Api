@@ -17,19 +17,19 @@ UserController.post(
   '/',
   validateNameLength,
   async (request, response) => {
-  const { displayName, email, password, image } = request.body;
-  const jwtConfig = { expiresIn: '7d', algorithm: 'HS256' };
+    const { displayName, email, password, image } = request.body;
+    const jwtConfig = { expiresIn: '7d', algorithm: 'HS256' };
 
-  try {
-    const user = await User.create({ displayName, email, password, image });
-    const token = jwt.sign({ email, password }, SECRET, jwtConfig);
-    const tokenContent = { token };
+    try {
+      await User.create({ displayName, email, password, image });
+      const token = jwt.sign({ email, password }, SECRET, jwtConfig);
+      const tokenContent = { token };
 
-    response.status(CREATED).json(tokenContent);
-  } catch (error) {
-    console.log(error);
-  }
-  // console.log(displayName, email, password, image)
-});
+      response.status(CREATED).json(tokenContent);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+);
 
 module.exports = UserController;
