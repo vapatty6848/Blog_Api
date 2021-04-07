@@ -1,0 +1,13 @@
+const UNAUTHORIZED = 401;
+const FORBIDDEN = 403;
+const NOT_FOUND = 404;
+const CONFLICT = 409;
+const BAD_DATA = 422;
+
+module.exports = {
+  BAD_DATA,
+  NOT_FOUND,
+  CONFLICT,
+  UNAUTHORIZED,
+  FORBIDDEN,
+};
