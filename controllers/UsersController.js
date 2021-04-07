@@ -3,16 +3,23 @@ const { Router } = require('express');
 const route = Router();
 
 const { UsersServices } = require('../services');
-const { createTokenUser, validations: valid } = require('../middlewares');
+const { validations: valid } = require('../middlewares');
 
-route.post('/', valid.verifyBodyData, async (req, res, next) => {
+route.post('/', valid.verifyBodyData, async (req, res) => {
   const dataUser = req.body;
+  const { email } = dataUser;
   try {
     await UsersServices.createUser(dataUser);
-    next();
+    const token = await UsersServices.createToken({ email });
+    return res.status(201).json({ token });
   } catch {
     return res.status(409).json({ message: 'Usuário já existe' });
   }
-}, createTokenUser.create);
+});
+
+route.get('/', valid.verifyAuthorization, async (req, res) => {
+  const listUsers = await UsersServices.findAllUsers();
+  return res.status(200).json(listUsers);
+});
 
 module.exports = route;

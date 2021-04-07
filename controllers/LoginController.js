@@ -3,13 +3,16 @@ const { Router } = require('express');
 const route = Router();
 
 const { UsersServices } = require('../services');
-const { createTokenUser, validations: valid } = require('../middlewares');
+const { validations: valid } = require('../middlewares');
 
-route.post('/', valid.verifyBodyLogin, async (req, res, next) => {
+route.post('/', valid.verifyBodyLogin, async (req, res) => {
   const { email, password } = req.body;
   const findUser = await UsersServices.findUserByEmail(email);
-  if (findUser && findUser.password === password) next();
-  else return res.status(400).json({ message: 'Campos inválidos' });
-}, createTokenUser.createTokenLogin);
+  if (findUser && findUser.password === password) {
+    const token = await UsersServices.createToken({ email });
+    return res.status(200).json({ token });
+  }
+  return res.status(400).json({ message: 'Campos inválidos' });
+});
 
 module.exports = route;
