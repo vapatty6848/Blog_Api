@@ -35,7 +35,7 @@ router.get('/:id', authToken, async (request, response) => {
     const { id } = request.params;
     const userFound = await Users.findOne({ where: { id } });
 
-    if (!userFound) response.status(404).send({ message: 'Usuário não existe' });
+    if (!userFound) return response.status(404).send({ message: 'Usuário não existe' });
 
     response.status(200).json(userFound);
   } catch (error) {

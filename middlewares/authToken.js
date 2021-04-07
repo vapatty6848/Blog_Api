@@ -11,15 +11,15 @@ const authToken = async (request, response, next) => {
 
     const tokenDecoded = verifyToken(token);
 
-    console.log(tokenDecoded.user);
-
     const userInfoFromDataBase = await Users.findOne({ where: { email: tokenDecoded.user.email } });
 
     const isTokenValid = checkInformationFromToken(tokenDecoded, userInfoFromDataBase);
 
     if (!isTokenValid) return response.status(401).send({ message: 'Token expirado ou inválido' });
 
-    request.user = tokenDecoded.user;
+    const { email, id, displayName } = tokenDecoded.user;
+
+    request.user = { email, id, displayName };
 
     next();
   } catch (error) {
