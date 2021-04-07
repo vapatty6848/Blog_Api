@@ -1,5 +1,6 @@
 const { error, status } = require('./errorMessage');
 const { getUserByEmail } = require('../services/UserSevice');
+const checkToken = require('../auth/validateToken');
 
 const emailFormat = (email) => {
   const regex = /^[a-zA-Z0-9]+@[a-z]+\.com$/;
@@ -31,6 +32,15 @@ const validateFields = async (req, res, next) => {
   }
 };
 
+const verifyGetAllUsers = async (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) return res.status(status.Unauthorized).json(error.tokenNotFound);
+  const result = checkToken(authorization);
+  if (result === null) return res.status(status.Unauthorized).json(error.expiredToken);
+  next();
+};
+
 module.exports = {
   validateFields,
+  verifyGetAllUsers,
 };

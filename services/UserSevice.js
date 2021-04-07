@@ -17,21 +17,26 @@ const getUserByEmail = async (userEmail) => {
 
 const loginWithEmailAndPass = async (userEmail, userPassword) => {
   try {
-    const getUser =  await User.findAll({
-      where: { 
+    const getUser = await User.findAll({
+      where: {
         email: userEmail,
         password: userPassword,
       },
     });
     return getUser;
-
-  } catch(_error) {
+  } catch (_error) {
     return null;
   }
+};
+
+const getAllUsers = async () => {
+  const allUsers = await User.findAll();
+  return allUsers;
 };
 
 module.exports = {
   addUser,
   getUserByEmail,
   loginWithEmailAndPass,
+  getAllUsers,
 };

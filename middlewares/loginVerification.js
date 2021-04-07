@@ -1,5 +1,5 @@
 const { error, status } = require('./errorMessage');
-const { loginWithEmailAndPass, } = require('../services/UserSevice');
+const { loginWithEmailAndPass } = require('../services/UserSevice');
 
 const validateLogin = async (req, res, next) => {
   const { email, password } = req.body;

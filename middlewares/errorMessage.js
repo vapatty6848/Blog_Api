@@ -8,13 +8,16 @@ const error = {
   invalidFiels: { message: 'Campos inválidos' },
   emptyEmail: { message: '"email" is not allowed to be empty' },
   emptyPassword: { message: '"password" is not allowed to be empty' },
+  tokenNotFound: { message: 'Token não encontrado' },
+  expiredToken: { message: 'Token expirado ou inválido' },
 };
 
 const status = {
-  Bad_Request: 400,
-  Created: 201,
-  Conflict: 409,
   Ok: 200,
+  Created: 201,
+  Bad_Request: 400,
+  Unauthorized: 401,
+  Conflict: 409,
 };
 
 module.exports = {
