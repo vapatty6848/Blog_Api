@@ -11,10 +11,13 @@ const findUserByEmail = async (email) => User.findOne({ where: { email } });
 
 const findAllUsers = async () => User.findAll();
 
+const findUsersById = async (id) => User.findByPk(id);
+
 module.exports = {
   createUser,
   createToken,
   findUserByEmail,
   findAllUsers,
   tokenValid,
+  findUsersById,
 };
