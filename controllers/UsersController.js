@@ -4,7 +4,7 @@ const { validateUser } = require('../schemas/userValidation');
 const verifyAuth = require('../schemas/verifyAuth');
 const createToken = require('../auth/createToken');
 const {
-  OK, CONFLICT, SUCCESS, INTERNAL_SERVER_ERROR, NOT_FOUND,
+  OK, CONFLICT, SUCCESS, INTERNAL_SERVER_ERROR,
 } = require('../document/HTTPStatus');
 
 const router = new Router();
