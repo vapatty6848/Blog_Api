@@ -1,27 +1,21 @@
 const express = require('express');
 const { User } = require('../models');
-
-// id: 1,
-// displayName: 'Lewis Hamilton',
-// email: 'lewishamilton@gmail.com',
-// password: '123456',
-// image: 'https://upload.wikimedia.org/wikipedia/commons/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg',
+const { validateUser } = require('../middlewares/UserMiddleware');
+const tokenGenerator = require('../utils/TokenGenerator');
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post('/', validateUser, (req, res) => {
   const { displayName, email, password, image } = req.body;
   User.create({ displayName, email, password, image })
     .then((newUser) => {
-      // Separamos a senha do restante do objeto, para que ela não seja retornada na API
-      // const { id, displayName, email, image, createdAt, updatedAt } = newUser;
       const { password: pwd, ...UserWithoutPassword } = newUser;
-      // res.status(200).json({ id, displayName, email, image, createdAt, updatedAt });
-      res.status(200).json(UserWithoutPassword);
+      const token = tokenGenerator(UserWithoutPassword);
+      res.locals.user = token;
+      res.status(201).json({ token });
     })
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
+    .catch(() => {
+      res.status(409).send({ message: 'Usuário já existe' });
     });
 });
 
@@ -42,11 +36,12 @@ router.get('/:id', (req, res, _next) => {
       if (user === null) {
         res.status(404).send({ message: 'Usuário não encontrado' });
       }
+      //  http GET :3000/login/1\?includeBlogPosts=1
+      //  linha 10 em User models
+      if (!req.query.includeBlogPosts) return res.status(200).json(user);
 
-      if (!req.query.includeProducts) return res.status(200).json(user);
-
-      return user.getProducts().then((products) => {
-        res.status(200).json({ ...user.dataValues, products });
+      return user.getBlogPosts().then((posts) => {
+        res.status(200).json({ ...user.dataValues, posts });
       });
     })
     .catch((e) => {
