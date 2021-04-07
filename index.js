@@ -17,5 +17,5 @@ app.get('/ping', (request, response) => {
 app.use('/user', UserController);
 
 app.use((error, request, response, _next) => {
-  response.status(error.code).json(error.message);
+  response.status(error.code).json({ message: error.message });
 });
