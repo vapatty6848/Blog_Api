@@ -12,16 +12,16 @@ async function validateToken(req, res, next) {
     if (error) {
       return res.status(401).json({ message: 'Token expirado ou inválido' });
     }
-    // console.log('meu token decodificado', decoded);
-    const emailExists = await User.findOne({ where: { email: decodedToken.email } });
+    const emailExists = await User
+      .scope('withoutPassword')
+      .findOne({ where: { email: decodedToken.email } });
+    // console.log(emailExists.dataValues);
     if (!emailExists) {
       return res.status(401).json({ message: 'Token expirado ou inválido' });
     }
-    req.user = decodedToken;
+    req.user = emailExists.dataValues;
     next();
   });
-
-  // next();
 }
 
 module.exports = {

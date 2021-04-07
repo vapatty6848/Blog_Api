@@ -2,7 +2,7 @@ const createBlogPost = (sequelize, DataTypes) => {
   const BlogPost = sequelize.define('BlogPost', {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    published: DataTypes.DATE,
+    published: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     updated: DataTypes.DATE,
   }, {
     timestamps: false,
