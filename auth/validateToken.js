@@ -13,8 +13,9 @@ const validateToken = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, secret);
-    const user = await UserService.findEmail(decoded.email);
-    req.user = user;
+    await UserService.findEmail(decoded.email);
+
+    req.user = decoded;
     next();
   } catch (error) {
     return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });

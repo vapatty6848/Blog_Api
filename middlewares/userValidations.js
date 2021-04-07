@@ -3,6 +3,7 @@ const UserService = require('../service/UserService');
 const EIGHT = 8;
 const BAD_REQUEST = 400;
 const CONFLICT = 409;
+const NOT_FOUND = 404;
 
 const validateName = (req, res, next) => {
   const { displayName } = req.body;
@@ -67,10 +68,21 @@ const unknownUser = async (req, res, next) => {
   next();
 };
 
+const userIdExist = async (req, res, next) => {
+  const { id } = req.params;
+  const userExist = UserService.findById(id);
+
+  if (!userExist === null) {
+    return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
+  }
+  next();
+};
+
 module.exports = {
   validateName,
   validateEmail,
   validatePassword,
   unknownUser,
   emailExists,
+  userIdExist,
 };
