@@ -6,6 +6,10 @@ function validateEmail(email) {
     return { result: 'missing' };
   }
 
+  if (email.length === 0) {
+    return { result: 'empty' };
+  }
+
   if (!isEmailValid) {
     return { result: 'invalid' }
   }
