@@ -2,13 +2,14 @@ const { Router } = require('express');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { validateNewUser } = require('../middlewares/validateNewUser');
+const { validateToken } = require('../middlewares/auth');
 
 const UserRouter = new Router();
 const jwtConfig = {
   algorithm: 'HS256',
 };
 
-UserRouter.get('/', async (req, res) => {
+UserRouter.get('/', validateToken, async (req, res) => {
   const allUsers = await User.findAll({});
   return res.status(200).json(allUsers);
 });
