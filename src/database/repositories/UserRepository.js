@@ -54,7 +54,7 @@ class UserRepository {
   async deleteByID(id) {
     this.count += 1;
 
-    await User.destroy({ where: { id } });
+    await User.destroy({ where: { id }, cascade: true });
   }
 }
 

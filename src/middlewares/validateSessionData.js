@@ -10,8 +10,8 @@ const MIN_LENGTH = 1;
 function validateUserData(request, _response, next) {
   const { email, password } = request.body;
 
-  if (!email) throw new AppError(requiredEmail);
-  if (!password) throw new AppError(requiredPassword);
+  if (email === undefined) throw new AppError(requiredEmail);
+  if (password === undefined) throw new AppError(requiredPassword);
 
   if (email.length < MIN_LENGTH) throw new AppError(emailError);
   if (password.length < MIN_LENGTH) throw new AppError(passwordError);

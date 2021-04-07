@@ -34,7 +34,6 @@ class BlogPostsRepository {
           { content: { [Op.like]: `%${searchTerm}%` } },
         ],
       },
-    }, {
       include: { as: 'user', model: User, attributes: ['id', 'displayName', 'email', 'image'] },
     });
 

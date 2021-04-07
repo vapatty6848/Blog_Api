@@ -3,7 +3,7 @@ const { CONFLICT } = require('../errors/status');
 
 const generateJWT = require('../utils/generateJWT');
 
-const emailError = 'Usuário já existente';
+const emailError = 'Usuário já existe';
 
 class CreateUserService {
   constructor(userRepository) {

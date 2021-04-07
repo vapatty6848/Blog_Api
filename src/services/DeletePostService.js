@@ -2,7 +2,7 @@ const AppError = require('../errors/AppError');
 const { UNAUTHORIZED, NOT_FOUND } = require('../errors/status');
 
 const notAuthorized = 'Usuário não autorizado';
-const notFound = 'Post not found';
+const notFound = 'Post não existe';
 
 class DeletePostService {
   constructor(blogPostsRepository) {

@@ -1,7 +1,7 @@
 const AppError = require('../errors/AppError');
 
-const displayNameError = '"displayName" must be at least 8 characters long';
-const passwordError = '"password" must be at least 6 characters long';
+const displayNameError = '"displayName" length must be at least 8 characters long';
+const passwordError = '"password" length must be 6 characters long';
 const emailError = '"email" must be a valid email';
 const requiredPassword = '"password" is required';
 const requiredEmail = '"email" is required';
