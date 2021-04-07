@@ -62,7 +62,7 @@ const unknownUser = async (req, res, next) => {
   const { email } = req.body;
   const emailFound = await UserService.findEmail(email);
 
-  if (!emailFound) {
+  if (!emailFound.length) {
     return res.status(BAD_REQUEST).json({ message: 'Campos inválidos' });
   }
   next();
@@ -70,9 +70,10 @@ const unknownUser = async (req, res, next) => {
 
 const userIdExist = async (req, res, next) => {
   const { id } = req.params;
-  const userExist = UserService.findById(id);
+  const userExist = await UserService.findById(id);
+  console.log(userExist);
 
-  if (!userExist === null) {
+  if (userExist === null) {
     return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
   }
   next();

@@ -33,7 +33,7 @@ UserController.post('/user', validateName, validateEmail, validatePassword, emai
 
 UserController.post('/login', validateEmail, validatePassword, unknownUser, rescue(async (req, res) => {
   const { email, password } = req.body;
-  await UserService.findUserByEmailAndPassword(email, password);
+  UserService.findUserByEmailAndPassword(email, password);
 
   const userData = {
     email,
