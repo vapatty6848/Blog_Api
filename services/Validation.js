@@ -1,7 +1,9 @@
+const { verifyToken } = require('./Auth');
 const { User } = require('../models');
 
 const BAD_REQUEST = 400;
 const CONFLICT = 409;
+const UNAUTHORIZED = 401;
 
 const isBlank = (field) => !field || field === '';
 
@@ -75,7 +77,27 @@ const validateLogin = async (req, res, next) => {
   next();
 };
 
+const validateToken = async (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+  }
+  try {
+    const decoded = verifyToken(token);
+    const { email } = decoded.data[0];
+    const user = await User.findAll({ where: { email } });
+    if (user.length === 0) {
+      return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+    }
+    next();
+  } catch (err) {
+    return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
+  }
+};
+
 module.exports = {
   validateCreateUser,
   validateLogin,
+  validateToken,
 };

@@ -5,10 +5,10 @@ const router = express.Router();
 const userController = require('../controllers/UsersController');
 const loginController = require('../controllers/LoginController');
 
-const { validateCreateUser, validateLogin } = require('../services/Validation');
+const { validateCreateUser, validateLogin, validateToken } = require('../services/Validation');
 
 // Rotas de User
-router.get('/user', userController.getUserAll);
+router.get('/user', validateToken, userController.getUserAll);
 router.post('/user', validateCreateUser, userController.createUser);
 
 // Rota de Login

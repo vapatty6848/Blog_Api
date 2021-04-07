@@ -5,7 +5,7 @@ const SUCCESS = 200;
 const CREATED = 201;
 
 const getUserAll = async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({ attributes: { exclude: ['password'] } });
   return res.status(SUCCESS).json(users);
 };
 
