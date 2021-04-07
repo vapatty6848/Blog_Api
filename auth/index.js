@@ -9,6 +9,7 @@ const headers = {
   expiresIn: '7d',
 };
 
+// const createToken = (payload) => jwt.sign(payload.dataValues, secret, headers);
 const createToken = (payload) => {
   const token = jwt.sign(payload.dataValues, secret, headers);
 
