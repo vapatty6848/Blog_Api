@@ -18,6 +18,8 @@ async function findByEmail(email) {
         email,
       },
     });
+    if (!result) return;
+
     const user = result.dataValues;
     return user;
   } catch (error) {

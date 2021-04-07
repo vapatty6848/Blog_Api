@@ -4,6 +4,7 @@ const UserService = require('../services/UserService');
 async function validateUniqueEmail(request, response, next) {
   const { email: requestEmail } = request.body;
   const userRetrieved = await UserService.findByEmail(requestEmail);
+  if (!userRetrieved) return next();
   if (requestEmail === userRetrieved.email) {
     return next({
       code: statusCode.CONFLICT,
