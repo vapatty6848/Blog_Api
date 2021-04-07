@@ -1,5 +1,5 @@
 const { Users } = require('../models');
-const generateToken = require('../utils');
+const { generateToken } = require('../utils');
 
 async function create(newUser) {
   const { displayName, email, password, image } = newUser;
