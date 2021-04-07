@@ -143,7 +143,6 @@ const DeleteBlogPostByIdService = async (req, res) => {
     { where: { id, userId } },
   )
     .then((qntDeleted) => {
-      console.log('data', qntDeleted)
       if (!qntDeleted) return res.status(UNAUTHORIZED).json(objErrRes('Usuário não autorizado'));
       res.status(NO_CONTENT).end();
     })
