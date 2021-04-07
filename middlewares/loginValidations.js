@@ -1,4 +1,3 @@
-const { User } = require('../models');
 const messages = require('../util/returnedMessages');
 const comebackResponse = require('../util/comebackResponse');
 
@@ -14,7 +13,7 @@ const validatePassword = (req, res, next) => {
   if (password === undefined) return comebackResponse(res, 400, messages.requiredPassword);
   if (password.length === 0) return comebackResponse(res, 400, messages.emptyPassword);
   next();
-}
+};
 
 module.exports = {
   validateEmail,

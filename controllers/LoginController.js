@@ -9,8 +9,9 @@ const LoginController = Router();
 LoginController.post('/', async (req, res) => {
   const { email } = req.body;
   const [foundUser] = await User.findAll({ where: { email } });
-  if(!foundUser || foundUser.dataValues.password !== req.body.password) return comebackResponse(res, 400, messages.invalidFields);
-  
+  if (!foundUser || foundUser.dataValues.password !== req.body.password) {
+    return comebackResponse(res, 400, messages.invalidFields);
+  }
   const { dataValues } = foundUser;
   const { password, ...userWithoutPassword } = dataValues;
   const token = createToken(userWithoutPassword);
