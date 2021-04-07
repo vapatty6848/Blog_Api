@@ -25,6 +25,7 @@ UserController.post('/user', validateName, validateEmail, validatePassword, emai
     id: addedUser.dataValues.id,
     displayName,
     email,
+    image,
   };
   console.log('userData cadastro', userData);
   const token = createToken(userData);
@@ -36,11 +37,12 @@ UserController.post('/login', validateEmail, validatePassword, unknownUser, resc
   const { email, password } = req.body;
   const [{ dataValues }] = await UserService.findUserByEmailAndPassword(email, password);
   console.log('login', dataValues);
-  const { id, displayName } = dataValues;
+  const { id, displayName, image } = dataValues;
   const user = {
     id,
     displayName,
     email,
+    image,
   };
   const token = createToken(user);
 

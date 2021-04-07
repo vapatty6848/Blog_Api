@@ -7,6 +7,7 @@ const { validateFields } = require('../middlewares/postValidation');
 
 const PostController = Router();
 const CREATED = 201;
+const OK = 200;
 
 PostController.post('/post', validateToken, validateFields, rescue(async (req, res) => {
   const { title, content } = req.body;
@@ -24,8 +25,9 @@ PostController.post('/post', validateToken, validateFields, rescue(async (req, r
   return res.status(CREATED).json({ title, content, userId: id });
 }));
 
-/* PostController.get('/post', rescue(async (req, res) => {
-
-})); */
+PostController.get('/post', validateToken, rescue(async (req, res) => {
+  const posts = await PostService.findPosts();
+  return res.status(OK).json(posts);
+}));
 
 module.exports = PostController;
