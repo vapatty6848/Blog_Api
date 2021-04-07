@@ -6,13 +6,27 @@ const { validateTitle, validateContent } = require('../middlewares/blogPostValid
 
 const BlogPostsController = Router();
 
-const { BlogPost } = require('../models');
+const { BlogPost, User } = require('../models');
 
-BlogPostsController.get('/', async (req, res) => {
-  const users = await BlogPost.findAll();
+BlogPostsController.get('/', validateToken, async (req, res) => {
+  const users = await BlogPost.findAll({
+    include: { model: User, as: 'user' },
+  });
 
   res.status(200).json(users);
 });
+
+// UsersController.get('/:id', validateToken, async (req, res) => {
+//   const { id } = req.params;
+
+//   const userExists = await User.scope('withoutPassword').findOne({ where: { id } });
+
+//   if (!userExists) {
+//     return res.status(404).json({ message: 'Usuário não existe' });
+//   }
+
+//   res.status(200).json(userExists);
+// });
 
 BlogPostsController.post('/', validateToken, validateTitle, validateContent, rescue(async (req, res) => {
   const { title, content } = req.body;
