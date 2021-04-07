@@ -5,6 +5,8 @@ const {
   GetAllBlogPostService,
   GetBlogPostByIdService,
   UpdateBlogPostByIdService,
+  FindBlogPostByTextService,
+  DeleteBlogPostByIdService,
 } = require('../services/postService');
 // const { BlogPost, User } = require('../models');
 
@@ -13,9 +15,11 @@ const postController = new Router();
 postController.use(VerifyAuthorization);
 
 postController.get('/', GetAllBlogPostService);
+postController.get('/search', FindBlogPostByTextService);
 postController.get('/:id', GetBlogPostByIdService);
 postController.post('/', RegisterBlogPostService);
 postController.put('/:id', UpdateBlogPostByIdService);
+postController.delete('/:id', DeleteBlogPostByIdService);
 
 // postController.get('/', (req, res) => {
 //   BlogPost.findAll({ include: { model: User, as: 'user' } })

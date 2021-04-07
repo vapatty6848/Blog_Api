@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { Op } = require('sequelize');
 
 const { BlogPost, User } = require('../models');
 
@@ -8,7 +9,7 @@ const {
   INTERNAL_SERVER_ERROR,
   // CONFLICT,
   NOT_FOUND,
-  // NO_CONTENT,
+  NO_CONTENT,
   UNAUTHORIZED,
   OK,
 } = require('../utils/allStatusCode');
@@ -103,9 +104,59 @@ const UpdateBlogPostByIdService = (req, res) => {
     });
 };
 
+const FindBlogPostByTextService = (req, res) => {
+  const { q: text } = req.query;
+
+  const where = !text
+    ? {}
+    : {
+      [Op.or]: [
+        { title: { [Op.like]: `%${text}%` } },
+        { content: { [Op.like]: `%${text}%` } },
+      ],
+    };
+
+  BlogPost.findAll({
+    where,
+    include: { model: User, as: 'user' },
+  })
+    .then((data) => {
+      res.status(OK).json(data);
+    })
+    .catch(() => {
+      res.status(INTERNAL_SERVER_ERROR).json(objErrRes('erro interno'));
+    });
+};
+
+const DeleteBlogPostByIdService = async (req, res) => {
+  const { id } = req.params;
+
+  const project = await BlogPost.findByPk(id);
+  // console.log('project', project)
+  if (!project) return res.status(NOT_FOUND).json(objErrRes('Post não existe'));
+
+  const { authorization: token } = req.headers;
+  const payload = jwt.decode(token);
+  const userId = payload.id;
+
+  BlogPost.destroy(
+    { where: { id, userId } },
+  )
+    .then((qntDeleted) => {
+      console.log('data', qntDeleted)
+      if (!qntDeleted) return res.status(UNAUTHORIZED).json(objErrRes('Usuário não autorizado'));
+      res.status(NO_CONTENT).end();
+    })
+    .catch(() => {
+      res.status(INTERNAL_SERVER_ERROR).json(objErrRes('erro interno'));
+    });
+};
+
 module.exports = {
   RegisterBlogPostService,
   GetAllBlogPostService,
   GetBlogPostByIdService,
   UpdateBlogPostByIdService,
+  FindBlogPostByTextService,
+  DeleteBlogPostByIdService,
 };
