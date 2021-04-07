@@ -75,7 +75,7 @@ Para fazer um post é necessário usuário e login, portanto será trabalhada a 
  
 ### Data de Entrega
 
-O projeto tem até a seguinte data: `15/03/2021 - 14:00h`. Para ser entregue a avaliação final.
+O projeto tem até a seguinte data: `15/04/2021 - 14:00h`. Para ser entregue a avaliação final.
 
 ---
 
@@ -257,7 +257,7 @@ Alguns exemplos:
 
 - O seu projeto deverá usar um `ORM` para criar e atualizar o seu banco. A clonagem do projeto seguida de um comando de migrate deve deixá-lo em sua forma esperada.
 
-- Deve conter uma tabela chamada **Users**, contendo os seguinte dados:
+- Deve conter uma tabela chamada **Users**, contendo dados com a seguinte estrutura:
 
   ```json
   {
@@ -269,14 +269,14 @@ Alguns exemplos:
   }
   ```
 
-- Deve conter uma tabela chamada **BlogPosts**, contendo os seguinte dados:
+- Deve conter uma tabela chamada **BlogPosts**, contendo dados com a seguinte estrutura:
 
   ```json
   {
     "id": "7706273476706534553",
     "title": "Latest updates, August 1st",
     "content": "The whole text for the blog post goes here in this key",
-    "user_id": "401465483996", // esse é o id que referência usuário que é o autor do post
+    "userId": "401465483996", // esse é o id que referência usuário que é o autor do post
     "published": "2011-08-01T19:58:00.000Z",
     "updated": "2011-08-01T19:58:51.947Z",
   }
@@ -308,7 +308,7 @@ Alguns exemplos:
   {
     "displayName": "Brett Wiltshire",
     "email": "brett@email.com",
-    "password": 123456,
+    "password": "123456",
     "image": "http://4.bp.blogspot.com/_YA50adQ-7vQ/S1gfR_6ufpI/AAAAAAAAAAk/1ErJGgRWZDg/S45/brett.png"
   }
   ```
