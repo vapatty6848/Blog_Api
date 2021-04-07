@@ -9,6 +9,7 @@ const {
   // CONFLICT,
   NOT_FOUND,
   // NO_CONTENT,
+  UNAUTHORIZED,
   OK,
 } = require('../utils/allStatusCode');
 const {
@@ -38,9 +39,9 @@ const RegisterBlogPostService = (req, res) => {
 
   const { authorization: token } = req.headers;
   const payload = jwt.decode(token);
-  const { id } = payload;
+  const userId = payload.id;
 
-  const dataBlogPostUserId = { ...dataBlogPost, userId: id };
+  const dataBlogPostUserId = { ...dataBlogPost, userId };
 
   BlogPost.create(dataBlogPostUserId)
     .then(() => {
@@ -63,15 +64,39 @@ const GetAllBlogPostService = (_req, res) => {
 
 const GetBlogPostByIdService = (req, res) => {
   const { id } = req.params;
-  console.log('chegou')
   BlogPost.findAll({
     where: { id },
     include: { model: User, as: 'user' },
   })
     .then(([data]) => {
-      console.log('data post', data)
       if (!data) return res.status(NOT_FOUND).json(objErrRes('Post não existe'));
       res.status(OK).json(data);
+    })
+    .catch(() => {
+      res.status(INTERNAL_SERVER_ERROR).json(objErrRes('erro interno'));
+    });
+};
+
+const UpdateBlogPostByIdService = (req, res) => {
+  const { id } = req.params;
+  const dataUpdateBlogPost = req.body;
+
+  const resError = (error) => res.status(error.status).json(objErrRes(error.err));
+
+  const error = registerValidationDataBlogPost(dataUpdateBlogPost);
+  if (error) return resError(error);
+
+  const { authorization: token } = req.headers;
+  const payload = jwt.decode(token);
+  const userId = payload.id;
+
+  BlogPost.update(
+    dataUpdateBlogPost,
+    { where: { id, userId } },
+  )
+    .then(([data]) => {
+      if (!data) return res.status(UNAUTHORIZED).json(objErrRes('Usuário não autorizado'));
+      res.status(OK).json({ ...dataUpdateBlogPost, userId });
     })
     .catch(() => {
       res.status(INTERNAL_SERVER_ERROR).json(objErrRes('erro interno'));
@@ -82,4 +107,5 @@ module.exports = {
   RegisterBlogPostService,
   GetAllBlogPostService,
   GetBlogPostByIdService,
+  UpdateBlogPostByIdService,
 };
