@@ -13,18 +13,18 @@ const findAll = async (req, res) => {
 };
 
 const findByTerm = async (req, res) => {
-  const { searchTerm } = req.query;
+  const { q } = req.query;
   BlogPosts.findAll({
     where: {
       [Op.or]: [
         {
           title: {
-            [Op.substring]: searchTerm,
+            [Op.substring]: q,
           },
         },
         {
           content: {
-            [Op.substring]: searchTerm,
+            [Op.substring]: q,
           },
         },
       ],
@@ -40,8 +40,8 @@ const findByTerm = async (req, res) => {
 
 const findBlogPosts = (req, res) => {
   try {
-    const { searchTerm } = req.query;
-    if (searchTerm === '') return findAll(req, res);
+    const { q } = req.query;
+    if (q === '') return findAll(req, res);
     return findByTerm(req, res);
   } catch (e) {
     return res.status(500).json({ message: e.message });
