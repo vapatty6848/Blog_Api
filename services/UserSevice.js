@@ -15,6 +15,15 @@ const getUserByEmail = async (userEmail) => {
   return true;
 };
 
+const getUserById = async (userId) => {
+  try {
+    const { id, displayName, email, image } = await User.findByPk(userId);
+    return { id, displayName, email, image };
+  } catch (_err) {
+    return null;
+  }
+};
+
 const loginWithEmailAndPass = async (userEmail, userPassword) => {
   try {
     const getUser = await User.findAll({
@@ -37,6 +46,7 @@ const getAllUsers = async () => {
 module.exports = {
   addUser,
   getUserByEmail,
-  loginWithEmailAndPass,
+  getUserById,
   getAllUsers,
+  loginWithEmailAndPass,
 };

@@ -10,6 +10,7 @@ const error = {
   emptyPassword: { message: '"password" is not allowed to be empty' },
   tokenNotFound: { message: 'Token não encontrado' },
   expiredToken: { message: 'Token expirado ou inválido' },
+  userNotFound: { message: 'Usuário não existe' },
 };
 
 const status = {
@@ -17,6 +18,7 @@ const status = {
   Created: 201,
   Bad_Request: 400,
   Unauthorized: 401,
+  Not_Found: 404,
   Conflict: 409,
 };
 

@@ -1,5 +1,5 @@
 const { error, status } = require('./errorMessage');
-const { getUserByEmail } = require('../services/UserSevice');
+const { getUserByEmail, getUserById } = require('../services/UserSevice');
 const checkToken = require('../auth/validateToken');
 
 const emailFormat = (email) => {
@@ -40,7 +40,19 @@ const verifyGetAllUsers = async (req, res, next) => {
   next();
 };
 
+const verifyGetById = async (req, res, next) => {
+  const { id } = req.params;
+  const { authorization } = req.headers;
+  if (!authorization) return res.status(status.Unauthorized).json(error.tokenNotFound);
+  const result = checkToken(authorization);
+  if (result === null) return res.status(status.Unauthorized).json(error.expiredToken);
+  const user = await getUserById(id);
+  if (user === null) return res.status(status.Not_Found).json(error.userNotFound);
+  next();
+};
+
 module.exports = {
   validateFields,
   verifyGetAllUsers,
+  verifyGetById,
 };
