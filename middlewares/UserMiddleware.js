@@ -28,6 +28,19 @@ const getUserById = (req, res) => {
     });
 };
 
+const deleteUser = (req, res) => {
+  User.destroy({
+    where: {
+      id: req.userId,
+    },
+  })
+    .then(() => res.status(204).send())
+    .catch((e) => {
+      console.log(e.message);
+      res.status(500).send({ message: 'Algo deu errado' });
+    });
+};
+
 const createUser = (req, res, next) => {
   const { displayName, email, password, image } = req.body;
 
@@ -46,5 +59,6 @@ const createUser = (req, res, next) => {
 module.exports = {
   getAllUsers,
   getUserById,
+  deleteUser,
   createUser,
 };

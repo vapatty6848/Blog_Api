@@ -12,15 +12,14 @@ module.exports = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, secret);
-    console.log('decoded:', decoded);
-
     const { email } = decoded.data;
+    const user = await User.findOne({ where: { email } });
 
-    const user = await User.findAll({ where: { email } });
-
-    if (user.length === 0) {
+    if (user === null) {
       return next({ statusCode: 401, customMessage: 'tokenNotFound' });
     }
+
+    req.userId = user.dataValues.id;
 
     next();
   } catch (err) { return next({ statusCode: 401, customMessage: 'invalidToken' }); }
