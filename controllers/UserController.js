@@ -1,6 +1,6 @@
 const { userService } = require('../services');
 
-const { OK, CREATED, INTERNAL_ERROR } = require('../schema/statusSchema');
+const { OK, CREATED } = require('../schema/statusSchema');
 
 const create = async (req, res) => {
   const { body } = req;
