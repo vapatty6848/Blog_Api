@@ -1,5 +1,6 @@
 const { BlogPosts, Users } = require('../../models');
-const { status } = require('../libs/dicts');
+const { status, messages } = require('../libs/dicts');
+const { ThrowError } = require('../middlewares/errorHandler/utils');
 
 const createPost = async (req, res) => {
   const { user: { id: userId } } = req.body;
@@ -15,8 +16,19 @@ const searchPost = async (req, res) => {
   res.status(200).json({ message: 'searchPost' });
 };
 
-const getPostById = async (req, res) => {
-  res.status(200).json({ message: 'getPostById' });
+const getPostById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const post = await BlogPosts.findOne({
+      where: { id },
+      include: { model: Users, as: 'user' },
+      attributes: { exclude: ['userId'] },
+    });
+    if (!post) throw new ThrowError(status.notFound, messages.missingPost);
+    res.status(200).json(post);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getAllPosts = async (req, res) => {

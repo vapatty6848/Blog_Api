@@ -14,6 +14,7 @@ const errorMessages = {
   userNotFound: 'Usuário não existe',
   missingTitle: '"title" is required',
   missingContent: '"content" is required',
+  missingPost: 'Post não existe',
 
 };
 

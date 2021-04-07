@@ -8,7 +8,7 @@ PostsRouter.post('/', validateToken, validatePostCreation, PostsController.creat
 
 PostsRouter.put('/search?q=:searchTerm', PostsController.searchPost);
 
-PostsRouter.get('/:id', PostsController.getPostById);
+PostsRouter.get('/:id', validateToken, PostsController.getPostById);
 
 PostsRouter.get('/', validateToken, PostsController.getAllPosts);
 
