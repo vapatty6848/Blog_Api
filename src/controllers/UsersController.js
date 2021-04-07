@@ -32,11 +32,11 @@ const getAllUsers = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const { user } = req.body;
+  const { user: {userData: {email}} } = req.body;
 
-  console.log(user);
+  Users.destroy({where: { email}});
 
-  res.status(status.ok).json({ message: 'deleteUser' });
+  res.status(status.noContent).end();
 };
 
 const login = async (req, res) => {
