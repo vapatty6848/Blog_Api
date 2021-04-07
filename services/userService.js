@@ -6,6 +6,7 @@ const {
   CREATED,
   INTERNAL_SERVER_ERROR,
   CONFLICT,
+  NOT_FOUND,
   OK,
 } = require('../utils/allStatusCode');
 const {
@@ -41,7 +42,6 @@ const emailAlreadyRegistered = async (email) => {
     attributes: ['id'],
     where: { email },
   });
-  console.log('emailRegistered', emailRegistered);
   if (emailRegistered.length !== 0) return objErrValidation('Usuário já existe', CONFLICT);
 };
 
@@ -76,11 +76,27 @@ const GetAllUserService = async (_req, res) => {
       res.status(OK).json(data);
     })
     .catch(() => {
-      res.status(500).json({ message: 'erro interno' });
+      res.status(INTERNAL_SERVER_ERROR).json(objErrRes('erro interno'));
+    });
+};
+
+const GetUserByIdService = async (req, res) => {
+  const { id } = req.params;
+  User.findAll({
+    attributes: ['id', 'displayName', 'email', 'image'],
+    where: { id },
+  })
+    .then(([data]) => {
+      if (!data) return res.status(NOT_FOUND).json(objErrRes('Usuário não existe'));
+      res.status(OK).json(data);
+    })
+    .catch(() => {
+      res.status(INTERNAL_SERVER_ERROR).json(objErrRes('erro interno'));
     });
 };
 
 module.exports = {
   RegisterUserService,
   GetAllUserService,
+  GetUserByIdService,
 };

@@ -3,6 +3,7 @@ const { Router } = require('express');
 const {
   RegisterUserService,
   GetAllUserService,
+  GetUserByIdService,
 } = require('../services/userService');
 const VerifyAuthorization = require('../middlewares/VerifyAuthorization');
 // const { User, BlogPost } = require('../models');
@@ -20,7 +21,9 @@ const userController = new Router();
 // });
 
 userController.get('/', VerifyAuthorization, GetAllUserService);
+userController.get('/:id', VerifyAuthorization, GetUserByIdService);
 userController.post('/', RegisterUserService);
+
 // userController.put('/:id', updateAdminOrderStatus);
 
 module.exports = userController;
