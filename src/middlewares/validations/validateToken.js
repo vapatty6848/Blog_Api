@@ -10,7 +10,8 @@ const validateToken = async (req, res, next) => {
     if (!authorization || authorization.length === 0) {
       throw new ThrowError(status.unauthorized, messages.tokenNotFound);
     }
-    jwt.verify(authorization, secret);
+    const user = jwt.verify(authorization, secret);
+    req.body.user = user;
     next();
   } catch (error) {
     if (error.message === messages.tokenNotFound) {

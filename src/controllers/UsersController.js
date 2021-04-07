@@ -32,6 +32,10 @@ const getAllUsers = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
+  const { user } = req.body;
+
+  console.log(user);
+
   res.status(status.ok).json({ message: 'deleteUser' });
 };
 
