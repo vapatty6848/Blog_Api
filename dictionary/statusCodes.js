@@ -1,5 +1,5 @@
 const BAD_REQUEST = 400;
-// const CONFLICT = 409;
+const CONFLICT = 409;
 const CREATED = 201;
 // const NO_CONTENT = 204;
 // const NOT_FOUND = 404;
@@ -8,7 +8,7 @@ const CREATED = 201;
 
 module.exports = {
   BAD_REQUEST,
-  // CONFLICT,
+  CONFLICT,
   CREATED,
   // NO_CONTENT,
   // NOT_FOUND,

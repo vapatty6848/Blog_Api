@@ -6,6 +6,10 @@ const { SECRET } = require('../dictionary/constants');
 const {
   validateNameLength,
   validateEmailForm,
+  validateEmailIsRequired,
+  validateEmailUniqueness,
+  validatePassordIsRequired,
+  validatePasswordLength,
 } = require('../validation/validations');
 
 const UserController = new Router();
@@ -19,7 +23,11 @@ UserController.get('/', async (_request, response) => {
 UserController.post(
   '/',
   validateNameLength,
+  validateEmailIsRequired,
   validateEmailForm,
+  validateEmailUniqueness,
+  validatePassordIsRequired,
+  validatePasswordLength,
   async (request, response) => {
     const { displayName, email, password, image } = request.body;
     const jwtConfig = { expiresIn: '7d', algorithm: 'HS256' };
