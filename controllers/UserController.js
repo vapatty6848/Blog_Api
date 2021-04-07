@@ -1,28 +1,22 @@
 const express = require('express');
-const { usermodel } = require('../models');
+
+const { User } = require('../models');
 const userService = require('../Service/UserValidations');
 
 const userRouter = express.Router();
 
 userRouter.get('/', (req, res, _next) => {
-  usermodel.findAll().then((users) => {
+  User.findAll().then((users) => {
     res.status(200).json(users);
   }).catch((err) => {
     console.error(err.message);
-    res.status(500).json({ message: 'deu ruim' });
+    res.status(401).json({ message: 'deu ruim' });
   });
 });
 
-userRouter.post('/', userService.nameVerification, userService.emailVerification, userService.passwordVerification, (req, res, _next) => {
+userRouter.post('/', userService.nameVerification, userService.emailVerification, userService.passwordVerification, (req, _res, _next) => {
   const { displayName, email, password, image } = req.body;
-  usermodel.create({ displayName, email, password, image }).then((user) => {
-    res.status(201).json(user);
-  }).catch((err) => {
-    console.error(err.message);
-    res.status(500).json({ message: 'deu ruim' });
-  });
+  User.create({ displayName, email, password, image });
 });
-
-userRouter.use('/', (error, req, res, _next) => res.status(error.status).json({ message: error.message }));
 
 module.exports = userRouter;
