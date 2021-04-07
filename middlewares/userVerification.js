@@ -9,7 +9,10 @@ const emailFormat = (email) => {
 
 const validateFields = async (req, res, next) => {
   const { displayName, email, password } = req.body;
-  const verifyEmail = await getUserByEmail(email);
+  let verifyEmail = null;
+  if (email) {
+    verifyEmail = await getUserByEmail(email);
+  }
   switch (true) {
     case displayName.length < 8:
       return res.status(status.Bad_Request).json(error.nameLegth);
