@@ -45,14 +45,14 @@ router.get('/:id', validateToken, async (req, res) => {
   res.status(200).json(users);
 });
 
-router.delete('/:id', validateToken, async (req, res) => {
-  const { id } = req.params;
-  await User.destroy(
-    {
-      where: { id },
-    },
-  );
-  res.status(204);
+router.delete('/me', validateToken, async (req, res) => {
+  // const { email } = req.users;
+  // await User.destroy(
+  //   {
+  //     where: { email },
+  //   },
+  // );
+  res.status(204).json({ message: 'Usuário não existe' });
 });
 
 module.exports = router;
