@@ -19,6 +19,29 @@ router.post('/', authToken, async (request, response) => {
   }
 });
 
+router.put('/:id', authToken, async (request, response) => {
+  const { title, content } = request.body;
+
+  if (!title) return response.status(400).send({ message: '"title" is required' });
+  if (!content) return response.status(400).send({ message: '"content" is required' });
+
+  try {
+    const idPost = request.params.id;
+    const { id } = request.user;
+    const postBeforeUpdate = await BlogPosts.findOne({ where: { id: idPost } });
+    if (postBeforeUpdate.dataValues.userId !== id) {
+      return response.status(401).send({ message: 'Usuário não autorizado' });
+    }
+    await BlogPosts.update({ title, content, updated: Date.now() },
+      { where: { id: idPost, userId: id } });
+    const updatedPost = { title, content, userId: id };
+
+    response.status(200).json(updatedPost);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 router.get('/:id', authToken, async (request, response) => {
   try {
     const { id } = request.params;
