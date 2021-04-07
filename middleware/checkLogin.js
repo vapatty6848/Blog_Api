@@ -1,21 +1,24 @@
 const { Users } = require('../models');
 
 const checkLogin = async (req, res, next) => {
-  const { email, password } = req.body;
-  const { Authorization: token } = req.headers;
-  req.payload = token;
-  if (password === '') return res.status(400).json({ message: '"password" is not allowed to be empty' });
-  if (email === '') return res.status(400).json({ message: '"email" is not allowed to be empty' });
-  if (!email) return res.status(400).json({ message: '"email" is required' });
-  if (!password) return res.status(400).json({ message: '"password" is required' });
+  const dataUser = req.body;
+  console.log(dataUser);
+  if (dataUser.password === '') return res.status(400).json({ message: '"password" is not allowed to be empty' });
+  if (dataUser.email === '') return res.status(400).json({ message: '"email" is not allowed to be empty' });
+  if (!dataUser.email) return res.status(400).json({ message: '"email" is required' });
+  if (!dataUser.password) return res.status(400).json({ message: '"password" is required' });
 
   const userEmail = await Users.findAll({
     where: {
-      email,
+      email: dataUser.email,
     },
   });
-  console.log(userEmail.length);
+
   if (userEmail.length < 1) return res.status(400).json({ message: 'Campos inválidos' });
+  if (userEmail[0].password !== dataUser.password) return res.status(401).json({ message: 'login invalido' });
+
+  const { displayName, email, password, image } = userEmail[0];
+  req.payload = { displayName, email, password, image };
   next();
 };
 
