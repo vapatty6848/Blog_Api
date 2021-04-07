@@ -15,15 +15,13 @@ const authToken = async (request, response, next) => {
 
     const isTokenValid = checkInformationFromToken(tokenDecoded, userInfoFromDataBase);
 
-    console.log('is token valid : ', isTokenValid);
-
     if (!isTokenValid) return response.status(401).send({ message: 'Token expirado ou inválido' });
 
     request.user = tokenDecoded.user;
 
     next();
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     return response.status(401).send({ message: 'Token expirado ou inválido' });
   }
 };

@@ -33,9 +33,9 @@ router.post('/', async (request, response) => {
 router.get('/', authToken, async (_request, response) => {
   try {
     const allUsers = await Users.findAll();
-    response.status(200).json(allUsers);
+    return response.status(200).json(allUsers);
   } catch {
-    response.status(500).send({ message: 'Internal Error' });
+    return response.status(500).send({ message: 'Internal Error' });
   }
 });
 

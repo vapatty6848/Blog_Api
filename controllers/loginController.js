@@ -13,7 +13,7 @@ router.post('/', async (request, response) => {
 
   const token = createToken({ user });
 
-  response.status(200).json({ token });
+  return response.status(200).json({ token });
 });
 
 module.exports = router;
