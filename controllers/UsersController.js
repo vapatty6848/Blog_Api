@@ -4,7 +4,7 @@ const { validateUser } = require('../schemas/userValidation');
 const verifyAuth = require('../schemas/verifyAuth');
 const createToken = require('../auth/createToken');
 const {
-  OK, CONFLICT, SUCCESS, INTERNAL_SERVER_ERROR, NOT_FOUND,
+  OK, CONFLICT, SUCCESS, INTERNAL_SERVER_ERROR, NOT_FOUND, NO_CONTENT,
 } = require('../document/HTTPStatus');
 
 const router = new Router();
@@ -46,6 +46,20 @@ router.get('/:id', verifyAuth, async (req, res) => {
     if (!user) return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
 
     return res.status(OK).json(user);
+  } catch (err) {
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.delete('/me', verifyAuth, async (req, res) => {
+  try {
+    await User.destroy({
+      where: {
+        email: req.user,
+      },
+    });
+
+    return res.status(NO_CONTENT).end();
   } catch (err) {
     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
