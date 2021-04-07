@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken');
 
-const { BlogPost } = require('../models');
+const { BlogPost, User } = require('../models');
 
 const {
   BAD_REQUEST,
   CREATED,
   INTERNAL_SERVER_ERROR,
   // CONFLICT,
-  // NOT_FOUND,
+  NOT_FOUND,
   // NO_CONTENT,
-  // OK,
+  OK,
 } = require('../utils/allStatusCode');
 const {
   objErrValidation,
@@ -51,6 +51,35 @@ const RegisterBlogPostService = (req, res) => {
     });
 };
 
+const GetAllBlogPostService = (_req, res) => {
+  BlogPost.findAll({ include: { model: User, as: 'user' } })
+    .then((data) => {
+      res.status(OK).json(data);
+    })
+    .catch(() => {
+      res.status(INTERNAL_SERVER_ERROR).json(objErrRes('erro interno'));
+    });
+};
+
+const GetBlogPostByIdService = (req, res) => {
+  const { id } = req.params;
+  console.log('chegou')
+  BlogPost.findAll({
+    where: { id },
+    include: { model: User, as: 'user' },
+  })
+    .then(([data]) => {
+      console.log('data post', data)
+      if (!data) return res.status(NOT_FOUND).json(objErrRes('Post não existe'));
+      res.status(OK).json(data);
+    })
+    .catch(() => {
+      res.status(INTERNAL_SERVER_ERROR).json(objErrRes('erro interno'));
+    });
+};
+
 module.exports = {
   RegisterBlogPostService,
+  GetAllBlogPostService,
+  GetBlogPostByIdService,
 };

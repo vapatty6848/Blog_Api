@@ -1,12 +1,18 @@
 const { Router } = require('express');
 const VerifyAuthorization = require('../middlewares/VerifyAuthorization');
-const { RegisterBlogPostService } = require('../services/postService');
+const {
+  RegisterBlogPostService,
+  GetAllBlogPostService,
+  GetBlogPostByIdService,
+} = require('../services/postService');
 // const { BlogPost, User } = require('../models');
 
 const postController = new Router();
 
 postController.use(VerifyAuthorization);
 
+postController.get('/', GetAllBlogPostService);
+postController.get('/:id', GetBlogPostByIdService);
 postController.post('/', RegisterBlogPostService);
 
 // postController.get('/', (req, res) => {
