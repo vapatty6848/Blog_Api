@@ -19,6 +19,22 @@ router.post('/', authToken, async (request, response) => {
   }
 });
 
+router.get('/:id', authToken, async (request, response) => {
+  try {
+    const { id } = request.params;
+    const user = await BlogPosts.findOne({
+      where: { id },
+      include: { model: Users, as: 'user', attributes: { exclude: ['password'] } },
+    });
+
+    if (!user) return response.status(404).send({ message: 'Post não existe' });
+
+    return response.status(200).json(user);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
 router.get('/', authToken, async (_request, response) => {
   try {
     const allPosts = await BlogPosts.findAll({ include: { model: Users, as: 'user' } });
