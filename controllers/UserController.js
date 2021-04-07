@@ -4,15 +4,17 @@ const {
   validateDisplayName,
   validateEmail,
   validateUniqueEmail,
+  validatePassword,
 } = require('../middlewares');
 const statusCode = require('../dicts/statusCodesHTTP');
 
 const router = Router();
 
 router.post('/',
-  validateUniqueEmail,
   validateDisplayName,
   validateEmail,
+  validateUniqueEmail,
+  validatePassword,
   async (request, response) => {
     const { displayName, email, password, image } = request.body;
     const newUser = { displayName, email, password, image };
