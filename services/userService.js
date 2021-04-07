@@ -7,9 +7,6 @@ const emailValidate = (email) => {
 
 const validateCreateUser = async (req, res, next) => {
   const { displayName, email, password } = req.body;
-  if (displayName.length < 8) {
-    res.status(400).json({ message: '"displayName" length must be at least 8 characters long' });
-  }
   if (!email) {
     res.status(400).json({ message: '"email" is required' });
   }
@@ -18,6 +15,9 @@ const validateCreateUser = async (req, res, next) => {
   }
   if (await Users.findOne({ where: { email } })) {
     res.status(409).json({ message: 'Usuário já existe' });
+  }
+  if (displayName.length < 8) {
+    res.status(400).json({ message: '"displayName" length must be at least 8 characters long' });
   }
   if (!password) {
     res.status(400).json({ message: '"password" is required' });

@@ -6,6 +6,10 @@ const service = require('../services/userService');
 const router = Router();
 
 const secret = 'ManoEsseÉOSegredoMaisSecretoQExiste';
+const jwtConfig = {
+  expiresIn: '1m',
+  algorithm: 'HS256',
+};
 
 router.get('/', async (_req, res) => {
   const users = await Users.findAll();
@@ -21,8 +25,8 @@ router.get('/', async (_req, res) => {
 router.post('/', service.validateCreateUser, async (req, res) => {
   const { displayName, email, password, image } = req.body;
 
-  await Users.create({ displayName, email, password, image });
-  const token = jwt.sign({ data: [displayName, email, password, image] }, secret);
+  const user = await Users.create({ displayName, email, password, image });
+  const token = jwt.sign({ data: user }, secret, jwtConfig);
 
   res.status(201).json({ token });
 });
