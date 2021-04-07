@@ -16,17 +16,20 @@ BlogPostsController.get('/', validateToken, async (req, res) => {
   res.status(200).json(users);
 });
 
-// UsersController.get('/:id', validateToken, async (req, res) => {
-//   const { id } = req.params;
+BlogPostsController.get('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
 
-//   const userExists = await User.scope('withoutPassword').findOne({ where: { id } });
+  const postExists = await BlogPost.findOne({
+    where: { id },
+    include: { model: User, as: 'user' },
+  });
 
-//   if (!userExists) {
-//     return res.status(404).json({ message: 'Usuário não existe' });
-//   }
+  if (!postExists) {
+    return res.status(404).json({ message: 'Post não existe' });
+  }
 
-//   res.status(200).json(userExists);
-// });
+  res.status(200).json(postExists);
+});
 
 BlogPostsController.post('/', validateToken, validateTitle, validateContent, rescue(async (req, res) => {
   const { title, content } = req.body;
