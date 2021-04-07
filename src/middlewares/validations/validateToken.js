@@ -15,8 +15,9 @@ const validateToken = async (req, res, next) => {
   } catch (error) {
     if (error.message === messages.tokenNotFound) {
       next(error);
+    } else {
+      res.status(status.unauthorized).json({ message: messages.invalidToken });
     }
-    res.status(status.unauthorized).json({ message: messages.invalidToken });
   }
 };
 
