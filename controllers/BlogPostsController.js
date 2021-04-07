@@ -52,7 +52,7 @@ BlogPostsController.get('/:id', validateToken, async (req, res) => {
   res.status(200).json(postExists);
 });
 
-BlogPostsController.post('/post', validateToken, validateTitle, validateContent, rescue(async (req, res) => {
+BlogPostsController.post('/', validateToken, validateTitle, validateContent, rescue(async (req, res) => {
   const { title, content } = req.body;
   const userId = req.user.id;
   let published;
@@ -61,5 +61,30 @@ BlogPostsController.post('/post', validateToken, validateTitle, validateContent,
 
   res.status(201).json({ title, content, userId });
 }));
+
+BlogPostsController.delete('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const userFromToken = req.user;
+
+  const postExists = await BlogPost.findOne({
+    where: { id },
+    include: { model: User, as: 'user' },
+  });
+
+  if (!postExists) {
+    return res.status(404).json({ message: 'Post não existe' });
+  }
+
+  const emailFromPost = postExists.dataValues.user.dataValues.email;
+  if (userFromToken.email !== emailFromPost) {
+    return res.status(401).json({ message: 'Usuário não autorizado' });
+  }
+
+  await BlogPost.destroy({
+    where: { id },
+  });
+
+  res.status(204).json({});
+});
 
 module.exports = BlogPostsController;
