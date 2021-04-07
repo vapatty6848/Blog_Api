@@ -15,7 +15,23 @@ const getUserByEmail = async (userEmail) => {
   return true;
 };
 
+const loginWithEmailAndPass = async (userEmail, userPassword) => {
+  try {
+    const getUser =  await User.findAll({
+      where: { 
+        email: userEmail,
+        password: userPassword,
+      },
+    });
+    return getUser;
+
+  } catch(_error) {
+    return null;
+  }
+};
+
 module.exports = {
   addUser,
   getUserByEmail,
+  loginWithEmailAndPass,
 };
