@@ -25,6 +25,16 @@ router.post('/', validateUser, async (req, res) => {
   }
 });
 
+router.get('/', verifyAuth, async (_req, res) => {
+  try {
+    const users = await User.findAll({ attributes: ['id', 'displayName', 'email', 'image'] });
+
+    return res.status(OK).json(users);
+  } catch (err) {
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+  }
+});
+
 router.get('/:id', verifyAuth, async (req, res) => {
   try {
     const { id } = req.params;
@@ -36,16 +46,6 @@ router.get('/:id', verifyAuth, async (req, res) => {
     if (!user) return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
 
     return res.status(OK).json(user);
-  } catch (err) {
-    return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
-  }
-});
-
-router.get('/', verifyAuth, async (_req, res) => {
-  try {
-    const users = await User.findAll({ attributes: ['id', 'displayName', 'email', 'image'] });
-
-    return res.status(OK).json(users);
   } catch (err) {
     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
