@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const secret = 'pfcz project blogs-api';
+const secret = process.env.TOKEN_SECRET || 'pfczprojectblogs-api';
 
 const headers = {
   algorithm: 'HS256',
