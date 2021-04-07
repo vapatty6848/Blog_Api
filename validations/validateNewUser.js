@@ -3,6 +3,8 @@ const validateEmail = (email) => {
   return regex.test(email);
 };
 
+const validateName = (name) => name.length < 8;
+
 const validateNewUser = (request, response, next) => {
   const { displayName, email, password } = request.body;
   if (!email) {
@@ -14,12 +16,12 @@ const validateNewUser = (request, response, next) => {
   if (!password) {
     return response.status(400).json({ message: '"password" is required' });
   }
-  if (password.length < 6) {
+  if (String(password).length < 6) {
     return response.status(400).json({
       message: '"password" length must be 6 characters long',
     });
   }
-  if (displayName.length < 8) {
+  if (validateName(displayName)) {
     return response.status(400).json({
       message: '"displayName" length must be at least 8 characters long',
     });
