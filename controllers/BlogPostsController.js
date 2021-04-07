@@ -42,4 +42,23 @@ router.get('/post/:id', validateToken, async (req, res) => {
   return res.status(404).json({ message: 'Post não existe' });
 });
 
+router.put('/post/:id', blogPostsService.dataValidate, validateToken, async (req, res) => {
+  const { title, content } = req.body;
+  const { id } = req.decodedUser;
+
+  const postId = await BlogPosts.findByPk(req.params.id);
+
+  if (postId.userId !== id) return res.status(401).json({ message: 'Usuário não autorizado' });
+
+  await BlogPosts.update(
+    { title, content },
+    { where: { id: req.params.id } },
+  );
+
+  // fiz mais um findByPk, pois o método update não retorna a resposta que o teste pede.
+  const updatePost = await BlogPosts.findByPk(req.params.id, { attributes: ['title', 'content', 'userId'] });
+
+  return res.status(200).json(updatePost);
+});
+
 module.exports = router;

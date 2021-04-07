@@ -172,6 +172,7 @@ describe('9 - Sua aplicação deve ter o endpoint PUT `/post/:id`', () => {
         const result = JSON.parse(body);
         token = result.token;
       });
+      console.log(`${url}/post/1`)
 
     await frisby
       .setup({
