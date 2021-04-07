@@ -1,5 +1,7 @@
 const { Router } = require('express');
 
+const { Op } = require('sequelize');
+
 const { User, BlogPost } = require('../models');
 const { validatePostData } = require('../middlewares/validatePostData');
 const { validateToken } = require('../auth/token');
@@ -18,8 +20,26 @@ PostController.get('/', validateToken, async (request, response) => {
 });
 
 PostController.get('/search', validateToken, async (request, response) => {
-  console.log(request.query.q);
-  return response.status(200).json({ message: 'PostController' });
+  const searchTerm = request.query.q;
+  const { email } = request.user;
+  const user = await User.findOne({ where: { email } });
+  const userId = user.dataValues.id;
+
+  const posts = await BlogPost.findAll({
+    include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+    where: {
+      userId,
+      [Op.or]: [
+        { title: {
+          [Op.like]: `%${searchTerm}%`,
+        } },
+        { content: {
+          [Op.like]: `${searchTerm}%`,
+        } },
+      ],
+    } });
+
+  return response.status(200).json(posts);
 });
 
 PostController.get('/:id', validateToken, async (request, response) => {
