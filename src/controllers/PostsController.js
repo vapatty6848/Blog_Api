@@ -62,21 +62,18 @@ const getAllPosts = async (req, res) => {
   res.status(200).json(responsePayload);
 };
 
-const updatePost = async (req, res, next) => {
+const updatePost = async (req, res) => {
   const { user, title, content } = req.body;
   const { id } = req.params;
 
-  try {
-    const { userId } = await BlogPosts.findByPk(id);
+  await BlogPosts.update({ title, content, updated: new Date() }, { where: { id } });
+  res.status(status.ok).json({ title, content, userId: user.id });
+};
 
-    if (!userId) throw new ThrowError(status.notFound, messages.missingPost);
-    if (userId !== user.id) throw new ThrowError(status.unauthorized, messages.unauthorizedUser);
-
-    await BlogPosts.update({ title, content, updated: new Date() }, { where: { id } });
-    res.status(status.ok).json({ title, content, userId: user.id });
-  } catch (error) {
-    next(error);
-  }
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  await BlogPosts.destroy({ where: { id } });
+  res.status(status.noContent).end();
 };
 
 module.exports = {
@@ -85,4 +82,5 @@ module.exports = {
   getPostById,
   getAllPosts,
   updatePost,
+  deletePost,
 };

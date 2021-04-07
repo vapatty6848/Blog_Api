@@ -1,11 +1,13 @@
 const validateUserCreation = require('./validateUserCreation');
 const validateLogin = require('./validateLogin');
 const validateToken = require('./validateToken');
-const validatePostCreation = require('./validatePostCreation');
+const validatePostContent = require('./validatePostContent');
+const validatePostOwnership = require('./validatePostOwnership');
 
 module.exports = {
   validateUserCreation,
   validateLogin,
   validateToken,
-  validatePostCreation,
+  validatePostContent,
+  validatePostOwnership,
 };
