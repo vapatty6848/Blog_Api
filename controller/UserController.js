@@ -3,7 +3,10 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { CREATED } = require('../dictionary/statusCodes');
 const { SECRET } = require('../dictionary/constants');
-const { validateNameLength } = require('../validation/validations');
+const {
+  validateNameLength,
+  validateEmailForm,
+} = require('../validation/validations');
 
 const UserController = new Router();
 
@@ -16,6 +19,7 @@ UserController.get('/', async (_request, response) => {
 UserController.post(
   '/',
   validateNameLength,
+  validateEmailForm,
   async (request, response) => {
     const { displayName, email, password, image } = request.body;
     const jwtConfig = { expiresIn: '7d', algorithm: 'HS256' };
