@@ -1,18 +1,18 @@
+const  { validateEmail } = require('../utils');
 const statusCode = require('../dicts/statusCodesHTTP');
 
-function validateEmail(request, response, next) {
+function emailValidation(request, response, next) {
   const { email } = request.body;
-  const regexPattern = /\S+@\S+/;
-  const isEmailValid = regexPattern.test(email);
+  const validation = validateEmail(email);
 
-  if (!email) {
+  if (validation.result === 'missing') {
     return next({
       code: statusCode.BAD_REQUEST,
       message: '"email" is required',
     });
   }
 
-  if (!isEmailValid) {
+  if (validation.result === 'invalid') {
     return next({
       code: statusCode.BAD_REQUEST,
       message: '"email" must be a valid email',
@@ -22,4 +22,4 @@ function validateEmail(request, response, next) {
   return next();
 }
 
-module.exports = validateEmail;
+module.exports = emailValidation;

@@ -1,5 +1,6 @@
 const express = require('express');
 const UserController = require('./controllers/UserController');
+const LoginController = require('./controllers/LoginController');
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,7 @@ app.get('/ping', (request, response) => {
 });
 
 app.use('/user', UserController);
+app.use('/login', LoginController);
 
 app.use((error, request, response, _next) => {
   response.status(error.code).json({ message: error.message });

@@ -2,7 +2,7 @@ const { Router } = require('express');
 const UserService = require('../services/UserService');
 const {
   validateDisplayName,
-  validateEmail,
+  emailValidation,
   validateUniqueEmail,
   validatePassword,
 } = require('../middlewares');
@@ -12,7 +12,7 @@ const router = Router();
 
 router.post('/',
   validateDisplayName,
-  validateEmail,
+  emailValidation,
   validateUniqueEmail,
   validatePassword,
   async (request, response) => {
