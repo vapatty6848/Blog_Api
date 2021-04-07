@@ -3,7 +3,7 @@ const { Router } = require('express');
 const router = Router();
 const { Users } = require('../models');
 const validations = require('../services/validations');
-const { createToken } = require('../auth/token');
+const { createToken, validateToken } = require('../auth/token');
 
 router.post('/user', validations.validate, async (req, res) => {
   const { displayName, email, password, image } = req.body;
@@ -11,6 +11,7 @@ router.post('/user', validations.validate, async (req, res) => {
   const token = createToken(user);
   return res.status(201).json({ token });
 });
+
 router.post('/login', validations.validateLogin, async (req, res) => {
   const { email, password } = req.body;
   const user = await Users.findOne({ where: { email } });
@@ -20,9 +21,10 @@ router.post('/login', validations.validateLogin, async (req, res) => {
   const token = createToken(user);
   return res.status(200).json({ token });
 });
-// router.get('/', async (req, res) => {
-//   const users = await Users.findAll();
-//   return res.status(200).json(users);
-// });
+
+router.get('/user', validateToken, async (req, res) => {
+  const users = await Users.findAll({ attributes: ['id', 'displayName', 'email', 'image'] });
+  return res.status(200).json(users);
+});
 
 module.exports = router;
