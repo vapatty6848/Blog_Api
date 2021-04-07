@@ -16,6 +16,6 @@ app.get('/', (request, response) => {
 });
 
 app.use('/', (error, req, res, _next) => {
-  console.log('error', error);
+  console.error('error', error.message);
   res.status(error.status).json({ message: error.message });
 });
