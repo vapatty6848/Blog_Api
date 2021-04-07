@@ -1,5 +1,6 @@
 const express = require('express');
 const UserController = require('./controllers/UserController');
+
 const PORT = 3000;
 const app = express();
 const { validateName, validateEmail, validatePassword } = require('./middlewares/validations');
