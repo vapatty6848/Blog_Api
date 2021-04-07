@@ -62,6 +62,32 @@ BlogPostsController.post('/', validateToken, validateTitle, validateContent, res
   res.status(201).json({ title, content, userId });
 }));
 
+BlogPostsController.put('/:id', validateToken, validateTitle, validateContent, rescue(async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const userFromToken = req.user;
+
+  const postExists = await BlogPost.findOne({
+    where: { id },
+    include: { model: User, as: 'user' },
+  });
+
+  const emailFromPost = postExists.dataValues.user.dataValues.email;
+  if (userFromToken.email !== emailFromPost) {
+    return res.status(401).json({ message: 'Usuário não autorizado' });
+  }
+
+  await BlogPost.update(
+    { title, content },
+    { where: { id } },
+  );
+
+  const editedPost = await BlogPost.findOne({ where: { id } });
+  res.status(200).json({
+    title: editedPost.title, content: editedPost.content, userId: editedPost.userId,
+  });
+}));
+
 BlogPostsController.delete('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
   const userFromToken = req.user;
