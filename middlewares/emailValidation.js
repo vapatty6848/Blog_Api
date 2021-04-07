@@ -1,4 +1,4 @@
-const  { validateEmail } = require('../utils');
+const { validateEmail } = require('../utils');
 const statusCode = require('../dicts/statusCodesHTTP');
 
 function emailValidation(request, response, next) {
