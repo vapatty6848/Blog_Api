@@ -35,7 +35,7 @@ router.get('/user/:id', validateToken, async (req, res) => {
 });
 
 router.delete('/user/me', validateToken, async (req, res) => {
-  const { id } = req.decodeUser;
+  const { id } = req.decodedUser;
   await Users.destroy({ where: { id } });
   return res.status(204).end();
 });
