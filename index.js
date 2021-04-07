@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const userController = require('./controllers/userController');
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use('/', userController);
 app.listen(3000, () => console.log('ouvindo porta 3000!'));

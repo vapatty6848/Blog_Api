@@ -12,9 +12,9 @@ router.post('/user', validations.validate, async (req, res) => {
   return res.status(201).json({ token });
 });
 
-router.get('/', async (req, res) => {
-  const users = await Users.findAll();
-  return res.status(200).json(users);
-});
+// router.get('/', async (req, res) => {
+//   const users = await Users.findAll();
+//   return res.status(200).json(users);
+// });
 
 module.exports = router;
