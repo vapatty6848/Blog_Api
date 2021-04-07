@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 
 const router = Router();
 const { BlogPosts, Users } = require('../models');
@@ -59,6 +60,46 @@ router.put('/post/:id', blogPostsService.dataValidate, validateToken, async (req
   const updatePost = await BlogPosts.findByPk(req.params.id, { attributes: ['title', 'content', 'userId'] });
 
   return res.status(200).json(updatePost);
+});
+
+router.get('/post/search?q=:searchTerm', validateToken, async (req, res) => {
+  console.log('cheguei aqui 0');
+  const { q } = req.query;
+  console.log(q, 'cheguei aqui 1');
+
+  const posts = await BlogPosts.findAll({
+    where: {
+      [Op.or]: [
+        { title: {
+          [Op.like]: `%${q}%`,
+        } },
+        { content: {
+          [Op.like]: `%${q}%`,
+        } },
+      ],
+    },
+    attributes: { exclude: ['UserId'] },
+    include: [{
+      model: Users, as: 'user', attributes: { exclude: ['password'] },
+    }],
+  });
+  console.log(posts);
+  if (!posts) return res.status(404).json({ message: 'Post não existe' });
+  return res.status(200).json(posts);
+});
+
+router.delete('/post/:id', validateToken, async (req, res) => {
+  const { id } = req.decodedUser;
+
+  const postId = await BlogPosts.findByPk(req.params.id);
+  if (!postId) return res.status(404).json({ message: 'Post não existe' });
+  if (postId.userId !== id) return res.status(401).json({ message: 'Usuário não autorizado' });
+
+  await BlogPosts.destroy(
+    { where: { id: req.params.id } },
+  );
+
+  return res.status(204).end();
 });
 
 module.exports = router;
