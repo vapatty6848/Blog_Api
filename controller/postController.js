@@ -26,4 +26,17 @@ PostRouter.get('/', validateToken, async (req, res) => {
   return res.status(200).json(posts);
 });
 
+PostRouter.get('/:id', validateToken, async (req, res) => {
+  const { id: userId } = req.payload.data;
+  const { id } = req.params;
+
+  const posts = await BlogPosts.findOne({
+    where: { userId, id },
+    attributes: { exclude: 'userId' },
+    include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+  });
+  if (!posts) return res.status(404).json({ message: 'Post não existe' });
+  return res.status(200).json(posts);
+});
+
 module.exports = { PostRouter };
