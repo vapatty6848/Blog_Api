@@ -15,6 +15,7 @@ const errorMessages = {
   missingTitle: '"title" is required',
   missingContent: '"content" is required',
   missingPost: 'Post não existe',
+  unauthorizedUser: 'Usuário não autorizado',
 
 };
 

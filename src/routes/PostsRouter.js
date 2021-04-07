@@ -12,6 +12,6 @@ PostsRouter.get('/:id', validateToken, PostsController.getPostById);
 
 PostsRouter.get('/', validateToken, PostsController.getAllPosts);
 
-PostsRouter.put('/:id', PostsController.updatePost);
+PostsRouter.put('/:id', validateToken, validatePostCreation, PostsController.updatePost);
 
 module.exports = PostsRouter;
