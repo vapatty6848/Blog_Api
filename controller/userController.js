@@ -37,4 +37,11 @@ UserRouter.post('/', validateNewUser, async (req, res) => {
   return res.status(201).json({ token });
 });
 
+UserRouter.delete('/me', validateToken, async (req, res) => {
+  const { email } = req.payload.data;
+  const userDeleted = await User.destroy({ where: { email } });
+
+  return res.status(204).json(userDeleted);
+});
+
 module.exports = { UserRouter };
