@@ -4,11 +4,11 @@ const LoginController = require('./controllers/LoginController');
 
 const PORT = 3000;
 const app = express();
-const userValidations = require('./middlewares/userValidations');
+// const userValidations = require('./middlewares/userValidations');
 const loginValidations = require('./middlewares/loginValidations');
 
 app.use(express.json());
-app.use('/user', userValidations.validateName, userValidations.validatePassword, userValidations.validateEmail, UserController);
+app.use('/user', UserController);
 app.use('/login', loginValidations.validateEmail, loginValidations.validatePassword, LoginController);
 
 app.listen(PORT, () => console.log(`Ouvindo na porta ${PORT}!`));

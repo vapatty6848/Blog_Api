@@ -1,6 +1,7 @@
 const { User } = require('../models');
 const messages = require('../util/returnedMessages');
 const comebackResponse = require('../util/comebackResponse');
+const validateToken = require('../auth/validateToken');
 
 const validEmailRegex = (email) => /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
   .test(email);
@@ -28,8 +29,17 @@ const validatePassword = (req, res, next) => {
   return next();
 };
 
+const validateTokenLogin = (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) return comebackResponse(res, 401, messages.tokenNotFound);
+  const validUser = validateToken(authorization);
+  if (validUser === null) return comebackResponse(res, 401, messages.expiredToken);
+  next();
+};
+
 module.exports = {
   validateName,
   validateEmail,
   validatePassword,
+  validateTokenLogin,
 };

@@ -8,4 +8,6 @@ module.exports = {
   passwordTooShort: '"password" length must be 6 characters long',
   emptyPassword: '"password" is not allowed to be empty',
   invalidFields: 'Campos inválidos',
+  tokenNotFound: 'Token não encontrado',
+  expiredToken: 'Token expirado ou inválido',
 };
