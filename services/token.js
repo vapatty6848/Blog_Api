@@ -12,7 +12,10 @@ const createToken = (data) => {
 };
 
 const decodeToken = (token) => {
-  const user = jwt.verify(token, secret, (_err, decoded) => decoded.data);
+  const user = jwt.verify(token, secret, (err, decoded) => {
+    if (err) return 'err';
+    return decoded.data;
+  });
 
   return user;
 };
@@ -22,9 +25,11 @@ const validateToken = (req, res, next) => {
 
   if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
 
-  jwt.verify(authorization, secret, (err) => {
-    if (err) return res.status(401).json({ message: 'Token expirado ou inválido' });
+  const isValid = jwt.verify(authorization, secret, (err) => {
+    if (err) return 'err';
   });
+
+  if (isValid === 'err') return res.status(401).json({ message: 'Token expirado ou inválido' });
 
   next();
 };
