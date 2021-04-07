@@ -1,12 +1,15 @@
 const express = require('express');
 const UserController = require('./controllers/UserController');
+const LoginController = require('./controllers/LoginController');
 
 const PORT = 3000;
 const app = express();
-const { validateName, validateEmail, validatePassword } = require('./middlewares/validations');
+const userValidations = require('./middlewares/userValidations');
+const loginValidations = require('./middlewares/loginValidations');
 
 app.use(express.json());
-app.use('/user', validateName, validatePassword, validateEmail, UserController);
+app.use('/user', userValidations.validateName, userValidations.validatePassword, userValidations.validateEmail, UserController);
+app.use('/login', loginValidations.validateEmail, loginValidations.validatePassword, LoginController);
 
 app.listen(PORT, () => console.log(`Ouvindo na porta ${PORT}!`));
 

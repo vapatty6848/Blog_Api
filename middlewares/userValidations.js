@@ -1,8 +1,6 @@
 const { User } = require('../models');
 const messages = require('../util/returnedMessages');
-
-const comebackResponse = (res, status, messageLine) => res.status(status)
-  .json({ message: messageLine });
+const comebackResponse = require('../util/comebackResponse');
 
 const validEmailRegex = (email) => /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/
   .test(email);
