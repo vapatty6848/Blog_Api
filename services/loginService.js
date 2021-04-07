@@ -44,7 +44,7 @@ const LoginService = async (req, res) => {
   });
   if (userLogin.length === 0) return resError(objErrValidation('Campos inválidos', BAD_REQUEST));
 
-  const { password: _password, email: _email, ...userWithoutPassword } = userLogin;
+  const { password: _password, email: _email, ...userWithoutPassword } = userLogin[0].dataValues;
   const token = createToken(userWithoutPassword);
   res.status(OK).json({ token });
 };

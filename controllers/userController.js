@@ -4,6 +4,7 @@ const {
   RegisterUserService,
   GetAllUserService,
   GetUserByIdService,
+  DeleteUserService,
 } = require('../services/userService');
 const VerifyAuthorization = require('../middlewares/VerifyAuthorization');
 // const { User, BlogPost } = require('../models');
@@ -23,6 +24,7 @@ const userController = new Router();
 userController.get('/', VerifyAuthorization, GetAllUserService);
 userController.get('/:id', VerifyAuthorization, GetUserByIdService);
 userController.post('/', RegisterUserService);
+userController.delete('/me', VerifyAuthorization, DeleteUserService);
 
 // userController.put('/:id', updateAdminOrderStatus);
 

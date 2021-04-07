@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const { User } = require('../models');
 const createToken = require('../JWT/createToken');
 
@@ -7,6 +9,7 @@ const {
   INTERNAL_SERVER_ERROR,
   CONFLICT,
   NOT_FOUND,
+  NO_CONTENT,
   OK,
 } = require('../utils/allStatusCode');
 const {
@@ -59,7 +62,7 @@ const RegisterUserService = async (req, res) => {
 
   User.create(dataUser)
     .then((data) => {
-      const { password: _password, email: _email, ...userWithoutPassword } = data;
+      const { password: _password, email: _email, ...userWithoutPassword } = data.dataValues;
       const token = createToken(userWithoutPassword);
       res.status(CREATED).json({ token });
     })
@@ -95,8 +98,31 @@ const GetUserByIdService = async (req, res) => {
     });
 };
 
+const DeleteUserService = async (req, res) => {
+  const { authorization: token } = req.headers;
+  console.log('token', token)
+  const payload = jwt.decode(token);
+  console.log('payload', payload)
+  const { id } = payload;
+
+  console.log('id', id)
+
+  User.destroy({
+    where: { id },
+  })
+    .then(() => {
+      console.log('excluiu')
+      res.status(NO_CONTENT).end();
+    })
+    .catch(() => {
+      console.log('erro sequelize')
+      res.status(INTERNAL_SERVER_ERROR).json(objErrRes('erro interno'));
+    });
+};
+
 module.exports = {
   RegisterUserService,
   GetAllUserService,
   GetUserByIdService,
+  DeleteUserService,
 };
