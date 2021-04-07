@@ -30,6 +30,20 @@ router.post('/', async (request, response) => {
   }
 });
 
+router.get('/:id', authToken, async (request, response) => {
+  try {
+    const { id } = request.params;
+    const userFound = await Users.findOne({ where: { id } });
+
+    if (!userFound) response.status(404).send({ message: 'Usuário não existe' });
+
+    response.status(200).json(userFound);
+  } catch (error) {
+    console.error(error.message);
+    response.status(500).send({ message: 'Internal Error' });
+  }
+});
+
 router.get('/', authToken, async (_request, response) => {
   try {
     const allUsers = await Users.findAll();
