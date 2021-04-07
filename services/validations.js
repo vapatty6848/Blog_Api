@@ -4,7 +4,8 @@ const validateEmail = (email) => {
   const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   const emailVerified = regex.test(email);
   return emailVerified;
-}
+};
+
 const validate = async (req, res, next) => {
   const { displayName, email, password, image } = req.body;
   if (!email) return res.status(400).json({ message: '"email" is required' });
