@@ -2,19 +2,15 @@ const { Router } = require('express');
 const { User } = require('../models');
 const { validateUser } = require('../schemas/userValidation');
 const createToken = require('../auth/createToken');
+const { CONFLICT, SUCCESS, INTERNAL_SERVER_ERROR } = require('../document/HTTPStatus');
 
 const router = new Router();
-
-const SUCCESS = 201;
-const CONFLICT = 409;
-const INTERNAL_SERVER_ERROR = 500;
 
 router.post('/', validateUser, async (req, res) => {
   try {
     const { displayName, email, password, image } = req.body;
 
     const user = await User.findOne({ where: { email } });
-
     if (user) return res.status(CONFLICT).json({ message: 'Usuário já existe' });
 
     const newUser = await User.create({ displayName, email, password, image });

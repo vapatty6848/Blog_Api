@@ -1,6 +1,6 @@
-const BAD_REQUEST = 400;
-const INTERNAL_SERVER_ERROR = 500;
-const mess = {
+const { BAD_REQUEST, INTERNAL_SERVER_ERROR } = require('../document/HTTPStatus');
+
+const obj = {
   name: '"displayName" length must be at least 8 characters long',
   notMail: '"email" is required',
   email: '"email" must be a valid email',
@@ -17,19 +17,19 @@ const validateUser = async (req, res, next) => {
     const { displayName, email, password } = req.body;
 
     if (!displayName || displayName.length < minimumNameLength) {
-      return res.status(BAD_REQUEST).json({ message: mess.name });
+      return res.status(BAD_REQUEST).json({ message: obj.name });
     }
     if (!email || !email.length) {
-      return res.status(BAD_REQUEST).json({ message: mess.notMail });
+      return res.status(BAD_REQUEST).json({ message: obj.notMail });
     }
     if (!regex.test(email)) {
-      return res.status(BAD_REQUEST).json({ message: mess.email });
+      return res.status(BAD_REQUEST).json({ message: obj.email });
     }
     if (!password) {
-      return res.status(BAD_REQUEST).json({ message: mess.notPass });
+      return res.status(BAD_REQUEST).json({ message: obj.notPass });
     }
     if (password.length < minimumPasswordLength) {
-      return res.status(BAD_REQUEST).json({ message: mess.smallPass });
+      return res.status(BAD_REQUEST).json({ message: obj.smallPass });
     }
   } catch (err) {
     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
