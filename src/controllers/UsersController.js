@@ -32,7 +32,7 @@ const getAllUsers = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const { user: { userData: { email } } } = req.body;
+  const { user: { email } } = req.body;
 
   Users.destroy({ where: { email } });
 

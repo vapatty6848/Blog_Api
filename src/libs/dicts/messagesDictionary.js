@@ -12,6 +12,9 @@ const errorMessages = {
   tokenNotFound: 'Token não encontrado',
   invalidToken: 'Token expirado ou inválido',
   userNotFound: 'Usuário não existe',
+  missingTitle: '"title" is required',
+  missingContent: '"content" is required',
+
 };
 
 module.exports = errorMessages;

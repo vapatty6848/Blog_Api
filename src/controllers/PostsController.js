@@ -1,5 +1,14 @@
+const { BlogPosts } = require('../../models');
+const { status } = require('../libs/dicts');
+
 const createPost = async (req, res) => {
-  res.status(200).json({ message: 'createPost' });
+  const { user: { id: userId } } = req.body;
+  const { title, content } = req.body;
+  const responsePayload = {
+    title, content, userId,
+  };
+  await BlogPosts.create({ title, content, userId });
+  res.status(status.created).json(responsePayload);
 };
 
 const searchPost = async (req, res) => {
