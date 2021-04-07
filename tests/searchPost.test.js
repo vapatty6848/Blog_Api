@@ -24,7 +24,8 @@ describe('10 - Sua aplicação deve ter o endpoint GET `post/search?q=:searchTer
         const result = JSON.parse(body);
         token = result.token;
       });
-
+    
+      console.log(`${url}/post/search?q=Vamos que vamos`)
     await frisby
       .setup({
         request: {
