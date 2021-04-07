@@ -5,6 +5,7 @@ const router = Router();
 const { validateUser } = require('../utils/userValidation');
 const generateToken = require('../utils/generateToken');
 const { User } = require('../models');
+const { st } = require('../utils/dictionary');
 
 // GET ALL
 router.get('/', async (req, res) => {
@@ -22,14 +23,14 @@ router.post('/', async (req, res) => {
     const userExists = await User.findAll({ where: { email } });
     if (userExists.length) {
       ms = 'Usuário já existe';
-      return res.status(process.env.CONFLICT).json({ message: ms });
+      return res.status(st.CONFLICT).json({ message: ms });
     }
 
     const { dataValues } = await User.create({ displayName, email, password, image });
     const token = await generateToken(dataValues);
 
     ms = { token };
-    status = process.env.CREATED;
+    status = st.CREATED;
     return res.status(status).json({ token });
   }
 

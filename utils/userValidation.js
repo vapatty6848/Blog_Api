@@ -1,3 +1,5 @@
+const { st } = require('./dictionary');
+
 function validateName(displayName) {
   if (typeof displayName === 'string' && displayName.length >= 8) return true;
 }
@@ -21,7 +23,7 @@ function passwordIsValid(password) {
 
 function validateUser(user) {
   let ms = {};
-  const status = process.env.BAD_REQUEST;
+  const status = st.BAD_REQUEST;
   const { displayName, email, password } = user;
 
   if (!validateName(displayName)) ms = '"displayName" length must be at least 8 characters long';
