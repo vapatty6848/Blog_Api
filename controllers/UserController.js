@@ -27,7 +27,7 @@ UserController.post('/user', validateName, validateEmail, validatePassword, emai
     email,
     image,
   };
-  console.log('userData cadastro', userData);
+
   const token = createToken(userData);
 
   return res.status(CREATED).json({ token });
@@ -36,7 +36,7 @@ UserController.post('/user', validateName, validateEmail, validatePassword, emai
 UserController.post('/login', validateEmail, validatePassword, unknownUser, rescue(async (req, res) => {
   const { email, password } = req.body;
   const [{ dataValues }] = await UserService.findUserByEmailAndPassword(email, password);
-  console.log('login', dataValues);
+
   const { id, displayName, image } = dataValues;
   const user = {
     id,
@@ -65,7 +65,7 @@ UserController.get('/user/:id', validateToken, userIdExist, rescue((async (req, 
 UserController.delete('/user/me', validateToken, rescue((async (req, res) => {
   const { id } = req.user;
 
-  await UserService.deleteUser(id);
+  UserService.deleteUser(id);
   res.status(NO_CONTENT).json({});
 })));
 

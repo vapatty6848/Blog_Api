@@ -67,7 +67,6 @@ const unknownUser = async (req, res, next) => {
 const userIdExist = async (req, res, next) => {
   const { id } = req.params;
   const userExist = await UserService.findById(id);
-  console.log(userExist);
 
   if (userExist === null) {
     return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });

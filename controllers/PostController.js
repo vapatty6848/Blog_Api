@@ -3,7 +3,7 @@ const rescue = require('express-rescue');
 
 const PostService = require('../service/PostService');
 const { validateToken } = require('../auth/validateToken');
-const { validateFields } = require('../middlewares/postValidation');
+const { validateFields, postIdExist } = require('../middlewares/postValidation');
 
 const PostController = Router();
 const CREATED = 201;
@@ -28,6 +28,12 @@ PostController.post('/post', validateToken, validateFields, rescue(async (req, r
 PostController.get('/post', validateToken, rescue(async (req, res) => {
   const posts = await PostService.findPosts();
   return res.status(OK).json(posts);
+}));
+
+PostController.get('/post/:id', validateToken, postIdExist, rescue(async (req, res) => {
+  const { id } = req.params;
+  const post = await PostService.findPostById(id);
+  return res.status(OK).json(post);
 }));
 
 module.exports = PostController;
