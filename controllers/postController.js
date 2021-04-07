@@ -39,4 +39,17 @@ postsRouter.post('/', validateToken, validatePost, async (req, res) => {
   }
 });
 
+postsRouter.put('/:id', validateToken, validatePost, async (req, res) => {
+  const { title, content } = req.body;
+  const { id: userId } = req.payload.data;
+  const { id } = req.params;
+
+  const editedPost = await models.BlogPosts.findOne({ where: { id } });
+  if (editedPost.userId !== userId) return res.status(401).json({ message: 'Usuário não autorizado' });
+  editedPost.title = title;
+  editedPost.content = content;
+  await editedPost.save();
+  return res.status(200).json({ title, content, userId });
+});
+
 module.exports = postsRouter;
