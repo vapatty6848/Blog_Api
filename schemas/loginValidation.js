@@ -11,17 +11,17 @@ const loginValidate = (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    if (email === '') {
+      return res.status(BAD_REQUEST).json({ message: obj.emptyMail });
+    }
     if (!email) {
       return res.status(BAD_REQUEST).json({ message: obj.notMail });
     }
-    if (!email.length) {
-      return res.status(BAD_REQUEST).json({ message: obj.emptyMail });
+    if (password === '') {
+      return res.status(BAD_REQUEST).json({ message: obj.emptyPass });
     }
     if (!password) {
       return res.status(BAD_REQUEST).json({ message: obj.notPass });
-    }
-    if (!password.length) {
-      return res.status(BAD_REQUEST).json({ message: obj.emptyPass });
     }
   } catch (err) {
     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
