@@ -1,7 +1,7 @@
 function validatePassword(password) {
   const minLength = 6;
 
-  if (!password) {
+  if (password === undefined) {
     return { result: 'missing' };
   }
 

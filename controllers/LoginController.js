@@ -1,12 +1,28 @@
 const { Router } = require('express');
-const LoginService = require('../services/LoginService');
+// const LoginService = require('../services/LoginService');
+const UserService = require('../services/UserService');
+const { emailValidation, passwordValidation } = require('../middlewares');
+const statusCode = require('../dicts/statusCodesHTTP');
+const { generateToken } = require('../utils');
 
 const router = Router();
 
 router.post(
   '/',
+  emailValidation,
+  passwordValidation,
   async (request, response) => {
-    response.status(200).send('Login Route');
+    const { email, password } = request.body;
+    const retrievedUser = await UserService.findByEmail(email);
+
+    if (!retrievedUser || retrievedUser.password !== password) {
+      return response
+        .status(statusCode.BAD_REQUEST)
+        .json({ message: 'Campos inválidos' });
+    }
+
+    const token = generateToken({ email });
+    response.status(statusCode.OK).json({ token });
   },
 );
 

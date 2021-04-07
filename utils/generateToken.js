@@ -7,6 +7,6 @@ const jwtHeader = { algorithm: 'HS256' };
 function generateToken(payload) {
   const token = jwt.sign(payload, secret, jwtHeader);
   return token;
-};
+}
 
 module.exports = generateToken;
