@@ -34,6 +34,7 @@ const validateTokenLogin = (req, res, next) => {
   if (!authorization) return comebackResponse(res, 401, messages.tokenNotFound);
   const validUser = validateToken(authorization);
   if (validUser === null) return comebackResponse(res, 401, messages.expiredToken);
+  req.validUser = validUser;
   next();
 };
 

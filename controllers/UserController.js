@@ -31,4 +31,10 @@ UserController.get('/:id', userValidations.validateTokenLogin, async (req, res) 
   return res.send(foundUser);
 });
 
+UserController.delete('/me', userValidations.validateTokenLogin, async (req, res) => {
+  const { validUser } = req;
+  await User.destroy({ where: { id: validUser.id } });
+  res.status(204).end();
+});
+
 module.exports = UserController;
