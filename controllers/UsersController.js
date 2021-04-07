@@ -1,34 +1,32 @@
 const { Router } = require('express');
-const jwt = require('jsonwebtoken');
 const { Users } = require('../models');
 const service = require('../services/userService');
+const { createToken, validateToken, decodeToken } = require('../services/token');
 
 const router = Router();
 
-const secret = 'ManoEsseÉOSegredoMaisSecretoQExiste';
-const jwtConfig = {
-  expiresIn: '1m',
-  algorithm: 'HS256',
-};
-
-router.get('/', async (_req, res) => {
+router.get('/', validateToken, async (_req, res) => {
   const users = await Users.findAll();
 
   res.status(200).json(users);
 });
 
-// router.get('/:id', async (req, res) => {
-//   const { id } = req.params;
-//   res.status(200).json({});
-// });
+router.get('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+
+  const user = await Users.findOne({ where: { id } });
+  if (!user) return res.status(404).json({ message: 'Usuário não existe' });
+
+  return res.status(200).json(user);
+});
 
 router.post('/', service.validateCreateUser, async (req, res) => {
   const { displayName, email, password, image } = req.body;
 
   const user = await Users.create({ displayName, email, password, image });
-  const token = jwt.sign({ data: user }, secret, jwtConfig);
+  const token = createToken(user);
 
-  res.status(201).json({ token });
+  return res.status(201).json({ token });
 });
 
 // router.put('/:id', async (req, res) => {
@@ -37,10 +35,12 @@ router.post('/', service.validateCreateUser, async (req, res) => {
 //   res.status(200).json({});
 // });
 
-// router.delete('/:id', async (req, res) => {
-//   const { id } = req.params;
+router.delete('/me', validateToken, async (req, res) => {
+  const { authorization } = req.headers;
+  const { id } = decodeToken(authorization);
+  await Users.destroy({ where: { id } });
 
-//   res.status(200).json({});
-// });
+  res.status(204).end();
+});
 
 module.exports = router;
