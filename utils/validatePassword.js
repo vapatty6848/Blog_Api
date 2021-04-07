@@ -5,6 +5,10 @@ function validatePassword(password) {
     return { result: 'missing' };
   }
 
+  if (password.length === 0) {
+    return { result: 'empty' };
+  }
+
   if (password.length < minLength) {
     return { result: 'invalid', minLength };
   }
