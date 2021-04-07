@@ -46,12 +46,12 @@ router.get('/:id', validateToken, async (req, res) => {
 });
 
 router.delete('/me', validateToken, async (req, res) => {
-  // const { email } = req.users;
-  // await User.destroy(
-  //   {
-  //     where: { email },
-  //   },
-  // );
+  const { email } = req.decodedUser;
+  await User.destroy(
+    {
+      where: { email },
+    },
+  );
   res.status(204).json({ message: 'Usuário não existe' });
 });
 

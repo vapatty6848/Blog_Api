@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, BlogPost } = require('../models');
 
 const emailExist = async (email) => {
   const emailRegistered = await User.findAll();
@@ -7,6 +7,14 @@ const emailExist = async (email) => {
   return true;
 };
 
+const getAllPostsByUser = async (userId) => {
+  const posts = await BlogPost.findAll({
+    include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+    where: { userId } });
+  return posts;
+};
+
 module.exports = {
   emailExist,
+  getAllPostsByUser,
 };

@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
   }
   const emailNotExist = await userService.emailExist(email);
   if (emailNotExist) return res.status(400).json({ message: 'Campos inválidos' });
-  const payload = { password };
+  const payload = { email, password };
   const token = createToken.createToken(payload);
   res.status(200).json({ token });
 });
