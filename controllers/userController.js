@@ -27,4 +27,17 @@ userRouter.post('/', validateNewUser, async (request, response) => {
   return response.status(201).json({ token });
 });
 
+userRouter.get('/:id', validateToken, async (request, response) => {
+  const { id } = request.params;
+  const user = await User.findOne({ where: { id } });
+  if (!user) return response.status(404).json({ message: 'Usuário não existe' });
+  return response.status(200).json(user);
+});
+
+userRouter.delete('/me', validateToken, async (request, response) => {
+  const { email } = request.user.data;
+  const userDel = await User.destroy({ where: { email } });
+  return response.status(204).json(userDel);
+});
+
 module.exports = userRouter;
