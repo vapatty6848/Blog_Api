@@ -4,7 +4,7 @@ const UNAUTHORIZED = 401;
 
 const jwt = require('jsonwebtoken');
 
-const SECRET = process.env.SECRET || 'my_secret_key';
+const SECRET = 'my_secret_key';
 const config = { algorithm: 'HS256', expiresIn: '1d' };
 
 const createToken = (email) => {
