@@ -1,6 +1,5 @@
 const createToken = require('../authentication/createToken');
 const { User, sequelize } = require('../models');
-
 const { messages, status } = require('../utils');
 
 const registerUser = async (info) => {
