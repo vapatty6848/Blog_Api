@@ -19,6 +19,7 @@ usersRouter.get(
 usersRouter.post(
   '/',
   Validation.displayName,
+  Validation.requiredInfo,
   Validation.password,
   Validation.email,
   async (req, res) => {
@@ -31,7 +32,6 @@ usersRouter.post(
     const token = createToken({ id: newUser.id, email, name: displayName });
 
     return res.status(CREATED).json({ token });
-
   },
 );
 

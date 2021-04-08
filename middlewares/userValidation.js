@@ -9,9 +9,14 @@ const displayName = (req, res, next) => {
   next();
 };
 
-const email = (req, res, next) => {
+const requiredInfo = (req, res, next) => {
   if (!req.body.email) return res.status(BAD_REQUEST).json(EMAIL_REQUIRED);
+  if (!req.body.password) return res.status(BAD_REQUEST).json(PASSWORD_REQUIRED);
 
+  next();
+};
+
+const email = (req, res, next) => {
   const emailRegEx = /\S+@\S+\.\S+/gi;
   const emailIsValid = emailRegEx.test(req.body.email);
 
@@ -21,8 +26,6 @@ const email = (req, res, next) => {
 };
 
 const password = (req, res, next) => {
-  if (!req.body.password) return res.status(BAD_REQUEST).json(PASSWORD_REQUIRED);
-
   const passwordIsValid = req.body.password.length >= 6;
 
   if (!passwordIsValid) return res.status(BAD_REQUEST).json(INVALID_PASSWORD);
@@ -32,6 +35,7 @@ const password = (req, res, next) => {
 
 module.exports = {
   displayName,
+  requiredInfo,
   email,
   password,
 };
