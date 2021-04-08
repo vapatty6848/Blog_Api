@@ -1,7 +1,8 @@
 const { Router } = require('express');
 const { User } = require('../models');
-const validateUser = require('../Middlewares/validateUser');
+const validateUser = require('../middlewares/validateUser');
 const createToken = require('../auth/createToken');
+const findByEmail = require('../utils/findByEmail');
 
 const routerUser = Router();
 
@@ -22,8 +23,10 @@ routerUser.get('/:id', async (req, res) => {
 routerUser.post('/', validateUser, async (req, res) => {
   const { displayName, email, password, image } = req.body;
   const newUser = { displayName, email, password, image };
-  User.create(newUser);
-  const token = createToken(newUser);
+  await User.create(newUser);
+
+  const [{ dataValues }] = await findByEmail(email);
+  const token = createToken(dataValues);
 
   res.status(201).json({ token });
 });
