@@ -9,10 +9,6 @@ module.exports = async (req, res, next) => {
     return res.status(UNAUTHORIZED).send({ message: 'Token não encontrado' });
   }
 
-  // if (typeof token !== 'string') {
-  //   return res.status(UNAUTHORIZED).send({ message: 'missing auth token' });
-  // }
-
   const verify = verifyToken(token);
 
   if (!verify) return res.status(UNAUTHORIZED).send({ message: 'Token expirado ou inválido' });

@@ -3,6 +3,7 @@ const { User } = require('../models');
 const validateUser = require('../middlewares/validateUser');
 const validateToken = require('../middlewares/validateToken');
 const createToken = require('../auth/createToken');
+const verifyToken = require('../auth/verifyToken');
 
 const userRouter = new Router();
 
@@ -36,6 +37,16 @@ userRouter.get('/:id', validateToken, async (req, res) => {
   if (user != null) return res.status(200).json(user);
 
   res.status(404).json({ message: 'Usuário não existe' });
+});
+
+userRouter.delete('/me', validateToken, async (req, res) => {
+  const token = req.headers.authorization;
+
+  const user = verifyToken(token);
+
+  await User.destroy({ where: { email: user.email } });
+
+  return res.status(204).send();
 });
 
 module.exports = userRouter;
