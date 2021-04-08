@@ -32,7 +32,7 @@ const validateFields = async (req, res, next) => {
   }
 };
 
-const verifyGetAllUsers = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) return res.status(status.Unauthorized).json(error.tokenNotFound);
   const result = checkToken(authorization);
@@ -53,6 +53,6 @@ const verifyGetById = async (req, res, next) => {
 
 module.exports = {
   validateFields,
-  verifyGetAllUsers,
+  verifyToken,
   verifyGetById,
 };

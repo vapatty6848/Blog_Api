@@ -5,6 +5,14 @@ const addUser = async (displayName, email, password, image) => {
   return { name: displayName, userEmail: email, userImage: image };
 };
 
+const deleteUser = async (userId) => {
+  await User.destroy({
+    where: {
+      id: userId,
+    }
+  });
+};
+
 const getUserByEmail = async (userEmail) => {
   const [found] = await User.findAll({
     where: {
@@ -45,6 +53,7 @@ const getAllUsers = async () => {
 
 module.exports = {
   addUser,
+  deleteUser,
   getUserByEmail,
   getUserById,
   getAllUsers,
