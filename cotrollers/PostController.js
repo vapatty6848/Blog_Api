@@ -7,6 +7,8 @@ const models = require('../models');
 const RouterPost = Router();
 const Created = 201;
 const NotFound = 404;
+const Success = 200;
+const InternalServerError = 500;
 
 RouterPost.post('/', validateToken, PostValidate, async (req, res) => {
   const { title, content } = req.body;
@@ -19,6 +21,19 @@ RouterPost.post('/', validateToken, PostValidate, async (req, res) => {
   } catch (err) {
     return res.status(NotFound).json({ message: err.message });
   }
+});
+
+RouterPost.get('/', validateToken, async (_req, res) => {
+  models.BlogPosts.findAll({
+    include: [{
+      model: models.User,
+      as: 'user',
+      attributes: { exclude: ['password'] },
+    }],
+    attributes: { exclude: ['userId'] },
+  })
+    .then((post) => res.status(Success).json(post))
+    .catch((err) => res.status(InternalServerError).json({ message: err.message }));
 });
 
 module.exports = RouterPost;
