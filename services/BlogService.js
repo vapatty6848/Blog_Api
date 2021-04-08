@@ -1,4 +1,4 @@
-const { BlogPosts } = require('../models');
+const { BlogPosts, User } = require('../models');
 
 const getDate = () => {
   const date = new Date();
@@ -19,6 +19,18 @@ const addPost = async ({ userTitle, userContent, userId }) => {
   return { title: userTitle, content: userContent, userId };
 };
 
+const getPosts = async () => {
+  const posts = await BlogPosts.findAll({
+    include: {
+      model: User,
+      as: 'user',
+      attributes: ['id', 'displayName', 'email', 'image'],
+    },
+  });
+  return posts;
+};
+
 module.exports = {
   addPost,
+  getPosts,
 };
