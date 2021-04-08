@@ -30,6 +30,8 @@ const getById = async (req, res) => {
   return res.status(200).json(userById);
 };
 
+// comentário teste: requisitos 2 e 3 passam localmente e no remoto não
+
 module.exports = {
   createUser,
   getAllUsers,
