@@ -40,4 +40,19 @@ router.get('/post/:id', validateToken, async (req, res) => {
   }
 });
 
+router.put('/post/:id', blogValidation.validatePost, validateToken, async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const { id } = req.decodedUser;
+    const post = await BlogPosts.findByPk(req.params.id);
+    if (post.userId !== id) return res.status(401).json({ message: 'Usuário não autorizado' });
+    await BlogPosts.update({ title, content },
+      { where: { id: req.params.id } });
+    const updatePost = await BlogPosts.findByPk(req.params.id, { attributes: ['title', 'content', 'userId'] });
+    return res.status(200).json(updatePost);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
