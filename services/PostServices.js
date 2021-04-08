@@ -15,8 +15,17 @@ const findPostById = async (id) => {
   return { ...post.dataValues, user };
 };
 
+const updatePost = async (dataBody, id) => BlogPost.update(
+  { ...dataBody },
+  {
+    returning: true,
+    where: { id },
+  },
+);
+
 module.exports = {
   createPost,
   findAllPosts,
   findPostById,
+  updatePost,
 };

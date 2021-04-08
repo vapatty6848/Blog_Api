@@ -38,4 +38,20 @@ route.get('/:id', valid.verifyAuthorization, async (req, res) => {
   }
 });
 
+route.put('/:id', valid.verifyAuthorization, valid.verifyBodyPost, async (req, res) => {
+  const { id } = req.params;
+  const bodyData = req.body;
+  const { authorization: token } = req.headers;
+  try {
+    const { id: idUser } = await ValidationDataServices.tokenValid(token);
+    const { user: { id: userId } } = await PostServices.findPostById(id);
+    console.log(idUser, '', userId);
+    if (userId !== idUser) return res.status(401).json({ message: 'Usuário não autorizado' });
+    await PostServices.updatePost(bodyData, id);
+    return res.status(200).json({ ...bodyData, userId });
+  } catch {
+    return res.status(401).json({ message: 'Post não existe' });
+  }
+});
+
 module.exports = route;
