@@ -1,18 +1,20 @@
 const rescue = require('express-rescue');
-const { BlogPosts } = require('../models');
+const { BlogPosts, Users } = require('../models');
 const Status = require('../dictionary/StatusCode');
-// const createToken = require('../auth/createToken');
 
-// const getAllUsers = rescue(async (_req, res) => {
-//   const users = await Users.findAll();
-//   res.status(Status.code200).json(users);
-// });
+const getAllPosts = rescue(async (_req, res) => {
+  const posts = await BlogPosts.findAll({ include:
+    { model: Users, as: 'user', attributes: { exclude: 'password' } } });
+  res.status(Status.code200).json(posts);
+});
 
-// const getUserById = rescue(async (req, res) => {
-//   const { id } = req.params;
-//   const user = await Users.findOne({ where: { id } });
-//   res.status(Status.code200).json(user);
-// });
+const getPostById = rescue(async (req, res) => {
+  const { id } = req.params;
+  const posts = await BlogPosts.findOne({ include:
+    { model: Users, as: 'user', attributes: { exclude: 'password' } },
+  where: { id } });
+  res.status(Status.code200).json(posts);
+});
 
 const createNewPost = rescue(async (req, res) => {
   const { title, content } = req.body;
@@ -21,12 +23,8 @@ const createNewPost = rescue(async (req, res) => {
   return res.status(Status.code201).json({ title, content, userId: id });
 });
 
-// const destroyUser = rescue(async (req, res) => {
-//   const { email } = req.decodedUser;
-//   await Users.destroy({ where: { email } });
-//   return res.status(Status.code204).send();
-// });
-
 module.exports = {
   createNewPost,
+  getAllPosts,
+  getPostById,
 };

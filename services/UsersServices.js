@@ -15,9 +15,9 @@ const getUserById = rescue(async (req, res) => {
 });
 
 const createNewUser = rescue(async (req, res) => {
-  const { displayName, email, password } = req.body;
-  const { dataValues } = await Users.create({ displayName, email, password });
-  const token = createToken({ email, displayName, id: dataValues.id });
+  const { displayName, email, password, image } = req.body;
+  const { dataValues } = await Users.create({ displayName, email, password, image });
+  const token = createToken({ email, displayName, id: dataValues.id, image });
   return res.status(Status.code201).json({ token });
 });
 

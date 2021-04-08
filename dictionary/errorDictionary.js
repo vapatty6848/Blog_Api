@@ -13,6 +13,7 @@ const PASSWORD_NOT_FILLED = { statusCode: code400, errorMessage: { message: '"pa
 const BAD_FILL = { statusCode: code400, errorMessage: { message: 'Campos inválidos' } };
 const TITLE_REQUIRED = { statusCode: code400, errorMessage: { message: '"title" is required' } };
 const CONTENT_REQUIRED = { statusCode: code400, errorMessage: { message: '"content" is required' } };
+const POST_NOT_FOUND = { statusCode: code404, errorMessage: { message: 'Post não existe' } };
 
 module.exports = {
   TOKEN_NOT_FOUND,
@@ -28,4 +29,5 @@ module.exports = {
   BAD_FILL,
   TITLE_REQUIRED,
   CONTENT_REQUIRED,
+  POST_NOT_FOUND,
 };

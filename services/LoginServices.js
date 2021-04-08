@@ -6,8 +6,8 @@ const createToken = require('../auth/createToken');
 const login = rescue(async (req, res) => {
   const { email, password } = req.body;
   const { dataValues } = await Users.findOne({ email, password });
-  const { displayName, id } = dataValues;
-  const token = createToken({ email, displayName, id });
+  const { displayName, id, image } = dataValues;
+  const token = createToken({ email, displayName, id, image });
   res.status(Status.code200).json({ token });
 });
 
