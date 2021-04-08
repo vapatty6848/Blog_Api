@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { BlogPost } = require('../models');
+const { BlogPost, User } = require('../models');
 const verifyAuth = require('../schemas/verifyAuth');
 const { validatePost } = require('../schemas/postsValidation');
 const {
