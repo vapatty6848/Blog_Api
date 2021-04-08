@@ -30,4 +30,11 @@ routerUser.post('/', validateUser, async (req, res) => {
   res.status(201).json({ token });
 });
 
+routerUser.delete('/me', validateToken, async (req, res) => {
+  const { id } = req.user;
+
+  User.destroy({ where: { id } });
+  res.status(204).json({});
+});
+
 module.exports = routerUser;
