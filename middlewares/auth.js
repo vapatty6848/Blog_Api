@@ -9,13 +9,13 @@ const verifyToken = (token) => jwt.verify(token, SECRET);
 
 const validateToken = async (req, res, next) => {
   if (!req.headers.authorization) {
-      return res.status(401).json({ message: 'Token não encontrado' });
+    return res.status(401).json({ message: 'Token não encontrado' });
   }
   try {
-      const payload = verifyToken(req.headers.authorization, SECRET);
-      req.payload = payload;
+    const payload = verifyToken(req.headers.authorization, SECRET);
+    req.payload = payload;
   } catch (err) {
-      return res.status(401).json({ message: 'Token expirado ou inválido' });
+    return res.status(401).json({ message: 'Token expirado ou inválido' });
   }
 
   return next();
