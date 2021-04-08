@@ -8,6 +8,7 @@ const { decodeToken } = require('../services/DecodeToken');
 const PostController = new Router();
 const SUCCESS = 200;
 const CREATED = 201;
+const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 
 const unexpectedError = (error, res) => {
@@ -20,6 +21,19 @@ const unexpectedError = (error, res) => {
 PostController.get('/', validateToken, (_req, res) => {
   BlogPost.findAll({ include: [{ model: User, as: 'user' }] })
     .then((posts) => res.status(SUCCESS).json(posts))
+    .catch((error) => unexpectedError(error, res));
+});
+
+PostController.get('/:id', validateToken, (req, res) => {
+  const { id } = req.params;
+
+  BlogPost.findAll({ where: { id }, include: [{ model: User, as: 'user' }] })
+    .then((posts) => {
+      const message = 'Post não existe';
+
+      if (!posts.length) return res.status(NOT_FOUND).json({ message });
+      return res.status(SUCCESS).json(posts[0]);
+    })
     .catch((error) => unexpectedError(error, res));
 });
 
