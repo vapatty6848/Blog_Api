@@ -7,7 +7,7 @@ const login = async (req, res) => {
   const userValid = req.user;
   const token = createToken(userValid);
 
-  return res.status(OK).json({ token });
+  res.status(OK).json({ token });
 };
 
 module.exports = {
