@@ -8,6 +8,7 @@ const { decodeToken } = require('../services/DecodeToken');
 const PostController = new Router();
 const SUCCESS = 200;
 const CREATED = 201;
+const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 
@@ -35,6 +36,27 @@ PostController.get('/:id', validateToken, (req, res) => {
       return res.status(SUCCESS).json(posts[0]);
     })
     .catch((error) => unexpectedError(error, res));
+});
+
+PostController.put('/:id', validateToken, validatePost, async (req, res) => {
+  const {
+    params: { id },
+    body: { title, content },
+    headers: { authorization },
+  } = req;
+  const [email] = decodeToken(authorization);
+  const validatedUserId = await User.findOne({ where: { email } })
+    .then(({ id: foundId }) => foundId).catch((error) => unexpectedError(error, res));
+
+  BlogPost.findOne({ where: { id } }).then((post) => {
+    if (post.userId !== validatedUserId) {
+      const message = 'Usuário não autorizado';
+      return res.status(UNAUTHORIZED).json({ message });
+    }
+    return BlogPost.update({ title, content }, { where: { id } });
+  })
+    .then(() => res
+      .status(SUCCESS).json({ title, content, userId: validatedUserId }));
 });
 
 PostController.post('/', validateToken, validatePost, (req, res) => {
