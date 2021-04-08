@@ -34,4 +34,22 @@ postsRouter.get('/:id', validateToken, async (request, response) => {
   return response.status(200).json(posts);
 });
 
+postsRouter.put('/:id', validateToken, validatePosts, async (request, response) => {
+  const { title, content } = request.body;
+  const { id: userId } = request.user.data;
+  const { id } = request.params;
+
+  const postToUpdate = await BlogPosts.findOne({ where: { id } });
+  if (postToUpdate.userId !== userId) return response.status(401).json({ message: 'Usuário não autorizado' });
+
+  await BlogPosts.update(
+    { title, content },
+    { where: { id } },
+  );
+
+  const postUpdated = await BlogPosts.findOne({ where: { id } });
+
+  return response.status(200).json(postUpdated);
+});
+
 module.exports = postsRouter;
