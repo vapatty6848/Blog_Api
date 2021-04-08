@@ -1,39 +1,34 @@
 const { userService } = require('../services');
-const { verifyToken } = require('../middlewares/CheckToken');
+const { createToken, verifyToken } = require('../middlewares/CheckToken');
 
 const { OK, CREATED, UNAUTHORIZED } = require('../schema/statusSchema');
 
+// *** CREATE NEW USER ***
 const create = async (req, res) => {
   const { body } = req;
 
-  const token = await userService.create(body);
+  const userCreated = await userService.create(body);
+  const token = await createToken(userCreated);
 
   res.status(CREATED).json({ token });
 };
 
+// *** GET ALL USERS ***
 const getAll = async (req, res) => {
-  const token = req.headers.authorization;
-  if (!token) {
-    return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+  const validation = await verifyToken(req.headers.authorization);
+  if (validation.message) {
+    return res.status(UNAUTHORIZED).json({ message: validation.message });
   }
-  try {
-    const decodedToken = verifyToken(token);
-    const { email } = decodedToken;
-    const user = await userService.getByEmail(email);
-    if (user === null) {
-      return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
-    }
-  } catch (error) {
-    return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
-  }
+
   const users = await userService.getAll();
+  console.log('USERS', users);
 
   res.status(OK).json(users);
 };
 
 // const getOne = async (req, res, next) => {
 //   try {
-//     const { id } = req.params;
+//     const { id } = req.params
 //     const getUser = await users.getOne(id);
 //     res.status(StatusCodes.OK).json(getUser);
 //   } catch (err) {

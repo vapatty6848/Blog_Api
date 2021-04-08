@@ -1,12 +1,10 @@
 const { Users } = require('../models');
-const { createToken } = require('../middlewares/CheckToken');
 
 const create = async ({ displayName, email, password, image }) => {
   const user = { displayName, email, password, image };
 
   const userCreated = await Users.create(user);
-  const token = await createToken(userCreated);
-  return token;
+  return userCreated;
 };
 
 const getAll = async () => {
