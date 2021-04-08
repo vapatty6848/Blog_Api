@@ -3,7 +3,7 @@ const { BlogPost } = require('../models');
 const verifyAuth = require('../schemas/verifyAuth');
 const { validatePost } = require('../schemas/postsValidation');
 const {
-  SUCCESS, INTERNAL_SERVER_ERROR,
+  OK, SUCCESS, INTERNAL_SERVER_ERROR,
 } = require('../document/HTTPStatus');
 
 const router = new Router();
@@ -24,14 +24,20 @@ router.post('/', verifyAuth, validatePost, async (req, res) => {
   }
 });
 
-// router.get('/', verifyAuth, async (_req, res) => {
-//   try {
+router.get('/', verifyAuth, async (_req, res) => {
+  try {
+    const posts = await BlogPost.findAll({
+      attributes: { exclude: ['userId'] },
+      include: [{
+        model: User, as: 'user', attributes: { exclude: ['password'] },
+      }],
+    });
 
-//     return res.status(OK).json();
-//   } catch (err) {
-//     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
-//   }
-// });
+    return res.status(OK).json(posts);
+  } catch (err) {
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+  }
+});
 
 // router.get('/:id', verifyAuth, async (req, res) => {
 //   try {
