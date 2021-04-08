@@ -13,7 +13,7 @@ loginRouter.post('/', validateLogin, async (req, res) => {
   if (password !== user.dataValues.password) return res.status(400).json({ message: 'Campos inválidos' });
 
   const token = jwt.sign({ data: user }, SECRET, config);
-  
+
   return res.status(200).json({ token });
 });
 
