@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { User } = require('../models');
-const { OK, CREATED, CONFLICT, NOT_FOUND } = require('../dictionary/statusCode');
+const { OK, CREATED, CONFLICT, NOT_FOUND, NO_CONTENT } = require('../dictionary/statusCode');
 const { USER_EXISTS, USER_DONT_EXISTS } = require('../dictionary/errorMessage');
 const Validation = require('../middlewares/userValidation');
 const createToken = require('../auth/createToken');
@@ -53,6 +53,18 @@ usersRouter.get(
     if (userNotFound) return res.status(NOT_FOUND).json(USER_DONT_EXISTS);
 
     return res.status(OK).json(user[0]);
+  },
+);
+
+usersRouter.delete(
+  '/me',
+  validateToken,
+  async (req, res) => {
+    const { id, email, displayName } = (req.user);
+
+    await User.destroy({ where: { id, email, displayName } });
+
+    return res.status(NO_CONTENT).json();
   },
 );
 
