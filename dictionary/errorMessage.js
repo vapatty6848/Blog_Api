@@ -4,5 +4,8 @@ module.exports = {
   INVALID_PASSWORD: { message: '"password" length must be 6 characters long' },
   EMAIL_REQUIRED: { message: '"email" is required' },
   PASSWORD_REQUIRED: { message: '"password" is required' },
+  EMAIL_EMPTY: { message: '"email" is not allowed to be empty' },
+  PASSWORD_EMPTY: { message: '"password" is not allowed to be empty' },
   USER_EXISTS: { message: 'Usuário já existe' },
+  USER_NOT_FOUND: { message: 'Campos inválidos' },
 };
