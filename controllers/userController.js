@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { User } = require('../models');
 const validateUser = require('../Middlewares/validateUser');
+const createToken = require('../auth/createToken');
 
 const routerUser = Router();
 
@@ -19,13 +20,12 @@ routerUser.get('/:id', async (req, res) => {
 });
 
 routerUser.post('/', validateUser, async (req, res) => {
-  console.log(req.body);
   const { displayName, email, password, image } = req.body;
   const newUser = { displayName, email, password, image };
-  User.create(newUser)
-    .then((user) => {
-      res.status(201).json(user);
-    });
+  User.create(newUser);
+  const token = createToken(newUser);
+
+  res.status(201).json({ token });
 });
 
 module.exports = routerUser;
