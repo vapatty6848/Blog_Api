@@ -8,4 +8,6 @@ module.exports = {
   PASSWORD_EMPTY: { message: '"password" is not allowed to be empty' },
   USER_EXISTS: { message: 'Usuário já existe' },
   USER_NOT_FOUND: { message: 'Campos inválidos' },
+  TOKEN_NOT_FOUND: { message: 'Token não encontrado' },
+  INVALID_TOKEN: { message: 'Token expirado ou inválido' },
 };
