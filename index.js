@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const userRouter = require('./controllers/userController');
 const loginRouter = require('./controllers/loginController');
-const postsRouter = require('./controllers/postsController');
+const postsRouter = require('./controllers/postController');
 require('dotenv').config();
 
 const app = express();
@@ -13,7 +13,6 @@ app.get('/', (_request, response) => {
 });
 
 app.use(bodyParser.json());
-
 
 app.use('/user', userRouter);
 app.use('/login', loginRouter);
