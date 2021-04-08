@@ -12,12 +12,12 @@ module.exports = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, secret);
-    const userRegistered = await User.findAll({
+    const [userRegistered] = await User.findAll({
       where: { id: decoded.id, email: decoded.email },
       attributes: ['id', 'displayName', 'email'],
     });
 
-    req.user = userRegistered;
+    req.user = userRegistered.dataValues;
     next();
   } catch (err) {
     return res.status(UNAUTHORIZED).json(INVALID_TOKEN);
