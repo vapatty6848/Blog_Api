@@ -31,7 +31,16 @@ const findAllUsers = async () => {
   return { status: status.OK, message: allUsers };
 };
 
+const findUser = async (id) => {
+  const user = await User.findByPk(id, { attributes: ['id', 'displayName', 'email', 'image'] });
+
+  if (user === null) return { status: status.NOT_FOUND, message: messages.USER_NOT_FOUND };
+
+  return { status: status.OK, user };
+};
+
 module.exports = {
   registerUser,
   findAllUsers,
+  findUser,
 };

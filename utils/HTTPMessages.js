@@ -6,6 +6,7 @@ const messages = {
   EMPTY_PASSWORD: '"password" is not allowed to be empty',
   INVALID_FIELD_DATA: 'Campos inválidos',
   INVALID_TOKEN: 'Token expirado ou inválido',
+  USER_NOT_FOUND: 'Usuário não existe',
   REQUIRED_EMAIL: '"email" is required',
   REQUIRED_PASSWORD: '"password" is required',
   SMT_WRONG: 'Something went wrong.',
