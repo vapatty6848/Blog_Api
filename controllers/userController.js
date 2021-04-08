@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { User } = require('../models');
+const validateUser = require('../Middlewares/validateUser');
 
 const routerUser = Router();
 
@@ -10,13 +11,21 @@ routerUser.get('/', async (_req, res) => {
     });
 });
 
-routerUser.post('/', async (req, res) => {
-  const { body } = req;
-  const createUser = await User.create(body);
+routerUser.get('/:id', async (req, res) => {
+  User.findByPk(req.params.id)
+    .then((user) => {
+      res.status(200).json(user);
+    });
+});
 
-  res.send(201).json(createUser);
-
-  return createUser;
+routerUser.post('/', validateUser, async (req, res) => {
+  console.log(req.body);
+  const { displayName, email, password, image } = req.body;
+  const newUser = { displayName, email, password, image };
+  User.create(newUser)
+    .then((user) => {
+      res.status(201).json(user);
+    });
 });
 
 module.exports = routerUser;
