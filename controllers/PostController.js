@@ -33,12 +33,6 @@ PostController.get('/search', validateToken, (req, res) => {
     .catch((error) => unexpectedError(error, res));
 });
 
-PostController.get('/', validateToken, (_req, res) => {
-  BlogPost.findAll({ include: [{ model: User, as: 'user' }] })
-    .then((posts) => res.status(SUCCESS).json(posts))
-    .catch((error) => unexpectedError(error, res));
-});
-
 PostController.get('/:id', validateToken, (req, res) => {
   const { id } = req.params;
 
@@ -52,6 +46,12 @@ PostController.get('/:id', validateToken, (req, res) => {
     .catch((error) => unexpectedError(error, res));
 });
 
+PostController.get('/', validateToken, (_req, res) => {
+  BlogPost.findAll({ include: [{ model: User, as: 'user' }] })
+    .then((posts) => res.status(SUCCESS).json(posts))
+    .catch((error) => unexpectedError(error, res));
+});
+
 PostController.put('/:id', validateToken, validatePost, async (req, res) => {
   const {
     params: { id },
@@ -61,7 +61,7 @@ PostController.put('/:id', validateToken, validatePost, async (req, res) => {
   const [email] = decodeToken(authorization);
   const validatedUserId = await User.findOne({ where: { email } })
     .then(({ id: foundId }) => foundId).catch((error) => unexpectedError(error, res));
-  const postToUpdate = BlogPost.findOne({ where: { id } }).then((post) => post)
+  const postToUpdate = await BlogPost.findOne({ where: { id } }).then((post) => post)
     .catch((error) => unexpectedError(error, res));
 
   if (postToUpdate.userId !== validatedUserId) {
