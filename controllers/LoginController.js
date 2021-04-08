@@ -14,7 +14,7 @@ LoginController.post('/', (req, res) => {
     .then((user) => {
       if (user.password === password) {
         const token = generateToken(email, password);
-        res.status(SUCCESS).json({ token });
+        return res.status(SUCCESS).json({ token });
       }
       const message = 'Campos inválidos';
       return res.status(BAD_REQUEST).json({ message });
