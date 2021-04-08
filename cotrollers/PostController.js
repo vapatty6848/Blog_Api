@@ -36,4 +36,22 @@ RouterPost.get('/', validateToken, async (_req, res) => {
     .catch((err) => res.status(InternalServerError).json({ message: err.message }));
 });
 
+RouterPost.get('/:id', validateToken, async (req, res) => {
+  try {
+    const post = await models.BlogPosts.findAll({
+      where: { id: req.params.id },
+      include: [{
+        model: models.User,
+        as: 'user',
+        attributes: { exclude: ['password'] },
+      }],
+      attributes: { exclude: ['userId'] },
+    });
+    if (post.length > 0) return res.status(Success).json(post[0]);
+    return res.status(NotFound).json({ message: 'Post não existe' });
+  } catch (err) {
+    return res.status(InternalServerError).json({ message: err.message });
+  }
+});
+
 module.exports = RouterPost;
