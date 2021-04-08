@@ -4,6 +4,11 @@ const { PostServices, ValidationDataServices } = require('../services');
 const { validations: valid } = require('../middlewares');
 
 const route = Router();
+const ok = 200;
+const created = 201;
+const unauthorized = 401;
+const notFound = 404;
+const noContent = 204;
 
 route.post('/', valid.verifyAuthorization, valid.verifyBodyPost, async (req, res) => {
   const { authorization: token } = req.headers;
@@ -17,24 +22,30 @@ route.post('/', valid.verifyAuthorization, valid.verifyBodyPost, async (req, res
   try {
     const createPost = await PostServices.createPost(bodyData);
     const { userId, content, title } = createPost;
-    return res.status(201).json({ userId, content, title });
+    return res.status(created).json({ userId, content, title });
   } catch {
-    return res.status(500).json({ message: 'Erro Interno' });
+    return res.status(notFound).json({ message: 'Erro Interno' });
   }
 });
 
 route.get('/', valid.verifyAuthorization, async (req, res) => {
   const listAllPosts = await PostServices.findAllPosts();
-  return res.status(200).json(listAllPosts);
+  return res.status(ok).json(listAllPosts);
+});
+
+route.get('/search', valid.verifyAuthorization, async (req, res) => {
+  const therm = req.query.q;
+  const listPost = await PostServices.findPostsByTherm(therm);
+  return res.status(ok).json(listPost);
 });
 
 route.get('/:id', valid.verifyAuthorization, async (req, res) => {
   const { id } = req.params;
   try {
     const post = await PostServices.findPostById(id);
-    return res.status(200).json(post);
+    return res.status(ok).json(post);
   } catch {
-    return res.status(404).json({ message: 'Post não existe' });
+    return res.status(notFound).json({ message: 'Post não existe' });
   }
 });
 
@@ -45,12 +56,29 @@ route.put('/:id', valid.verifyAuthorization, valid.verifyBodyPost, async (req, r
   try {
     const { id: idUser } = await ValidationDataServices.tokenValid(token);
     const { user: { id: userId } } = await PostServices.findPostById(id);
-    console.log(idUser, '', userId);
-    if (userId !== idUser) return res.status(401).json({ message: 'Usuário não autorizado' });
-    await PostServices.updatePost(bodyData, id);
-    return res.status(200).json({ ...bodyData, userId });
+    const message = 'Usuário não autorizado';
+    if (userId !== idUser) return res.status(unauthorized).json({ message });
+    const [updatePost] = await PostServices.updatePost(bodyData, id);
+    if (updatePost !== 0) return res.status(ok).json({ ...bodyData, userId });
   } catch {
-    return res.status(401).json({ message: 'Post não existe' });
+    return res.status(unauthorized).json({ message: 'Post não existe' });
+  }
+});
+
+route.delete('/:id', valid.verifyAuthorization, async (req, res) => {
+  const { id } = req.params;
+  const { authorization: token } = req.headers;
+  try {
+    const { id: idUser } = await ValidationDataServices.tokenValid(token);
+    const { user: { id: userId } } = await PostServices.findPostById(id);
+
+    const message = 'Usuário não autorizado';
+    if (userId !== idUser) return res.status(unauthorized).json({ message });
+
+    const deleteUser = await PostServices.deletePost(id);
+    if (deleteUser !== 0) return res.status(noContent).send();
+  } catch {
+    return res.status(notFound).json({ message: 'Post não existe' });
   }
 });
 

@@ -8,7 +8,7 @@ const findAllUsers = async () => User.findAll();
 
 const findUsersById = async (id) => User.findByPk(id);
 
-const deleteUser = async (id) => User.destroy(id);
+const deleteUser = async (email) => User.destroy({ where: { email } });
 
 module.exports = {
   createUser,
