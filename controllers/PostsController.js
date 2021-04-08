@@ -9,4 +9,7 @@ Route.post('/', validateToken, ValidatePosts.InputsExists, PostsServices.createN
 Route.get('/', validateToken, PostsServices.getAllPosts);
 Route.get('/:id', validateToken, ValidatePosts.IfPostExist, PostsServices.getPostById);
 
+Route.delete('/:id', validateToken, ValidatePosts.IfPostExist,
+  ValidatePosts.IfUserHasAuthorization, PostsServices.destroyPost);
+
 module.exports = Route;

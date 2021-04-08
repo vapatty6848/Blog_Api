@@ -1,5 +1,7 @@
-const { BlogPosts } = require('../models');
-const { TITLE_REQUIRED, CONTENT_REQUIRED, POST_NOT_FOUND } = require('../dictionary/errorDictionary');
+const jwt = require('jsonwebtoken');
+const { BlogPosts, Users } = require('../models');
+const { TITLE_REQUIRED, CONTENT_REQUIRED, POST_NOT_FOUND,
+  USER_NOT_AUTHORIZED } = require('../dictionary/errorDictionary');
 
 const InputsExists = async (req, _res, next) => {
   const { title, content } = req.body;
@@ -15,4 +17,16 @@ const IfPostExist = async (req, _res, next) => {
   next();
 };
 
-module.exports = { InputsExists, IfPostExist };
+const IfUserHasAuthorization = async (req, _res, next) => {
+  const { id } = req.params;
+  const userId = jwt.decode(req.headers.authorization);
+
+  const post = await BlogPosts.findOne({ where: { id },
+    include: { model: Users, as: 'user', attributes: { exclude: 'password' } } });
+  const { user } = post;
+
+  if (user.dataValues.id !== userId.id) return next(USER_NOT_AUTHORIZED);
+  next();
+};
+
+module.exports = { InputsExists, IfPostExist, IfUserHasAuthorization };

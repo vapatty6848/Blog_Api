@@ -3,6 +3,7 @@ const { code409, code404, code400, code401 } = require('./StatusCode');
 const TOKEN_NOT_FOUND = { statusCode: code401, errorMessage: { message: 'Token não encontrado' } };
 const USER_ALREADY_EXIST = { statusCode: code409, errorMessage: { message: 'Usuário já existe' } };
 const USER_NOT_FOUND = { statusCode: code404, errorMessage: { message: 'Usuário não existe' } };
+const USER_NOT_AUTHORIZED = { statusCode: code401, errorMessage: { message: 'Usuário não autorizado' } };
 const DYSPLAYNAME_SIZE = { statusCode: code400, errorMessage: { message: '"displayName" length must be at least 8 characters long' } };
 const EMAIL_REQUIRED = { statusCode: code400, errorMessage: { message: '"email" is required' } };
 const EMAIL_BAD_FORMAT = { statusCode: code400, errorMessage: { message: '"email" must be a valid email' } };
@@ -19,6 +20,7 @@ module.exports = {
   TOKEN_NOT_FOUND,
   USER_ALREADY_EXIST,
   USER_NOT_FOUND,
+  USER_NOT_AUTHORIZED,
   DYSPLAYNAME_SIZE,
   EMAIL_REQUIRED,
   EMAIL_BAD_FORMAT,

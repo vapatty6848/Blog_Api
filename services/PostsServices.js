@@ -10,10 +10,9 @@ const getAllPosts = rescue(async (_req, res) => {
 
 const getPostById = rescue(async (req, res) => {
   const { id } = req.params;
-  const posts = await BlogPosts.findOne({ include:
-    { model: Users, as: 'user', attributes: { exclude: 'password' } },
-  where: { id } });
-  res.status(Status.code200).json(posts);
+  const post = await BlogPosts.findOne({ where: { id },
+    include: { model: Users, as: 'user', attributes: { exclude: 'password' } } });
+  res.status(Status.code200).json(post);
 });
 
 const createNewPost = rescue(async (req, res) => {
@@ -23,8 +22,15 @@ const createNewPost = rescue(async (req, res) => {
   return res.status(Status.code201).json({ title, content, userId: id });
 });
 
+const destroyPost = rescue(async (req, res) => {
+  const { id } = req.params;
+  await BlogPosts.destroy({ where: { id } });
+  return res.status(Status.code204).send();
+});
+
 module.exports = {
   createNewPost,
   getAllPosts,
   getPostById,
+  destroyPost,
 };
