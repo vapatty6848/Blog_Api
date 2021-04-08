@@ -37,8 +37,8 @@ router.post('/', service.validateCreateUser, async (req, res) => {
 
 router.delete('/me', validateToken, async (req, res) => {
   const { authorization } = req.headers;
-  const { id } = decodeToken(authorization);
-  await Users.destroy({ where: { id } });
+  const { email } = decodeToken(authorization);
+  await Users.destroy({ where: { email } });
 
   res.status(204).end();
 });
