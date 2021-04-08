@@ -44,14 +44,11 @@ router.put('/:id', validateToken, async (req, res) => {
   if (!title) return res.status(400).send({ message: '"title" is required' });
   if (!content) return res.status(400).send({ message: '"content" is required' });
   const postActual = await BlogPosts.findOne({ where: { id } });
-
-  console.log(id, postActual.userId, userId);
-
-  if (postActual.userId !== id) {
+  if (postActual.userId !== userId) {
     return res.status(401).send({ message: 'Usuário não autorizado' });
   }
-  const updatedPost = await BlogPosts.update({ title, content }, { where: { id, userId } });
-  res.status(200).json(updatedPost);
+  await BlogPosts.update({ title, content }, { where: { userId, id } });
+  res.status(200).json({ title, content, userId });
 });
 
 router.get('/search', validateToken, async (req, res) => {
@@ -78,18 +75,17 @@ router.get('/search', validateToken, async (req, res) => {
   return res.status(200).json(posts);
 });
 
-// Acho que o problema é no userId
+// Acho que o problema é no userId está vindo como Number
 router.delete('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
   const { email } = req.decodedUser;
   const user = await getUserByEmail(email);
   const userId = user.dataValues.id;
-  console.log(user);
   const postActual = await BlogPosts.findOne({ where: { id } });
   if (!postActual) {
     return res.status(404).json({ message: 'Post não existe' });
   }
-  if (postActual.userId !== id) {
+  if (postActual.userId !== userId) {
     return res.status(401).send({ message: 'Usuário não autorizado' });
   }
   const deletedPost = await BlogPosts.destroy({ where: { userId, id } });
