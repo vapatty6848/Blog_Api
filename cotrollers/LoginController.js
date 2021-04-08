@@ -13,9 +13,10 @@ RouterLogin.post('/', LoginValidate, async (req, res) => {
   const userExists = await models.User.findOne({ where: { email } });
   if (!userExists) return res.status(InvalidRequest).json({ message: 'Campos inválidos' });
   if (password !== userExists.dataValues.password) return res.status(InvalidRequest).json({ message: 'Campos inválidos' });
+  // console.log(userExists);
 
   const token = await createToken(userExists);
-  console.log(token, 'token');
+  // console.log(token, 'token');
 
   return res.status(Success).json({ token });
 });
