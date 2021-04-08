@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 
-const { usersRoute } = require('./routes');
+const { usersRoute, loginRoute } = require('./routes');
 const log = require('./middlewares/Log');
 const { NOT_FOUND } = require('./schema/statusSchema');
 
@@ -10,7 +10,7 @@ const PORT = parseInt(process.env.PORT, 10) || 3001;
 
 app.use(express.json());
 app.use(log);
-// app.use('/login', loginRoute);
+app.use('/login', loginRoute);
 app.use('/user', usersRoute);
 // app.use('/post', blogPostsRoute);
 

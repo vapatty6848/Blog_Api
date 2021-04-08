@@ -1,32 +1,30 @@
 const userService = require('../services/UserService');
 
-const isString = (name) => typeof (name) === 'string';
-const isLessThan = (name, number) => name.toString().length < number;
 const isBlank = (field) => field === '';
+const isString = (name) => typeof (name) === 'string';
+const isLessThan = (name, size) => name.toString().length < size;
 
 const isEmailValid = (email) => {
   const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-
   return regex.test(email);
 };
 
 const isDisplayNameValid = (displayName) => {
   if (isString(displayName) && !isLessThan(displayName, 8)) return true;
-
   return false;
 };
 
-const doesEmailAlreadyExists = async (email) => {
+const emailAlreadyExists = async (email) => {
   if (!email) return false;
-  const result = await userService.getByEmail(email);
 
-  if (result.length === 0) return false;
+  const result = await userService.getByEmail(email);
+  if (!result) return false;
 
   return result;
 };
 
 const validateUser = async (displayName, email, password) => {
-  const isUserAlreadyregistered = await doesEmailAlreadyExists(email);
+  const isUserAlreadyregistered = await emailAlreadyExists(email);
 
   switch (true) {
     case !isDisplayNameValid(displayName):
@@ -46,32 +44,30 @@ const validateUser = async (displayName, email, password) => {
   }
 };
 
-const validateLoginFields = async (email, password) => {
-  const isUserAlreadyregistered = await doesEmailAlreadyExists(email);
-
-  if (!password) return false;
-  if (!isEmailValid(email) || isLessThan(password, 6) || !isUserAlreadyregistered) {
+const checkLoginFields = async (email, password) => {
+  const user = await emailAlreadyExists(email);
+  if (!password || !isEmailValid(email) || isLessThan(password, 6) || !user) {
     return false;
   }
 
-  const userPassword = isUserAlreadyregistered[0].dataValues.password;
+  const userPassword = user.dataValues.password;
+  // if (parseInt(password, 10) !== userPassword) return false;
+  if (password.toString() !== userPassword.toString()) return false;
 
-  if (parseInt(password, 10) !== userPassword) return false;
-
-  return true;
+  return user.dataValues;
 };
 
 const validateLogin = async (email, password) => {
-  const areFieldsValid = await validateLoginFields(email, password);
+  const user = await checkLoginFields(email, password);
 
   switch (true) {
-    case isBlank(email): return { status: 400, message: 'emailEmptyMsg' };
-    case !email: return { status: 400, message: 'emailRequiredMsg' };
-    case isBlank(password): return { status: 400, message: 'passwordEmptyMsg' };
-    case !password: return { status: 400, message: 'passwordRequiredMsg' };
-    case !areFieldsValid: return { status: 400, message: 'invalidFieldsMsg' };
+    case isBlank(email): return { status: 400, message: '"email" is not allowed to be empty' };
+    case !email: return { status: 400, message: '"email" is required' };
+    case isBlank(password): return { status: 400, message: '"password" is not allowed to be empty' };
+    case !password: return { status: 400, message: '"password" is required' };
+    case !user: return { status: 400, message: 'Campos inválidos' };
 
-    default: return {};
+    default: return user;
   }
 };
 

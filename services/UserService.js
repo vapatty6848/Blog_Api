@@ -9,19 +9,18 @@ const create = async ({ displayName, email, password, image }) => {
   return token;
 };
 
-// const getOne = async (id) => {
-//   const getUser = await Users.findOne({ where: { id } });
-//   if (!getUser) throw new Error('C_ERR_USER_NOT_FOUND');
-//   return getUser;
-// };
-
 const getAll = async () => {
   const users = await Users.findAll();
   return users;
 };
 
+const getById = async (id) => {
+  const user = await Users.findOne({ where: { id } });
+  return user;
+};
+
 const getByEmail = async (email) => {
-  const user = await Users.findAll({ where: { email } });
+  const user = await Users.findOne({ where: { email } });
   return user;
 };
 
@@ -34,5 +33,6 @@ const getByEmail = async (email) => {
 module.exports = {
   create,
   getAll,
+  getById,
   getByEmail,
 };

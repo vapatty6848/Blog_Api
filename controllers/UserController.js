@@ -1,16 +1,31 @@
 const { userService } = require('../services');
+const { verifyToken } = require('../middlewares/CheckToken');
 
-const { OK, CREATED } = require('../schema/statusSchema');
+const { OK, CREATED, UNAUTHORIZED } = require('../schema/statusSchema');
 
 const create = async (req, res) => {
   const { body } = req;
-  console.log('Vai iniciar o create');
+
   const token = await userService.create(body);
 
   res.status(CREATED).json({ token });
 };
 
-const getAll = async (_req, res) => {
+const getAll = async (req, res) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+  }
+  try {
+    const decodedToken = verifyToken(token);
+    const { email } = decodedToken;
+    const user = await userService.getByEmail(email);
+    if (user === null) {
+      return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+    }
+  } catch (error) {
+    return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
+  }
   const users = await userService.getAll();
 
   res.status(OK).json(users);
