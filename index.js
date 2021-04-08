@@ -1,7 +1,7 @@
 const express = require('express');
 const {
   UserController,
-  PostController,
+  BlogPostController,
   LoginController,
 } = require('./controllers');
 const error = require('./middlewares/error');
@@ -20,5 +20,5 @@ app.get('/', (request, response) => {
 
 app.use('/user', UserController);
 app.use('/login', LoginController);
-app.use('/post', PostController);
+app.use('/post', BlogPostController);
 app.use(error);

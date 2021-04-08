@@ -4,7 +4,6 @@ const { LoginValidation } = require('../middlewares/validations');
 
 const LoginController = new Router();
 
-// LoginController.get('/', getAllUsers);
 LoginController.post('/', LoginValidation, createToken);
 
 module.exports = LoginController;

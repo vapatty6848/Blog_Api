@@ -29,11 +29,7 @@ const getUserById = (req, res) => {
 };
 
 const deleteUser = (req, res) => {
-  User.destroy({
-    where: {
-      id: req.userId,
-    },
-  })
+  User.destroy({ where: { id: req.userId } })
     .then(() => res.status(204).send())
     .catch((e) => {
       console.log(e.message);

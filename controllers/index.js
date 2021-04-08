@@ -1,9 +1,9 @@
 const UserController = require('./UserController');
-const PostController = require('./PostController');
+const BlogPostController = require('./BlogPostController');
 const LoginController = require('./LoginController');
 
 module.exports = {
   UserController,
-  PostController,
+  BlogPostController,
   LoginController,
 };
