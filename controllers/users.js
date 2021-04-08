@@ -16,5 +16,5 @@ userRouter.post('/', validateSignUp, async (req, res) => {
   const token = JWT.sign({ signUpData: [displayName, email, password, image] }, 'secret', jwtParams);
   return res.status(201).json({ token });
 });
-
+// teste
 module.exports = userRouter;
