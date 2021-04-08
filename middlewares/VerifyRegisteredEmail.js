@@ -5,14 +5,12 @@ const INTERNAL_SERVER_ERROR = 500;
 
 const verifyRegisteredEmail = (req, res, next) => {
   const { email } = req.body;
-  const { method } = req;
-
-  if (method === 'GET') return next();
 
   User.findOne({ where: { email } })
     .then((user) => {
       if (user !== null) return next();
       const message = 'Campos inválidos';
+
       return res.status(BAD_REQUEST).json({ message });
     })
     .catch((error) => {

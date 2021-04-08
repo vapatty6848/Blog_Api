@@ -1,10 +1,6 @@
 const BAD_REQUEST = 400;
 
 const validateDisplayName = (req, res, next) => {
-  const { method } = req;
-
-  if (method === 'GET') return next();
-
   const { displayName } = req.body;
   const MINIMUM_DISPLAY_NAME_LENGTH = 8;
 
@@ -26,10 +22,6 @@ const validateDisplayName = (req, res, next) => {
 };
 
 const validatePassword = (req, res, next) => {
-  const { method } = req;
-
-  if (method === 'GET') return next();
-
   const { password } = req.body;
   const MINIMUM_PASSWORD_LENGTH = 6;
 
@@ -51,10 +43,6 @@ const validatePassword = (req, res, next) => {
 };
 
 const validateEmail = (req, res, next) => {
-  const { method } = req;
-
-  if (method === 'GET') return next();
-
   const { email } = req.body;
 
   if (email) {
@@ -75,10 +63,6 @@ const validateEmail = (req, res, next) => {
 };
 
 const validateImage = (req, res, next) => {
-  const { method } = req;
-
-  if (method === 'GET') return next();
-
   const { image } = req.body;
 
   if (image) {
