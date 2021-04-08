@@ -1,6 +1,7 @@
 const { createToken } = require('../utils/createToken');
 const { CREATED, CONFLICT, OK, NOT_FOUND, NO_CONTENT } = require('../utils/allStatusCode');
 const { Users } = require('../models');
+const tokenDecoder = require('../utils/tokenDecoder');
 
 const createUser = async (req, res) => {
   const { displayName, email, password, image } = req.body;
@@ -30,7 +31,9 @@ const getUserById = async (req, res) => {
 };
 
 const removeUser = async (req, res) => {
-  const email = req.user.data;
+  const token = req.headers.authorization;
+  const { email } = tokenDecoder(token);
+
   await Users.destroy(
     {
       where: { email },
