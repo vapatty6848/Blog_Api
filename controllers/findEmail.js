@@ -1,6 +1,6 @@
 const { User } = require('../models');
 
-const findEmail = (email) => User
+const findEmail = async (email) => User
   .findOne({ where: { email } })
   .then(true)
   .catch((e) => console.error(e.message));

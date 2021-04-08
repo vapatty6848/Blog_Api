@@ -1,15 +1,12 @@
-const jwt = require('jsonwebtoken');
 const { User } = require('../models');
-
-const segredo = 'token';
+const { generateToken } = require('../helpers/utils');
 
 const createUser = (req, res) => {
   const { displayName, email, password, image } = req.body;
 
   User.create({ displayName, email, password, image })
     .then((user) => {
-      const token = jwt.sign({ email: user.dataValues.email }, segredo);
-      console.log(token);
+      const token = generateToken(user.dataValues.email);
       return res.status(201).json({ token });
     })
     .catch((e) => {

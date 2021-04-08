@@ -1,4 +1,4 @@
-const { checkEmail } = require('../helpers/utils');
+const { checkEmail, generateToken } = require('../helpers/utils');
 
 const loginValidation = async (req, res, _next) => {
   const { email, password } = req.body;
@@ -18,10 +18,9 @@ const loginValidation = async (req, res, _next) => {
   if (!user) {
     return res.status(400).json({ message: 'Campos inválidos' });
   }
-  return res.status(200).json();
-  // catch (e) {
-  //   return res.status(500).json({ message: 'Erro', error: e });
-  // }
+
+  const token = generateToken(email);
+  return res.status(200).json({ token });
 };
 
 module.exports = loginValidation;

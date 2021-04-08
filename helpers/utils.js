@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const findEmail = require('../controllers/findEmail');
 
 const getter = (data) => {
@@ -12,9 +13,14 @@ const validateEmail = (email) => {
 
 const checkEmail = async (input) => findEmail(input);
 
+const generateToken = (email) => {
+  jwt.sign(email, 'token');
+};
+
 module.exports = {
   findEmail,
   getter,
   validateEmail,
   checkEmail,
+  generateToken,
 };
