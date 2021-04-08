@@ -16,8 +16,7 @@ async function validateJWT(token) {
     if (!user) {
       return { result: 'invalid' };
     }
-
-    return user;
+    return { result: user };
   } catch (error) {
     return { result: 'invalid' };
   }

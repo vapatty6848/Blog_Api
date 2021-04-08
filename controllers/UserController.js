@@ -48,4 +48,14 @@ router.get(
   },
 );
 
+router.delete(
+  '/me',
+  tokenValidation,
+  async (request, response) => {
+    const { id } = response.locals.authenticatedUser;
+    await UserService.remove(id);
+    return response.status(statusCode.NO_CONTENT).end();
+  },
+);
+
 module.exports = router;

@@ -17,7 +17,7 @@ async function tokenValidation(request, response, next) {
       message: 'Token expirado ou inválido',
     });
   }
-
+  response.locals.authenticatedUser = validation.result;
   return next();
 }
 

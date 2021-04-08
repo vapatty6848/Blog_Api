@@ -19,9 +19,8 @@ async function findByEmail(email) {
       },
     });
     if (!result) return;
-
-    const user = result.dataValues;
-    return user;
+    const { password, ...userInfo } = result.dataValues;
+    return userInfo;
   } catch (error) {
     console.log(error);
   }
@@ -40,9 +39,20 @@ async function getById(id) {
   return userInfo;
 }
 
+async function remove(id) {
+  const queryResult = await Users.destroy(
+    {
+      where: { id },
+    },
+  );
+
+  if (!queryResult) return null;
+}
+
 module.exports = {
   create,
   findByEmail,
   getAll,
   getById,
+  remove,
 };
