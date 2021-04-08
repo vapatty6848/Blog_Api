@@ -26,7 +26,6 @@ router.get('/', validateToken, async (_req, res) => {
 
 router.get('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const post = await BlogPosts.findOne({
     where: { id },
     include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
@@ -35,6 +34,7 @@ router.get('/:id', validateToken, async (req, res) => {
   res.status(200).json(post);
 });
 
+// Acho que o problema é no userId
 router.put('/:id', validateToken, async (req, res) => {
   const { title, content } = req.body;
   const { id } = req.params;
@@ -50,7 +50,6 @@ router.put('/:id', validateToken, async (req, res) => {
   if (postActual.userId !== id) {
     return res.status(401).send({ message: 'Usuário não autorizado' });
   }
-  // não esta funcionando o update
   const updatedPost = await BlogPosts.update({ title, content }, { where: { id, userId } });
   res.status(200).json(updatedPost);
 });
@@ -77,6 +76,24 @@ router.get('/search', validateToken, async (req, res) => {
     } });
 
   return res.status(200).json(posts);
+});
+
+// Acho que o problema é no userId
+router.delete('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const { email } = req.decodedUser;
+  const user = await getUserByEmail(email);
+  const userId = user.dataValues.id;
+  console.log(user);
+  const postActual = await BlogPosts.findOne({ where: { id } });
+  if (!postActual) {
+    return res.status(404).json({ message: 'Post não existe' });
+  }
+  if (postActual.userId !== id) {
+    return res.status(401).send({ message: 'Usuário não autorizado' });
+  }
+  const deletedPost = await BlogPosts.destroy({ where: { userId, id } });
+  return res.status(204).json(deletedPost);
 });
 
 module.exports = router;

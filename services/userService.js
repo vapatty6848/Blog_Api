@@ -19,14 +19,8 @@ const getUserPostById = async (id) => {
   return post;
 };
 
-const updateUserPostById = async (userId, id, title, content) => {
-  const post = await BlogPost.update({ title, content }, { where: { userId, id } });
-  return post;
-};
-
 module.exports = {
   emailExist,
   getUserByEmail,
   getUserPostById,
-  updateUserPostById,
 };

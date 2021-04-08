@@ -1,7 +1,7 @@
 const express = require('express');
 const { User } = require('../models');
 const createToken = require('../auth/createToken');
-const userService = require('../services/userService');
+const { emailExist } = require('../services/userService');
 const validateToken = require('../auth/validateToken');
 
 const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
   if (!regexEmail.test(email)) {
     return res.status(400).json({ message: '"email" must be a valid email' });
   }
-  const emailNotExist = await userService.emailExist(email);
+  const emailNotExist = await emailExist(email);
   if (!emailNotExist) return res.status(409).json({ message: 'Usuário já existe' });
   await User.create({ displayName, email, password, image });
   const payload = { displayName, email, password, image };
