@@ -5,6 +5,7 @@ const {
   emailValidation,
   validateUniqueEmail,
   passwordValidation,
+  tokenValidation,
 } = require('../middlewares');
 const statusCode = require('../dicts/statusCodesHTTP');
 
@@ -22,5 +23,14 @@ router.post('/',
     const token = await UserService.create(newUser);
     return response.status(statusCode.CREATED).json({ token });
   });
+
+router.get(
+  '/',
+  tokenValidation,
+  async (request, response) => {
+    const users = await UserService.getAll();
+    return response.status(statusCode.OK).json(users);
+  },
+);
 
 module.exports = router;

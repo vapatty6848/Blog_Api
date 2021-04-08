@@ -1,5 +1,5 @@
 const { Users } = require('../models');
-const { generateToken } = require('../utils');
+const { generateToken, getUsers } = require('../utils');
 
 async function create(newUser) {
   const { displayName, email, password, image } = newUser;
@@ -27,7 +27,14 @@ async function findByEmail(email) {
   }
 }
 
+async function getAll() {
+  const queryResult = await Users.findAll();
+  const users = getUsers(queryResult);
+  return users;
+}
+
 module.exports = {
   create,
   findByEmail,
+  getAll,
 };
