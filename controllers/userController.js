@@ -13,11 +13,10 @@ routerUser.get('/', validateToken, async (_req, res) => {
     });
 });
 
-routerUser.get('/:id', async (req, res) => {
-  User.findByPk(req.params.id)
-    .then((user) => {
-      res.status(200).json(user);
-    });
+routerUser.get('/:id', validateToken, async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  if (!user) return res.status(404).json({ message: 'Usuário não existe' });
+  res.status(200).json(user);
 });
 
 routerUser.post('/', validateUser, async (req, res) => {
