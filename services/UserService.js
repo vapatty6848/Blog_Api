@@ -12,7 +12,7 @@ const createUser = async (req, res) => {
 
   await Users.create({ displayName, email, password, image });
   const token = createToken({ email });
-  res.status(CREATED).json(token);
+  res.status(CREATED).json({ token });
 };
 
 const getUsers = async (req, res) => {
