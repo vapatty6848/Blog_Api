@@ -3,7 +3,7 @@ const { BlogPosts, Users } = require('../models');
 const { TITLE_REQUIRED, CONTENT_REQUIRED, POST_NOT_FOUND,
   USER_NOT_AUTHORIZED } = require('../dictionary/errorDictionary');
 
-const InputsExists = async (req, _res, next) => {
+const IfInputsExists = async (req, _res, next) => {
   const { title, content } = req.body;
   if (!title) return next(TITLE_REQUIRED);
   if (!content) return next(CONTENT_REQUIRED);
@@ -26,7 +26,8 @@ const IfUserHasAuthorization = async (req, _res, next) => {
   const { user } = post;
 
   if (user.dataValues.id !== userId.id) return next(USER_NOT_AUTHORIZED);
+  req.userIdFromMiddleware = userId;
   next();
 };
 
-module.exports = { InputsExists, IfPostExist, IfUserHasAuthorization };
+module.exports = { IfInputsExists, IfPostExist, IfUserHasAuthorization };
