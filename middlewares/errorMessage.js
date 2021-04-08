@@ -11,6 +11,8 @@ const error = {
   tokenNotFound: { message: 'Token não encontrado' },
   expiredToken: { message: 'Token expirado ou inválido' },
   userNotFound: { message: 'Usuário não existe' },
+  noTitle: { message: '"title" is required' },
+  noContent: { message: '"content" is required' },
 };
 
 const status = {

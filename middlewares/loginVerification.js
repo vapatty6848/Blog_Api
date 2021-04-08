@@ -4,7 +4,6 @@ const { loginWithEmailAndPass } = require('../services/UserSevice');
 const validateLogin = async (req, res, next) => {
   const { email, password } = req.body;
   const result = await loginWithEmailAndPass(email, password);
-  // console.log('o resultado', result)
   switch (true) {
     case email === undefined:
       return res.status(status.Bad_Request).json(error.noEmail);

@@ -51,8 +51,16 @@ const verifyGetById = async (req, res, next) => {
   next();
 };
 
+const verifyPostFields = async (req, res, next) => {
+  const { title, content } = req.body;
+  if (!title) return res.status(status.Bad_Request).json(error.noTitle);
+  if (!content) return res.status(status.Bad_Request).json(error.noContent);
+  next();
+};
+
 module.exports = {
   validateFields,
   verifyToken,
   verifyGetById,
+  verifyPostFields,
 };
