@@ -6,6 +6,7 @@ const { validatePost } = require('../middlewares/ValidatePost');
 const { decodeToken } = require('../services/DecodeToken');
 
 const PostController = new Router();
+const SUCCESS = 200;
 const CREATED = 201;
 const INTERNAL_SERVER_ERROR = 500;
 
@@ -15,6 +16,12 @@ const unexpectedError = (error, res) => {
   console.log(error);
   return res.status(INTERNAL_SERVER_ERROR).json({ message });
 };
+
+PostController.get('/', validateToken, (_req, res) => {
+  BlogPost.findAll({ include: [{ model: User, as: 'user' }] })
+    .then((posts) => res.status(SUCCESS).json(posts))
+    .catch((error) => unexpectedError(error, res));
+});
 
 PostController.post('/', validateToken, validatePost, (req, res) => {
   const { headers: { authorization }, body: { title, content } } = req;

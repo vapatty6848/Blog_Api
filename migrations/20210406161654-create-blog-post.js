@@ -26,14 +26,14 @@ module.exports = {
         onUpdate: 'CASCADE',
         type: Sequelize.INTEGER
       },
-      createdAt: {
+      published: {
         allowNull: false,
-        field: 'published',
+        defaultValue: new Date(),
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated: {
         allowNull: false,
-        field: 'updated',
+        defaultValue: new Date(),
         type: Sequelize.DATE
       }
     });
