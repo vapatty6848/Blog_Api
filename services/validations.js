@@ -22,7 +22,7 @@ const validate = async (req, res, next) => {
   if (password.length !== 6) return res.status(400).json({ message: '"password" length must be 6 characters long' });
   const findEmail = await Users.findOne({ where: { email } });
   if (findEmail) {
-    res.status(409).json({ message: 'Usuário já existe' });
+    return res.status(409).json({ message: 'Usuário já existe' });
   }
   next();
 };
@@ -44,7 +44,15 @@ const validateLogin = async (req, res, next) => {
   next();
 };
 
+const validatePost = async (req, res, next) => {
+  const { title, content } = req.body;
+  if (!title) return res.status(400).json({ message: '"title" is required' });
+  if (!content) return res.status(400).json({ message: '"content" is required' });
+  next();
+};
+
 module.exports = {
   validate,
   validateLogin,
+  validatePost,
 };
