@@ -13,7 +13,7 @@ const getAll = async () => {
 };
 
 const getById = async (id) => {
-  const user = await Users.findOne({ where: { id } });
+  const user = await Users.findByPk(id);
   return user;
 };
 
