@@ -1,28 +1,13 @@
 const UserController = require('express').Router();
-const createToken = require('../authentication/createToken');
-const { User, sequelize } = require('../models');
+const { regValidationRules, validateReg } = require('../middlewares/validateUserReg');
+const UserServices = require('../services/UserServices');
 
-const status = require('../utils/HTTPStatus');
+UserController.post('/', regValidationRules(), validateReg, async (req, res) => {
+  const userInfo = req.body;
 
-UserController.post('/', async (req, res) => {
-  try {
-    const userInfo = req.body;
-    console.log(userInfo)
-    const result = await sequelize.transaction(async (t) => {
-      const newUser = User.create({ ...userInfo });
-      console.log(newUser)
+  const { status, message, token } = await UserServices.registerUser(userInfo);
 
-      const {
-        id, password, ...userWithoutPassword
-      } = newUser;
-
-      const token = createToken(userWithoutPassword);
-      console.log(token);
-      res.status(status.OK).json({ token });
-    });
-  } catch {
-    res.status(status.GEN_ERROR).json({ message: 'Something went wrong' });
-  }
+  return (!message) ? res.status(status).json({ token }) : res.status(status).json({ message });
 });
 
 module.exports = UserController;
