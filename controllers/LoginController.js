@@ -1,5 +1,4 @@
 const { Router } = require('express');
-// const LoginService = require('../services/LoginService');
 const UserService = require('../services/UserService');
 const { emailValidation, passwordValidation } = require('../middlewares');
 const statusCode = require('../dicts/statusCodesHTTP');

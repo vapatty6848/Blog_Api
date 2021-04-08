@@ -19,8 +19,8 @@ async function findByEmail(email) {
       },
     });
     if (!result) return;
-    const { password, ...userInfo } = result.dataValues;
-    return userInfo;
+    const user = result.dataValues;
+    return user;
   } catch (error) {
     console.log(error);
   }
