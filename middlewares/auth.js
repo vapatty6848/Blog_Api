@@ -22,9 +22,9 @@ const validateToken = async (req, res, next) => {
 };
 
 module.exports = {
-createToken,
-verifyToken,
-SECRET,
-config,
-validateToken,
+  createToken,
+  verifyToken,
+  SECRET,
+  config,
+  validateToken,
 };
