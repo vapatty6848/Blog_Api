@@ -11,7 +11,6 @@ router.post('/post', blogValidation.validatePost, validateToken, async (req, res
   const date = new Date().toLocaleString();
   const blogPost = await BlogPosts
     .create({ title, content, userId: id, published: date, updated: date });
-  
   return res.status(201).json(blogPost);
 });
 
