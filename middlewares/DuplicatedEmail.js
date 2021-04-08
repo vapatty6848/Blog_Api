@@ -4,6 +4,10 @@ const CONFLICT = 409;
 const INTERNAL_SERVER_ERROR = 500;
 
 const duplicatedEmail = (req, res, next) => {
+  const { method } = req;
+
+  if (method === 'GET') return next();
+
   const { email } = req.body;
 
   User.findOne({ where: { email } }).then((foundUser) => {

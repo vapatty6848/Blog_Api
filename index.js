@@ -13,6 +13,8 @@ const {
   validateEmailLogin,
 } = require('./middlewares/ValidateDataLogin');
 const { duplicatedEmail } = require('./middlewares/DuplicatedEmail');
+const { validateToken } = require('./middlewares/ValidateToken');
+const { verifyRegisteredEmail } = require('./middlewares/VerifyRegisteredEmail');
 
 const app = express();
 const PORT = 3000;
@@ -31,6 +33,7 @@ app.use(
   validatePassword,
   validateEmail,
   duplicatedEmail,
+  validateToken,
   UserController,
 );
 
@@ -38,6 +41,7 @@ app.use(
   '/login',
   validatePasswordLogin,
   validateEmailLogin,
+  verifyRegisteredEmail,
   LoginController,
 );
 

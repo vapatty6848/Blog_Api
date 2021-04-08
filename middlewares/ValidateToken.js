@@ -3,18 +3,28 @@ const jwt = require('jsonwebtoken');
 const secret = 'theIncredibleSecret';
 const UNAUTHORIZED = 401;
 
-const validateToken = (token) => {
-  try {
-    const [email, password] = jwt.verify(token, secret).data;
+const validateToken = (req, res, next) => {
+  const { method } = req;
+  if (method === 'GET') {
+    const { authorization } = req.headers;
 
-    return {
-      email,
-      password,
-    };
-  } catch (err) {
-    const error = [{ message: 'jwt malformed' }, UNAUTHORIZED];
-    throw error;
+    if (!authorization) {
+      const message = 'Token não encontrado';
+
+      return res.status(UNAUTHORIZED).json({ message });
+    }
+    try {
+      jwt.verify(authorization, secret);
+
+      return next();
+    } catch (error) {
+      const message = 'Token expirado ou inválido';
+
+      console.log(error);
+      return res.status(UNAUTHORIZED).json({ message });
+    }
   }
+  next();
 };
 
 module.exports = {
