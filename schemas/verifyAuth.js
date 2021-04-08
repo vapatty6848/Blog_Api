@@ -11,7 +11,10 @@ module.exports = (req, res, next) => {
 
     if (!payload) res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
 
-    req.user = payload.email;
+    req.user = {
+      email: payload.email,
+      id: payload.id,
+    };
   } catch (err) {
     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }

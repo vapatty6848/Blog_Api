@@ -55,7 +55,7 @@ router.delete('/me', verifyAuth, async (req, res) => {
   try {
     await User.destroy({
       where: {
-        email: req.user,
+        email: req.user.email,
       },
     });
 
