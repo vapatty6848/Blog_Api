@@ -9,9 +9,9 @@ route.post('/', valid.verifyAuthorization, valid.verifyBodyPost, async (req, res
   const { authorization: token } = req.headers;
   const { id } = await ValidationDataServices.tokenValid(token);
   const bodyData = {
-    ...req.body,
     published: new Date(),
     updated: new Date(),
+    ...req.body,
     userId: id,
   };
   try {
@@ -24,8 +24,18 @@ route.post('/', valid.verifyAuthorization, valid.verifyBodyPost, async (req, res
 });
 
 route.get('/', valid.verifyAuthorization, async (req, res) => {
-  const listAllPosts = await PostServices.findAllUsers();
+  const listAllPosts = await PostServices.findAllPosts();
   return res.status(200).json(listAllPosts);
+});
+
+route.get('/:id', valid.verifyAuthorization, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const post = await PostServices.findPostById(id);
+    return res.status(200).json(post);
+  } catch {
+    return res.status(404).json({ message: 'Post não existe' });
+  }
 });
 
 module.exports = route;
