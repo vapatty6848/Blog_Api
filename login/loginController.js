@@ -13,7 +13,7 @@ loginRouter.post('/', validateEmail, validatePassword, (async (req, res) => {
 
   if (message) return res.status(400).json({ message });
 
-  res.status(200).json({ token });
+  return res.status(200).json({ token });
 }));
 
 module.exports = loginRouter;

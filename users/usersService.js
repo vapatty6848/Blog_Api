@@ -8,12 +8,8 @@ const createUser = async (displayName, email, password, image) => {
 
   const userExists = await Users.findOne({ where: { email } });
   if (userExists === null) {
-    // se o email nao está cadastrado, não existe um usuário, então, criar um:
-    // - inserir no banco e gerar um token
     const createdUser = await Users.create({ displayName, email, password, image });
     const { dataValues: { id } } = createdUser;
-    console.log('ID', id);
-    // criar o token e retornar ele aqui embaixo:
     const token = await generateToken({ id, email });
     return { token };
   }
@@ -21,6 +17,15 @@ const createUser = async (displayName, email, password, image) => {
   return { message: 'Usuário já existe' };
 };
 
+const getAllUsers = async () => {
+  console.log('SERVICE GET ALL USERS');
+
+  const allUsers = await Users.findAll();
+
+  return allUsers;
+};
+
 module.exports = {
   createUser,
+  getAllUsers,
 };
