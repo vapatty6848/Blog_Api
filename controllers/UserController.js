@@ -24,4 +24,12 @@ UserController.post('/', regValidationRules(), validateReg, async (req, res) => 
   return (!message) ? res.status(status).json({ token }) : res.status(status).json({ message });
 });
 
+UserController.delete('/me', async (req, res) => {
+  const { email } = req.user;
+
+  const { status } = await UserServices.destroyUser(email);
+
+  res.status(status).json();
+});
+
 module.exports = UserController;

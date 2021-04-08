@@ -39,8 +39,15 @@ const findUser = async (id) => {
   return { status: status.OK, user };
 };
 
+const destroyUser = async (email) => {
+  await User.destroy({ where: { email } });
+
+  return { status: status.NO_CONTENT };
+};
+
 module.exports = {
   registerUser,
   findAllUsers,
   findUser,
+  destroyUser,
 };
