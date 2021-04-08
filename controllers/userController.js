@@ -1,12 +1,12 @@
 const { Router } = require('express');
 const { User } = require('../models');
 const validateUser = require('../middlewares/validateUser');
-const createToken = require('../auth/createToken');
+const { createToken, validateToken } = require('../auth');
 const findByEmail = require('../utils/findByEmail');
 
 const routerUser = Router();
 
-routerUser.get('/', async (_req, res) => {
+routerUser.get('/', validateToken, async (_req, res) => {
   User.findAll()
     .then((users) => {
       res.status(200).json(users);
