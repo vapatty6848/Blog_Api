@@ -33,8 +33,16 @@ async function getAll() {
   return users;
 }
 
+async function getById(id) {
+  const queryResult = await Users.findByPk(id);
+  if (!queryResult) return null;
+  const { password, ...userInfo } = queryResult.dataValues;
+  return userInfo;
+}
+
 module.exports = {
   create,
   findByEmail,
   getAll,
+  getById,
 };

@@ -33,4 +33,19 @@ router.get(
   },
 );
 
+router.get(
+  '/:id',
+  tokenValidation,
+  async (request, response) => {
+    const { id } = request.params;
+    const retrievedUser = await UserService.getById(id);
+    if (!retrievedUser) {
+      return response
+        .status(statusCode.NOT_FOUND)
+        .json({ message: 'Usuário não existe' });
+    }
+    return response.status(statusCode.OK).json(retrievedUser);
+  },
+);
+
 module.exports = router;
