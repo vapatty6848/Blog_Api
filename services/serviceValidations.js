@@ -1,3 +1,5 @@
+const JWT = require('jsonwebtoken');
+
 const validateEmail = (email) => {
   const emailRegex = /\S+@\S+\.\S+/;
   return emailRegex.test(email);
@@ -26,8 +28,19 @@ const loginValidation = (req, res, next) => {
 
   next();
 };
-
+const verifyToken = (token) => JWT.verify(token, 'secret');
+const validadeToken = async (req, res, next) => {
+  if (!req.headers.authorization) return res.status(401).json({ message: 'Token não encontrado' });
+  try {
+    const user = verifyToken(req.headers.authorization, 'secret');
+    req.user = user;
+  } catch (err) {
+    return res.status(401).json({ message: 'Token expirado ou inválido' });
+  }
+  next();
+};
 module.exports = {
   validateSignUp,
   loginValidation,
+  validadeToken,
 };
