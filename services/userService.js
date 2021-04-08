@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, BlogPost } = require('../models');
 
 const emailExist = async (email) => {
   const emailRegistered = await User.findAll();
@@ -7,6 +7,26 @@ const emailExist = async (email) => {
   return true;
 };
 
+const getUserByEmail = async (email) => {
+  const user = await User.findOne({ where: { email } });
+  return user;
+};
+
+const getUserPostById = async (id) => {
+  const post = await BlogPost.findOne({
+    include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+    where: { id } });
+  return post;
+};
+
+const updateUserPostById = async (userId, id, title, content) => {
+  const post = await BlogPost.update({ title, content }, { where: { userId, id } });
+  return post;
+};
+
 module.exports = {
   emailExist,
+  getUserByEmail,
+  getUserPostById,
+  updateUserPostById,
 };

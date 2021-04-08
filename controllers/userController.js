@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
   const emailNotExist = await userService.emailExist(email);
   if (!emailNotExist) return res.status(409).json({ message: 'Usuário já existe' });
   await User.create({ displayName, email, password, image });
-  const payload = { password };
+  const payload = { displayName, email, password, image };
   const token = createToken.createToken(payload);
   res.status(201).json({ token });
 });
