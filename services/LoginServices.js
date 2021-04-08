@@ -6,7 +6,7 @@ const loginUser = async (info) => {
   try {
     const result = await User.findOne({ where: { email: info.email, password: info.password } });
 
-    if (!result) return { status: status.BAD_REQUEST, message: messages.INVALID_FIELD_DATA }
+    if (!result) return { status: status.BAD_REQUEST, message: messages.INVALID_FIELD_DATA };
 
     const {
       id, password, ...userInfo

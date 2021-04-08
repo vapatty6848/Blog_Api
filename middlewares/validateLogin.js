@@ -7,14 +7,16 @@ const loginValidationRules = () => [
   body('email')
     .exists()
     .withMessage({ message: messages.REQUIRED_EMAIL })
-    .not().isEmpty()
+    .not()
+    .isEmpty()
     .withMessage({ message: messages.EMPTY_EMAIL })
     .isEmail()
     .withMessage({ message: messages.BAD_EMAIL }),
   body('password')
     .exists()
     .withMessage({ message: messages.REQUIRED_PASSWORD })
-    .not().isEmpty()
+    .not()
+    .isEmpty()
     .withMessage({ message: messages.EMPTY_PASSWORD }),
 ];
 

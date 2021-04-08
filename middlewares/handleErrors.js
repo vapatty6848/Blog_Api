@@ -1,4 +1,4 @@
-const express = require('express');
+require('express');
 const { status, messages } = require('../utils');
 
 const handleUnauthorized = (err, req, res, next) => {
@@ -8,6 +8,7 @@ const handleUnauthorized = (err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     return res.status(status.UNAUTHORIZED).json({ message: messages.INVALID_TOKEN });
   }
+  return next();
 };
 
 module.exports = handleUnauthorized;
