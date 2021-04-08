@@ -29,16 +29,10 @@ router.post('/', service.validateCreateUser, async (req, res) => {
   return res.status(201).json({ token });
 });
 
-// router.put('/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const { } = req.body;
-//   res.status(200).json({});
-// });
-
 router.delete('/me', validateToken, async (req, res) => {
   const { authorization } = req.headers;
-  const { email } = decodeToken(authorization);
-  await Users.destroy({ where: { email } });
+  const { id } = decodeToken(authorization);
+  await Users.destroy({ where: { id } });
 
   res.status(204).end();
 });
