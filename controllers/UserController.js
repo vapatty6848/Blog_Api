@@ -9,13 +9,12 @@ UserController.get('/', async (req, res) => {
 });
 
 UserController.get('/:id', async (req, res) => {
-  const { id }= req.params;
+  const { id } = req.params;
 
   const { status, message, user } = await UserServices.findUser(id);
 
   return (!user) ? res.status(status).json({ message }) : res.status(status).json(user);
 });
-
 
 UserController.post('/', regValidationRules(), validateReg, async (req, res) => {
   const userInfo = req.body;
