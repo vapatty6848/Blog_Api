@@ -1,6 +1,6 @@
 const { Op } = require('sequelize');
 const { BlogPosts, Users } = require('../models');
-const { CREATED, INTERNAL_ERROR, OK, NOT_FOUND, UNAUTHORIZED } = require('../utils/allStatusCode');
+const { CREATED, INTERNAL_ERROR, OK, NOT_FOUND, UNAUTHORIZED, NO_CONTENT } = require('../utils/allStatusCode');
 const tokenDecoder = require('../utils/tokenDecoder');
 
 const decode = (token) => tokenDecoder(token);
@@ -89,10 +89,34 @@ const getByQuery = async (req, res) => {
   return res.status(OK).json(targetedPosts);
 };
 
+const removePost = async (req, res) => {
+  const { email } = decode(req.headers.authorization);
+  const { id } = req.params;
+  const post = await BlogPosts.findByPk(id);
+  const user = await Users.findOne({ where: { email } });
+  const userId = user.dataValues.id;
+
+  if (!post) {
+    return res.status(NOT_FOUND).json({ message: 'Post não existe' });
+  }
+
+  if (userId !== post.dataValues.userId) {
+    return res.status(UNAUTHORIZED).json({ message: 'Usuário não autorizado' });
+  }
+
+  await BlogPosts.destroy(
+    {
+      where: { userId, id },
+    },
+  );
+  return res.status(NO_CONTENT).send();
+};
+
 module.exports = {
   createPost,
   getPosts,
   getPostById,
   editPost,
   getByQuery,
+  removePost,
 };
