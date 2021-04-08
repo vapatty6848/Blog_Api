@@ -23,16 +23,15 @@ usersRouter.post(
   Validation.email,
   async (req, res) => {
     const { displayName, email, password, image } = req.body;
-    const isNewUser = (await User.findAll({ where: { email } })).length === 0;
+    const emailAlreadyUsed = (await User.findAll({ where: { email } })).length;
 
-    if (isNewUser) {
-      const createdUser = await User.create({ displayName, email, password, image });
-      const { id, email: userEmail, displayname: name } = createdUser.dataValues;
-      const token = createToken({ id, email: userEmail, name });
+    if (emailAlreadyUsed) return res.status(CONFLICT).json(USER_EXISTS);
 
-      return res.status(CREATED).json({ token });
-    }
-    return res.status(CONFLICT).json(USER_EXISTS);
+    const newUser = await User.create({ displayName, email, password, image });
+    const token = createToken({ id: newUser.id, email, name: displayName });
+
+    return res.status(CREATED).json({ token });
+
   },
 );
 
