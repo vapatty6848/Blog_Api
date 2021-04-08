@@ -9,7 +9,7 @@ const deleteUser = async (userId) => {
   await User.destroy({
     where: {
       id: userId,
-    }
+    },
   });
 };
 

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     BlogPosts.belongsTo(model.User, {
       onDelete: 'CASCADE',
       as: 'user',
-      foreignKey: 'userId'
+      foreignKey: 'userId',
     });
   };
   return BlogPosts;
