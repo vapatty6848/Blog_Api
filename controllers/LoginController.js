@@ -1,7 +1,11 @@
 const { Router } = require('express');
+const { LoginValidation } = require('../middlewares/validations');
 
-const LoginController = Router();
+const LoginController = new Router();
+const {
+  Login,
+} = require('../services/LoginService');
 
-LoginController.post('/');
+LoginController.post('/', LoginValidation, Login);
 
 module.exports = LoginController;
