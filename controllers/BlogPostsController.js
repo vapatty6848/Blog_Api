@@ -3,7 +3,7 @@ const { BlogPost, User } = require('../models');
 const verifyAuth = require('../schemas/verifyAuth');
 const { validatePost } = require('../schemas/postsValidation');
 const {
-  OK, SUCCESS, INTERNAL_SERVER_ERROR,
+  OK, SUCCESS, INTERNAL_SERVER_ERROR, NOT_FOUND,
 } = require('../document/HTTPStatus');
 
 const router = new Router();
@@ -39,14 +39,24 @@ router.get('/', verifyAuth, async (_req, res) => {
   }
 });
 
-// router.get('/:id', verifyAuth, async (req, res) => {
-//   try {
+router.get('/:id', verifyAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
 
-//     return res.status(OK).json();
-//   } catch (err) {
-//     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
-//   }
-// });
+    const post = await BlogPost.findByPk(id, {
+      attributes: { exclude: ['userId'] },
+      include: [{
+        model: User, as: 'user', attributes: { exclude: ['password'] },
+      }],
+    });
+
+    if (!post) return res.status(NOT_FOUND).json({ message: 'Post não existe' });
+
+    return res.status(OK).json(post);
+  } catch (err) {
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+  }
+});
 
 // router.delete('/me', verifyAuth, async (req, res) => {
 //   try {
