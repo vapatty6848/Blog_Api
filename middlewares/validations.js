@@ -1,4 +1,4 @@
-const { UsersServices } = require('../services');
+const { ValidationDataServices } = require('../services');
 
 const badRequest = 400;
 const unauthorized = 401;
@@ -55,8 +55,23 @@ const verifyAuthorization = async (req, res, next) => {
   message = 'Token não encontrado';
   if (!token) return res.status(unauthorized).json({ message });
   message = 'Token expirado ou inválido';
-  const payload = await UsersServices.tokenValid(token);
+  const payload = await ValidationDataServices.tokenValid(token);
   if (!payload) return res.status(unauthorized).json({ message });
+  next();
+};
+
+const verifyBodyPost = async (req, res, next) => {
+  const { content, title } = req.body;
+  let message;
+  switch (true) {
+    case (!content):
+      message = '"content" is required';
+      return res.status(badRequest).json({ message });
+    case (!title):
+      message = '"title" is required';
+      return res.status(badRequest).json({ message });
+    default: console.log({ ok: true });
+  }
   next();
 };
 
@@ -64,4 +79,5 @@ module.exports = {
   verifyBodyData,
   verifyBodyLogin,
   verifyAuthorization,
+  verifyBodyPost,
 };
