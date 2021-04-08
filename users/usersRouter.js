@@ -9,4 +9,6 @@ usersRouter.post('/', validateName, validateEmail, validatePassword, usersContro
 
 usersRouter.get('/', validateToken, usersController.getAllUsers);
 
+usersRouter.get('/:id', validateToken, usersController.getById);
+
 module.exports = usersRouter;
