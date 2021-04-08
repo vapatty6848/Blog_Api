@@ -9,6 +9,7 @@ const Created = 201;
 const NotFound = 404;
 const Success = 200;
 const InternalServerError = 500;
+const NotAuthorized = 401;
 
 RouterPost.post('/', validateToken, PostValidate, async (req, res) => {
   const { title, content } = req.body;
@@ -51,6 +52,27 @@ RouterPost.get('/:id', validateToken, async (req, res) => {
     return res.status(NotFound).json({ message: 'Post não existe' });
   } catch (err) {
     return res.status(InternalServerError).json({ message: err.message });
+  }
+});
+
+RouterPost.put('/:id', validateToken, PostValidate, async (req, res) => {
+  const { title, content } = req.body;
+  try {
+    const token = req.headers.authorization;
+    const tokenVerify = verifyToken(token);
+    const { id } = tokenVerify;
+    const updatePost = await models.BlogPosts.findOne({ where: { id } });
+    const userId = id;
+    if (updatePost.userId !== userId) {
+      return res.status(NotAuthorized)
+        .json({ message: 'Usuário não autorizado' });
+    }
+    updatePost.title = title;
+    updatePost.content = content;
+    await updatePost.save();
+    return res.status(Success).json({ title, content, userId });
+  } catch (err) {
+    return res.status(NotFound).json({ message: err.message });
   }
 });
 
