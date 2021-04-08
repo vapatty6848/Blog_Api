@@ -1,7 +1,7 @@
 const { userService } = require('../services');
 const { createToken, verifyToken } = require('../middlewares/CheckToken');
 
-const { OK, CREATED, UNAUTHORIZED, NOT_FOUND } = require('../schema/statusSchema');
+const { OK, CREATED, UNAUTHORIZED, NOT_FOUND, NO_CONTENT } = require('../schema/statusSchema');
 
 // *** CREATE NEW USER ***
 const create = async (req, res) => {
@@ -35,18 +35,20 @@ const getById = async (req, res) => {
   res.status(OK).json(user);
 };
 
-// const removeOne = async (req, res, next) => {
-//   try {
-//     const { userId } = req;
-//     await users.removeOne(userId);
-//     res.status(StatusCodes.NO_CONTENT).json();
-//   } catch (err) {
-//     return next({ err });
-//   }
-// };
+const remove = async (req, res) => {
+  const validation = await verifyToken(req.headers.authorization);
+  if (validation.message) return res.status(UNAUTHORIZED).json({ message: validation.message });
+
+  const { id } = validation.user;
+  const result = await userService.remove(id);
+  if (result.message) return res.status(NOT_FOUND).json({ message: result.message });
+
+  res.status(NO_CONTENT).json();
+};
 
 module.exports = {
   create,
   getAll,
   getById,
+  remove,
 };

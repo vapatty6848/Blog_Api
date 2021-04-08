@@ -22,15 +22,17 @@ const getByEmail = async (email) => {
   return user;
 };
 
-// const removeOne = async (id) => {
-//   const removeUser = await Users.destroy({ where: { id } });
-//   if (!removeUser) throw new Error('C_ERR_USER_NOT_FOUND');
-//   return null;
-// };
+const remove = async (id) => {
+  const removeUser = await Users.destroy({ where: { id } });
+  if (!removeUser) return { message: 'Usuário não existe' };
+
+  return {};
+};
 
 module.exports = {
   create,
   getAll,
   getById,
   getByEmail,
+  remove,
 };

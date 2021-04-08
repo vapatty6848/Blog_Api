@@ -17,14 +17,14 @@ const verifyToken = async (token) => {
   try {
     const decodedToken = jwt.verify(token, SECRET);
     const { email } = decodedToken;
+
     const user = await userService.getByEmail(email);
-    if (user === null) {
-      return { message: 'Token não encontrado' };
-    }
+    if (user === null) return { message: 'Token não encontrado' };
+
+    return { user };
   } catch (error) {
     return { message: 'Token expirado ou inválido' };
   }
-  return {};
 };
 
 module.exports = {
