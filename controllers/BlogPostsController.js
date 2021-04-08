@@ -3,7 +3,7 @@ const { BlogPost, User } = require('../models');
 const verifyAuth = require('../schemas/verifyAuth');
 const { validatePost } = require('../schemas/postsValidation');
 const {
-  OK, SUCCESS, INTERNAL_SERVER_ERROR, NOT_FOUND,
+  OK, SUCCESS, INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED,
 } = require('../document/HTTPStatus');
 
 const router = new Router();
@@ -53,6 +53,26 @@ router.get('/:id', verifyAuth, async (req, res) => {
     if (!post) return res.status(NOT_FOUND).json({ message: 'Post não existe' });
 
     return res.status(OK).json(post);
+  } catch (err) {
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.put('/:id', verifyAuth, validatePost, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content } = req.body;
+    const userId = req.user.id;
+    const newDate = new Date().toLocaleString();
+
+    const [post] = await BlogPost.update(
+      { title, content, updated: newDate },
+      { where: { id, userId } },
+    );
+
+    if (!post) return res.status(UNAUTHORIZED).json({ message: 'Usuário não autorizado' });
+
+    return res.status(OK).json({ title, content, userId });
   } catch (err) {
     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
