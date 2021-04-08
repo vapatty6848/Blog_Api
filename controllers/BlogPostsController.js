@@ -3,7 +3,7 @@ const { BlogPost, User } = require('../models');
 const verifyAuth = require('../schemas/verifyAuth');
 const { validatePost } = require('../schemas/postsValidation');
 const {
-  OK, SUCCESS, INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED,
+  OK, SUCCESS, INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED, NO_CONTENT,
 } = require('../document/HTTPStatus');
 
 const router = new Router();
@@ -78,13 +78,21 @@ router.put('/:id', verifyAuth, validatePost, async (req, res) => {
   }
 });
 
-// router.delete('/me', verifyAuth, async (req, res) => {
-//   try {
+router.delete('/:id', verifyAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
 
-//     return res.status(NO_CONTENT).end();
-//   } catch (err) {
-//     return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
-//   }
-// });
+    const post = await BlogPost.findByPk(id);
+    if (!post) return res.status(NOT_FOUND).json({ message: 'Post não existe' });
+
+    const destroyedPost = await BlogPost.destroy({ where: { id, userId } });
+    if (!destroyedPost) return res.status(UNAUTHORIZED).json({ message: 'Usuário não autorizado' });
+
+    return res.status(NO_CONTENT).end();
+  } catch (err) {
+    return res.status(INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
+  }
+});
 
 module.exports = router;
