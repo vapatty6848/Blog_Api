@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 const { User } = require('../models');
 const { BlogPost } = require('../models');
 const { validateToken } = require('../middlewares/ValidateToken');
@@ -18,6 +19,18 @@ const unexpectedError = (error, res) => {
   console.log(error);
   return res.status(INTERNAL_SERVER_ERROR).json({ message });
 };
+
+PostController.get('/search', validateToken, (req, res) => {
+  const query = req.query.q;
+  console.log(query);
+  BlogPost.findAll({ where: { [Op.or]: [
+    { title: { [Op.like]: `%${query}%` } },
+    { content: { [Op.like]: `%${query}%` } },
+  ] },
+  include: [{ model: User, as: 'user' }],
+  }).then((posts) => res.status(SUCCESS).json(posts))
+    .catch((error) => unexpectedError(error, res));
+});
 
 PostController.get('/', validateToken, (_req, res) => {
   BlogPost.findAll({ include: [{ model: User, as: 'user' }] })
@@ -51,12 +64,12 @@ PostController.put('/:id', validateToken, validatePost, async (req, res) => {
   BlogPost.findOne({ where: { id } }).then((post) => {
     if (post.userId !== validatedUserId) {
       const message = 'Usuário não autorizado';
+
       return res.status(UNAUTHORIZED).json({ message });
     }
     return BlogPost.update({ title, content }, { where: { id } });
-  })
-    .then(() => res
-      .status(SUCCESS).json({ title, content, userId: validatedUserId }));
+  }).then(() => res
+    .status(SUCCESS).json({ title, content, userId: validatedUserId }));
 });
 
 PostController.post('/', validateToken, validatePost, (req, res) => {
