@@ -5,7 +5,7 @@ const UserService = require('../services/UserService');
 const secret = process.env.JWTSECRET || 'mysectrettoken';
 
 async function validateJWT(token) {
-  if (token === undefined) {
+  if (token === undefined || token.length === 0) {
     return { result: 'missing' };
   }
 
