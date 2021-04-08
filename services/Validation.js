@@ -87,7 +87,6 @@ const validateToken = async (req, res, next) => {
   }
   try {
     const decoded = verifyToken(token);
-    console.log('Decoded : ', decoded);
     const { email } = decoded;
     const user = await User.findOne({ where: { email } });
     if (user === null) {
@@ -100,8 +99,16 @@ const validateToken = async (req, res, next) => {
   }
 };
 
+const validatePost = async (req, res, next) => {
+  const { title, content } = req.body;
+  if (!title) return res.status(BAD_REQUEST).json({ message: '"title" is required' });
+  if (!content) return res.status(BAD_REQUEST).json({ message: '"content" is required' });
+  next();
+};
+
 module.exports = {
   validateCreateUser,
   validateLogin,
   validateToken,
+  validatePost,
 };

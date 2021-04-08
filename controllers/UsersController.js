@@ -1,5 +1,4 @@
 const { User } = require('../models');
-// const { createToken } = require('../services/Auth');
 
 const SUCCESS = 200;
 const CREATED = 201;
