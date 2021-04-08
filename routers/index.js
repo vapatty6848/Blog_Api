@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('../controllers/UsersController');
-const loginController = require('../controllers/LoginController');
 
 const { validateCreateUser, validateLogin, validateToken } = require('../services/Validation');
 const { createTok } = require('../middleware/createTok');
