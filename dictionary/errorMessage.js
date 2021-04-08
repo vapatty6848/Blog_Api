@@ -11,4 +11,6 @@ module.exports = {
   USER_DONT_EXISTS: { message: 'Usuário não existe' },
   TOKEN_NOT_FOUND: { message: 'Token não encontrado' },
   INVALID_TOKEN: { message: 'Token expirado ou inválido' },
+  CONTENT_REQUIRED: { message: '"content" is required' },
+  TITLE_REQUIRED: { message: '"title" is required' },
 };
