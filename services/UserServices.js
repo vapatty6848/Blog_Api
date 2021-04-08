@@ -23,6 +23,15 @@ const registerUser = async (info) => {
   }
 };
 
+const findAllUsers = async () => {
+  const allUsers = await User.findAll({
+    attributes: ['id', 'displayName', 'email', 'image'],
+  });
+
+  return { status: status.OK, message: allUsers };
+};
+
 module.exports = {
   registerUser,
+  findAllUsers,
 };

@@ -1,6 +1,5 @@
 const jsonwebtoken = require('jsonwebtoken');
-
-const secret = 'Here I am, signed, sealed, delivered';
+const secret = require('./secret');
 
 module.exports = (payload) => {
   const headers = {
