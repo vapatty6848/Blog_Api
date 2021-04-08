@@ -23,4 +23,9 @@ route.post('/', valid.verifyAuthorization, valid.verifyBodyPost, async (req, res
   }
 });
 
+route.get('/', valid.verifyAuthorization, async (req, res) => {
+  const listAllPosts = await PostServices.findAllUsers();
+  return res.status(200).json(listAllPosts);
+});
+
 module.exports = route;
