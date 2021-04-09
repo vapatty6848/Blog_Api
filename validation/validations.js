@@ -2,9 +2,12 @@ const {
   DISPLAY_NAME_TOO_SHORT,
   EMAIL_IS_INVALID,
   EMAIL_IS_REQUIRED,
+  EMAIL_IS_NOT_EMPTY,
   PASSWORD_IS_REQUIRED,
+  PASSWORD_IS_NOT_EMPTY,
   PASSWORD_NAME_TOO_SHORT,
   USER_ALREADY_REGISTERED,
+  USER_NOT_FOUND,
 } = require('../dictionary/errorMessages');
 const {
   BAD_REQUEST,
@@ -29,6 +32,13 @@ const validateEmailForm = async (request, response, next) => {
 const validateEmailIsRequired = async (request, response, next) => {
   const user = request.body;
   const emailIsMissing = !user.email;
+  const emailIsNotEmpty = user.email === '';
+
+  if (emailIsNotEmpty) {
+    return response
+      .status(BAD_REQUEST)
+      .json({ message: EMAIL_IS_NOT_EMPTY });
+  }
 
   if (emailIsMissing) {
     return response
@@ -42,7 +52,6 @@ const validateEmailIsRequired = async (request, response, next) => {
 const validateEmailUniqueness = async (request, response, next) => {
   const { email } = request.body;
   const emailIsNotUnique = await User.findOne({ where: { email } });
-  // const emailIsNotUnique = typeof queriedEmail === 'object';
 
   if (emailIsNotUnique) {
     return response.status(CONFLICT).send({
@@ -69,6 +78,13 @@ const validateNameLength = async (request, response, next) => {
 const validatePassordIsRequired = async (request, response, next) => {
   const user = request.body;
   const passwordIsMissing = !user.password;
+  const passwordIsNotEmpty = user.password === '';
+
+  if (passwordIsNotEmpty) {
+    return response
+      .status(BAD_REQUEST)
+      .json({ message: PASSWORD_IS_NOT_EMPTY });
+  }
 
   if (passwordIsMissing) {
     return response
@@ -92,6 +108,19 @@ const validatePasswordLength = async (request, response, next) => {
   next();
 };
 
+const validateUserExistence = async (request, response, next) => {
+  const { email } = request.body;
+  const foundUser = await User.findOne({ where: { email } });
+
+  if (!foundUser) {
+    return response
+      .status(BAD_REQUEST)
+      .send({ message: USER_NOT_FOUND });
+  }
+
+  next();
+};
+
 module.exports = {
   validateEmailForm,
   validateEmailIsRequired,
@@ -99,4 +128,5 @@ module.exports = {
   validateNameLength,
   validatePassordIsRequired,
   validatePasswordLength,
+  validateUserExistence,
 };
