@@ -22,7 +22,8 @@ UsersController.get('/', IsUserLoggedIn, async (_req, res) => {
 
 UsersController.get('/:id', IsUserLoggedIn, async (req, res) => {
   try {
-    const { id } = req.params;
+    let { id } = req.params;
+    id = parseFloat(id);
     const { displayName, email, image } = await FindUserService(id);
     return res.status(200).json({ id, displayName, email, image });
   } catch (e) {
