@@ -14,4 +14,5 @@ module.exports = {
   CONTENT_REQUIRED: { message: '"content" is required' },
   TITLE_REQUIRED: { message: '"title" is required' },
   POST_NOT_FOUND: { message: 'Post não existe' },
+  USER_NOT_AUTHORIZED: { message: 'Usuário não autorizado' },
 };

@@ -1,5 +1,5 @@
-const { TITLE_REQUIRED, CONTENT_REQUIRED } = require('../dictionary/errorMessage');
-const { BAD_REQUEST } = require('../dictionary/statusCode');
+const { TITLE_REQUIRED, CONTENT_REQUIRED, USER_NOT_AUTHORIZED } = require('../dictionary/errorMessage');
+const { BAD_REQUEST, UNAUTHORIZED } = require('../dictionary/statusCode');
 
 const requiredInfo = (req, res, next) => {
   const titleIsUndefined = req.body.title === undefined;
@@ -11,6 +11,15 @@ const requiredInfo = (req, res, next) => {
   next();
 };
 
+const blogPostAuthor = (req, res, next) => {
+  const notAuthorized = Number(req.params.id) !== Number(req.user.id);
+
+  if (notAuthorized) return res.status(UNAUTHORIZED).json(USER_NOT_AUTHORIZED);
+
+  next();
+};
+
 module.exports = {
   requiredInfo,
+  blogPostAuthor,
 };

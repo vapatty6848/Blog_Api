@@ -64,4 +64,23 @@ blogPostsRouter.get(
   },
 );
 
+blogPostsRouter.put(
+  '/:id',
+  validateToken,
+  Validation.requiredInfo,
+  Validation.blogPostAuthor,
+  async (req, res) => {
+    const { title, content } = req.body;
+    const { id: userId } = req.user;
+    const response = { title, content, userId };
+
+    await BlogPost.update(
+      { title, content },
+      { where: { id: req.params.id } },
+    );
+
+    return res.status(OK).json(response);
+  },
+);
+
 module.exports = blogPostsRouter;
