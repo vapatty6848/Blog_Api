@@ -28,7 +28,14 @@ const createNewUser = async (displayName, email, password, image) => {
   return user;
 };
 
+const usersAll = async () => {
+  const listOfUsers = await Users.findAll();
+  console.log(listOfUsers);
+  return listOfUsers;
+};
+
 module.exports = {
   findEmailExist,
   createNewUser,
+  usersAll,
 };
