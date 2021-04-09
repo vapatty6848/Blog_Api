@@ -62,7 +62,9 @@ const editorAllowed = async (req, res, next) => {
   const { id: paramsId } = req.params;
   const { authorization } = req.headers;
   const { id: authId } = checkToken(authorization);
-  if (authId !== +paramsId) res.status(status.Unauthorized).json(error.UserNotAllowed);
+  if (authId !== +paramsId) {
+    return res.status(status.Unauthorized).json(error.UserNotAllowed);
+  }
   next();
 };
 
