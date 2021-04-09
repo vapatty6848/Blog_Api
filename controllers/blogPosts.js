@@ -1,10 +1,10 @@
 const { Router } = require('express');
 const { Op } = require('sequelize');
-const { CREATED, OK, NOT_FOUND } = require('../dictionary/statusCode');
+const { CREATED, OK, NOT_FOUND, UNAUTHORIZED } = require('../dictionary/statusCode');
 const { BlogPost, User } = require('../models');
 const validateToken = require('../auth/validateToken');
 const Validation = require('../middlewares/blogPostValidation');
-const { POST_NOT_FOUND } = require('../dictionary/errorMessage');
+const { POST_NOT_FOUND, USER_NOT_AUTHORIZED } = require('../dictionary/errorMessage');
 
 const blogPostsRouter = new Router();
 
@@ -95,18 +95,32 @@ blogPostsRouter.put(
   '/:id',
   validateToken,
   Validation.requiredInfo,
-  Validation.blogPostAuthor,
   async (req, res) => {
     const { title, content } = req.body;
     const { id: userId } = req.user;
+    const { id: postId } = req.params;
     const response = { title, content, userId };
+
+    const notAuthorized = !(await BlogPost.findAll({ where: { id: postId, userId } })).length;
+
+    if (notAuthorized) return res.status(UNAUTHORIZED).json(USER_NOT_AUTHORIZED);
 
     await BlogPost.update(
       { title, content },
-      { where: { id: req.params.id } },
+      { where: { id: postId } },
     );
 
     return res.status(OK).json(response);
+  },
+);
+
+blogPostsRouter.delete(
+  '/:id',
+  validateToken,
+  async (req, res) => {
+    const postToDelete = await BlogPost.findAll({ where: { id: req.params.id } });
+
+    return res.status(OK).json(postToDelete);
   },
 );
 
