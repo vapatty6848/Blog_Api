@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const findEmail = require('../controllers/findEmail');
+const { User } = require('../models');
 
 const getter = (data) => {
   const element = data;
@@ -11,16 +11,16 @@ const validateEmail = (email) => {
   return reg.test(email.toString().toLowerCase());
 };
 
-const checkEmail = async (input) => findEmail(input);
+const checkEmail = async (email) => User
+  .findOne({ where: { email } })
+  .then(true)
+  .catch((e) => console.error(e.message));
 
-const generateToken = (email) => {
-  jwt.sign(email, 'token');
-};
+const generateToken = (email) => jwt.sign(email, 'token');
 
 module.exports = {
-  findEmail,
+  checkEmail,
   getter,
   validateEmail,
-  checkEmail,
   generateToken,
 };
