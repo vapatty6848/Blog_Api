@@ -4,10 +4,10 @@ const CreateUserService = require('../services/CreateUserService');
 const UserValidation = require('../middlewares/UserValidation');
 const EmailChecker = require('../middlewares/EmailChecker');
 const CreateToken = require('../auth/CreateToken');
-
+const TokenValidation = require('../middlewares/TokenValidation');
 const UsersController = Router();
 
-UsersController.get('/', async (_req, res) => {
+UsersController.get('/', TokenValidation, async (_req, res) => {
   try {
     const users = await FindAllUsersServices();
     return res.status(200).json(users);
