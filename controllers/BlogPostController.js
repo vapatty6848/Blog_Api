@@ -8,6 +8,13 @@ BlogPostController.get('/', async (req, res) => {
   res.status(status).json(message);
 });
 
+BlogPostController.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status, message, post } = await BlogPostServices.findPost(id);
+
+  return (!post) ? res.status(status).json({ message }) : res.status(status).json(post);
+});
+
 BlogPostController.post('/', postValidationRules(), validatePost, async (req, res) => {
   const data = req.body;
   const { id } = req.user;

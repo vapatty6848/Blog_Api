@@ -32,7 +32,7 @@ const findAllUsers = async () => {
 const findUser = async (id) => {
   const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
 
-  if (user === null) return { status: status.NOT_FOUND, message: messages.USER_NOT_FOUND };
+  if (user === null) return { status: status.NOT_FOUND, message: messages.NOT_FOUND_USER };
 
   return { status: status.OK, user };
 };
