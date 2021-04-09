@@ -5,6 +5,7 @@ const BlogPostValidation = require('../middlewares/BlogPostValidation');
 const FindBlogPostsService = require('../services/FindBlogPostsService');
 const FindBlogPostService = require('../services/FindBlogPostService');
 const BlogPostUpdateService = require('../services/BlogPostUpdateService');
+const DeleteBlogPostService = require('../services/DeleteBlogPostService');
 const UserChecker = require('../middlewares/UserChecker');
 
 const BlogPostController = Router();
@@ -58,6 +59,23 @@ BlogPostController.put(
       return res.status(200).json({ title, content, userId });
     } catch (e) {
       console.log(e);
+    }
+  },
+);
+
+BlogPostController.delete(
+  '/:id',
+  IsUserLoggedIn,
+  UserChecker,
+  async (req, res) => {
+    try {
+      const { dataValues: { id: userId } } = req.user;
+      const { id: blogPostId } = req.params;
+      await DeleteBlogPostService(userId, blogPostId);
+      return res.status(204).json();
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: 'Something went wrong' });
     }
   },
 );
