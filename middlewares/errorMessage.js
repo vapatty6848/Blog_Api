@@ -13,6 +13,7 @@ const error = {
   userNotFound: { message: 'Usuário não existe' },
   noTitle: { message: '"title" is required' },
   noContent: { message: '"content" is required' },
+  noPosts: { message: 'Post não existe' },
 };
 
 const status = {
