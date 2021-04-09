@@ -1,28 +1,18 @@
-const jwt = require('jsonwebtoken');
-// const checkEmail = require('../helpers/utils');
+const { verifyToken } = require('../helpers/utils');
+const validations = require('../helpers/validations');
 
-const segredo = 'token';
 const authorization = async (req, res, next) => {
   const token = req.headers.authorization;
-  console.log('token', token);
   if (!token) {
-    return res.status(401).json({ message: 'Token não encontrado' });
+    const err = validations.requiredTokenError();
+    return res.status(err.status).json(err);
   }
-
   try {
-    const user = jwt.verify(token, segredo);
-    console.log('x', user);
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: 'Token expirado ou inválido' });
-    }
-
-    req.user = user;
-
+    verifyToken(token);
     return next();
-  } catch (err) {
-    return res.status(401).json({ message: 'Token expirado ou inválido' });
+  } catch (error) {
+    const err = validations.invalidTokenError();
+    return res.status(err.status).json(err);
   }
 };
 

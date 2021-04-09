@@ -1,7 +1,7 @@
-const { Users } = require('../models');
+const { User } = require('../models');
 
 const getAllUsers = (_req, res) => {
-  Users.findAll()
+  User.findAll()
     .then((users) => res.status(200).json(users))
     .catch((e) => {
       console.log(e.message);

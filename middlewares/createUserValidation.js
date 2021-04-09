@@ -1,24 +1,26 @@
 const { validateEmail, checkEmail } = require('../helpers/utils');
+const validations = require('../helpers/validations');
 
 const createUserValidation = async (req, res, next) => {
   const { displayName, email, password } = req.body;
   if (displayName.length < 8) {
-    return res.status(400).json({ message: '"displayName" length must be at least 8 characters long' });
-  }
-  if (!email) {
-    return res.status(400).json({ message: '"email" is required' });
-  }
-  if (!validateEmail(email)) {
-    return res.status(400).json({ message: '"email" must be a valid email' });
-  }
-  if (!password) {
-    return res.status(400).json({ message: '"password" is required' });
-  }
-  if (password.length < 6) {
-    return res.status(400).json({ message: '"password" length must be 6 characters long' });
-  }
-  if (await checkEmail(email)) {
-    return res.status(409).json({ message: 'Usuário já existe' });
+    const err = validations.nameLengthError();
+    return res.status(err.status).json(err);
+  } if (!email) {
+    const err = validations.requiredEmailError();
+    return res.status(err.status).json(err);
+  } if (!validateEmail(email)) {
+    const err = validations.validEmailError();
+    return res.status(err.status).json(err);
+  } if (!password) {
+    const err = validations.requiredPasswordError();
+    return res.status(err.status).json(err);
+  } if (password.length < 6) {
+    const err = validations.passwordLengthError();
+    return res.status(err.status).json(err);
+  } if (await checkEmail(email)) {
+    const err = validations.userExistisError();
+    return res.status(err.status).json(err);
   }
   return next();
 };

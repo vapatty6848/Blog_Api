@@ -18,9 +18,12 @@ const checkEmail = async (email) => User
 
 const generateToken = (email) => jwt.sign(email, 'token');
 
+const verifyToken = (email) => jwt.verify(email, 'token');
+
 module.exports = {
   checkEmail,
   getter,
   validateEmail,
   generateToken,
+  verifyToken,
 };
