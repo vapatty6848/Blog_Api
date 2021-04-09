@@ -31,8 +31,8 @@ const getPosts = async () => {
   return posts;
 };
 
-const getPostsById = async (userId) => {
-  const posts = await BlogPosts.findByPk(userId, {
+const getPostsById = async (paramsId) => {
+  const posts = await BlogPosts.findByPk(paramsId, {
     include: {
       model: User,
       as: 'user',
@@ -42,14 +42,14 @@ const getPostsById = async (userId) => {
   return posts;
 };
 
-const updatePost = async (id, newTitle, newContent) => {
-  await BlogPosts.update({
+const updatePost = async (paramsId, newTitle, newContent) => {
+  const data = await BlogPosts.update({
     title: newTitle,
     content: newContent,
   }, {
-    where: { userId: id },
+    where: { id: paramsId },
   });
-  return { title: newTitle, content: newContent, userId: +id };
+  return data;
 };
 
 const getQuery = async (q) => {
@@ -77,8 +77,17 @@ const getQuery = async (q) => {
   return post;
 };
 
+const deletePost = async (postId) => {
+  await BlogPosts.destroy({
+    where: {
+      id: postId,
+    },
+  });
+};
+
 module.exports = {
   addPost,
+  deletePost,
   getPosts,
   getPostsById,
   getQuery,

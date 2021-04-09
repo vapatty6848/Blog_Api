@@ -1,5 +1,6 @@
 const { error, status } = require('./errorMessage');
 const { getUserByEmail, getUserById } = require('../services/UserSevice');
+const Post = require('../services/BlogService');
 const checkToken = require('../auth/validateToken');
 
 const emailFormat = (email) => {
@@ -62,8 +63,10 @@ const editorAllowed = async (req, res, next) => {
   const { id: paramsId } = req.params;
   const { authorization } = req.headers;
   const { id: authId } = checkToken(authorization);
-  if (authId !== +paramsId) {
-    return res.status(status.Unauthorized).json(error.UserNotAllowed);
+  const post = await Post.getPostsById(paramsId);
+  if (post) {
+    const { user } = post;
+    if (user.id !== authId) return res.status(status.Unauthorized).json(error.UserNotAllowed);
   }
   next();
 };
