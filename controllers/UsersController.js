@@ -3,6 +3,7 @@ const FindAllUsersServices = require('../services/FindAllUsersService');
 const CreateUserService = require('../services/CreateUserService');
 const UserValidation = require('../middlewares/UserValidation');
 const EmailChecker = require('../middlewares/EmailChecker');
+const CreateToken = require('../auth/CreateToken');
 
 const UsersController = Router();
 
@@ -17,10 +18,11 @@ UsersController.get('/', async (_req, res) => {
 });
 
 UsersController.post('/', UserValidation, EmailChecker, async (req, res) => {
-  const { displayName, email, password, image } = req.body;
   try {
+    const { displayName, email, password, image } = req.body;
     const user = await CreateUserService({ displayName, email, password, image });
-    return res.status(201).json(user);
+    const { password: passWord, ...userWithoutPassword } = user;
+    return res.status(201).json({ token: CreateToken(userWithoutPassword) });
   } catch (e) {
     console.log(e.messsage);
     return res.status(500).json({ message: 'Something went wrong' });

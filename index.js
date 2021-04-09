@@ -1,4 +1,5 @@
 const express = require('express');
+const LoginController = require('./controllers/LoginController');
 const UsersController = require('./controllers/UsersController');
 
 const app = express();
@@ -11,4 +12,5 @@ app.get('/', (request, response) => {
   response.send();
 });
 
-app.use('/users', UsersController);
+app.use('/user', UsersController);
+app.use('/login', LoginController);

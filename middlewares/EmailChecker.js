@@ -5,7 +5,7 @@ const EmailChecker = async (req, res, next) => {
   const user = await User.findAll({
     where: { email },
   });
-  if (user) return res.status(409).json({ message: 'Usuário já existe' });
+  if (user.length !== 0) return res.status(409).json({ message: 'Usuário já existe' });
   next();
 };
 
