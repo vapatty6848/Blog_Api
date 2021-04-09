@@ -34,8 +34,19 @@ const usersAll = async () => {
   return listOfUsers;
 };
 
+const userId = async (id) => {
+  const listOfUser = await Users.findAll({
+    where: {
+      id,
+    },
+  });
+  return listOfUser;
+};
+
+
 module.exports = {
   findEmailExist,
   createNewUser,
   usersAll,
+  userId,
 };
