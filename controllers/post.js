@@ -1,6 +1,6 @@
 const { Router } = require('express');
-const { validateToken } = require('../../middlewares/auth');
-const validatePost = require('../../middlewares/validatePost');
+const { validateToken } = require('../middlewares/auth');
+const validatePost = require('../middlewares/validatePost');
 const models = require('../models');
 
 const postsRouter = Router();

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
-const { SECRET, config } = require('../../middlewares/auth');
-const { validateLogin } = require('../../middlewares/validateLogin');
+const { SECRET, config } = require('../middlewares/auth');
+const { validateLogin } = require('../middlewares/validateLogin');
 const models = require('../models');
 
 const loginRouter = Router();
