@@ -14,9 +14,11 @@ routerPost.get('/', validateToken, async (_req, res) => {
 });
 
 routerPost.get('/:id', validateToken, async (req, res) => {
-  const user = await BlogPosts.findByPk(req.params.id);
-  if (!user) return res.status(404).json({ message: 'Usuário não existe' });
-  res.status(200).json(user);
+  const post = await BlogPosts.findByPk(
+    req.params.id, { include: { model: User, as: 'user' } },
+  );
+  if (!post) return res.status(404).json({ message: 'Post não existe' });
+  res.status(200).json(post);
 });
 
 routerPost.post('/', validateToken, validatePost, async (req, res) => {
