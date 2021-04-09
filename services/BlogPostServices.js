@@ -16,7 +16,7 @@ const newPost = async (data) => {
   } catch (err) {
     return { status: status.INTERNAL_ERROR, message: messages.SMT_WRONG };
   }
-}
+};
 
 module.exports = {
   newPost,

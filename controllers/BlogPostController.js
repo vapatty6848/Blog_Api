@@ -6,7 +6,7 @@ BlogPostController.post('/', postValidationRules(), validatePost, async (req, re
   const data = req.body;
   const { id } = req.user;
 
-  data['userId'] = id;
+  data.userId = id;
 
   const { status, message } = await BlogPostServices.newPost(data);
 
