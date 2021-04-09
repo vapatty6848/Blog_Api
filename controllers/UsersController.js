@@ -1,17 +1,16 @@
 const { Router } = require('express');
-const jwt = require('jsonwebtoken');
 const FindAllUsersService = require('../services/FindAllUsersService');
 const FindUserService = require('../services/FindUserService');
 const CreateUserService = require('../services/CreateUserService');
 const UserValidation = require('../middlewares/UserValidation');
 const EmailChecker = require('../middlewares/EmailChecker');
 const CreateToken = require('../auth/CreateToken');
-const TokenValidation = require('../middlewares/TokenValidation');
+const IsUserLoggedIn = require('../middlewares/IsUserLoggedIn');
 const DeleteUserService = require('../services/DeleteUserService');
 
 const UsersController = Router();
 
-UsersController.get('/', TokenValidation, async (_req, res) => {
+UsersController.get('/', IsUserLoggedIn, async (_req, res) => {
   try {
     const users = await FindAllUsersService();
     return res.status(200).json(users);
@@ -21,7 +20,7 @@ UsersController.get('/', TokenValidation, async (_req, res) => {
   }
 });
 
-UsersController.get('/:id', TokenValidation, async (req, res) => {
+UsersController.get('/:id', IsUserLoggedIn, async (req, res) => {
   try {
     const { id } = req.params;
     const { displayName, email, image } = await FindUserService(id);
@@ -44,13 +43,11 @@ UsersController.post('/', UserValidation, EmailChecker, async (req, res) => {
   }
 });
 
-UsersController.delete('/me', TokenValidation, async (req, res) => {
+UsersController.delete('/me', IsUserLoggedIn, async (req, res) => {
   try {
-    const { authorization } = req.headers;
-    const payload = jwt.decode(authorization);
-    const { id } = payload;
-    await DeleteUserService(id);
-    return res.status(204);
+    const { user } = req;
+    await DeleteUserService(user.id);
+    return res.status(204).json();
   } catch (e) {
     return res.status(500).json({ message: 'Something went wrong' });
   }
