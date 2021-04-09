@@ -25,8 +25,14 @@ userRouter.post('/', validateSignUp, async (req, res) => {
   const user = await User.findOne({ where: { email } });
   if (user) return res.status(409).json({ message: 'Usuário já existe' });
   await User.create({ displayName, email, password, image });
-  const token = JWT.sign({ signUpData: [displayName, email, password, image] }, 'secret', jwtParams);
+  const token = JWT.sign({ data: [displayName, email, password, image] }, 'secret', jwtParams);
   return res.status(201).json({ token });
 });
-// teste
+userRouter.delete('/me', validadeToken, async (req, res) => {
+  const { email } = req.user.data;
+  const user = await User.destroy({ where: { email } });
+  console.log(req.user.data);
+  return res.status(204).json(user);
+});
+
 module.exports = userRouter;
