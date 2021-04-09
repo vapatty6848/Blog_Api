@@ -1,5 +1,14 @@
-const { BlogPost, sequelize } = require('../models');
+const { BlogPost, User, sequelize } = require('../models');
 const { messages, status } = require('../utils');
+
+const findAllPosts = async () => {
+  const allPosts = await BlogPost.findAll({
+    attributes: { exclude: ['userId'] },
+    include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }],
+  });
+
+  return { status: status.OK, message: allPosts };
+};
 
 const newPost = async (data) => {
   try {
@@ -19,5 +28,6 @@ const newPost = async (data) => {
 };
 
 module.exports = {
+  findAllPosts,
   newPost,
 };
