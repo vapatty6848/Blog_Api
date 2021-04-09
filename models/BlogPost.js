@@ -2,7 +2,7 @@ const BlogPost = (sequelize, DataTypes) => {
   const blogPost = sequelize.define('BlogPost', {
     title: DataTypes.STRING,
     content: DataTypes.TEXT,
-    user_id: { type: DataTypes.INTEGER, foreignKey: true },
+    userId: { type: DataTypes.INTEGER, foreignKey: true },
   }, {
     createdAt: 'published',
     updatedAt: 'updated',
