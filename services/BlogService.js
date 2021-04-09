@@ -41,8 +41,19 @@ const getPostsById = async (userId) => {
   return posts;
 };
 
+const updatePost = async (id, newTitle, newContent) => {
+  await BlogPosts.update({
+    title: newTitle,
+    content: newContent,
+  }, {
+    where: { userId: id },
+  });
+  return { title: newTitle, content: newContent, userId: +id };
+};
+
 module.exports = {
   addPost,
   getPosts,
   getPostsById,
+  updatePost,
 };

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { status, error } = require('../middlewares/errorMessage');
-const { verifyToken, verifyPostFields } = require('../middlewares/userVerification');
-const { addPost, getPosts, getPostsById } = require('../services/BlogService');
+const { verifyToken, verifyPostFields, editorAllowed } = require('../middlewares/userVerification');
+const { addPost, getPosts, getPostsById, updatePost } = require('../services/BlogService');
 const validateToken = require('../auth/validateToken');
 
 const PostController = Router();
@@ -25,5 +25,16 @@ PostController.get('/:id', verifyToken, async (req, res) => {
   if (!posts) return res.status(status.Not_Found).json(error.noPosts);
   return res.status(status.Ok).json(posts);
 });
+
+PostController.put('/:id',
+  verifyToken,
+  verifyPostFields,
+  editorAllowed,
+  async (req, res) => {
+    const { title, content } = req.body;
+    const { id } = req.params;
+    const updated = await updatePost(id, title, content);
+    return res.status(status.Ok).json(updated);
+  });
 
 module.exports = PostController;

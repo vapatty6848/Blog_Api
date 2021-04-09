@@ -58,9 +58,18 @@ const verifyPostFields = async (req, res, next) => {
   next();
 };
 
+const editorAllowed = async (req, res, next) => {
+  const { id: paramsId } = req.params;
+  const { authorization } = req.headers;
+  const { id: authId } = checkToken(authorization);
+  if (authId !== +paramsId) res.status(status.Unauthorized).json(error.UserNotAllowed);
+  next();
+};
+
 module.exports = {
   validateFields,
   verifyToken,
   verifyGetById,
   verifyPostFields,
+  editorAllowed,
 };

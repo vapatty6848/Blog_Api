@@ -14,6 +14,7 @@ const error = {
   noTitle: { message: '"title" is required' },
   noContent: { message: '"content" is required' },
   noPosts: { message: 'Post não existe' },
+  UserNotAllowed: { message: 'Usuário não autorizado' },
 };
 
 const status = {
