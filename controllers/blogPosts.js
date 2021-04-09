@@ -1,6 +1,6 @@
 const { Router } = require('express');
-const { CREATED } = require('../dictionary/statusCode');
-const { BlogPost } = require('../models');
+const { CREATED, OK } = require('../dictionary/statusCode');
+const { BlogPost, User } = require('../models');
 const validateToken = require('../auth/validateToken');
 const Validation = require('../middlewares/blogPostValidation');
 
@@ -15,19 +15,30 @@ blogPostsRouter.post(
     const { id: userId } = req.user;
     const creationDate = new Date();
 
-    const newBlogPost = await BlogPost.create({
+    await BlogPost.create({
       title, content, userId, published: creationDate, updated: creationDate,
     });
 
-    // ['id', 'published', 'updated'].forEach((key) => delete newBlogPost[key]);
-
-    const response = {
-      title: newBlogPost.title,
-      content: newBlogPost.content,
-      userId: newBlogPost.userId,
-    };
+    const response = { title, content, userId };
 
     return res.status(CREATED).json(response);
+  },
+);
+
+blogPostsRouter.get(
+  '/',
+  validateToken,
+  async (_req, res) => {
+    const posts = await BlogPost.findAll({
+      include: {
+        model: User,
+        as: 'user',
+        attributes: { exclude: ['password'] },
+      },
+      attributes: { exclude: ['userId'] },
+    });
+
+    return res.status(OK).json(posts);
   },
 );
 
