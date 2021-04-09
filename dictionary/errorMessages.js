@@ -2,6 +2,8 @@ const DISPLAY_NAME_TOO_SHORT = '"displayName" length must be at least 8 characte
 const EMAIL_IS_INVALID = '"email" must be a valid email';
 const EMAIL_IS_REQUIRED = '"email" is required';
 const EMAIL_IS_NOT_EMPTY = '"email" is not allowed to be empty';
+const EXPIRED_OR_INVALID_TOKEN = 'Token expirado ou inválido';
+const MISSING_TOKEN = 'Token não encontrado';
 const PASSWORD_IS_REQUIRED = '"password" is required';
 const PASSWORD_IS_NOT_EMPTY = '"password" is not allowed to be empty';
 const PASSWORD_NAME_TOO_SHORT = '"password" length must be 6 characters long';
@@ -13,6 +15,8 @@ module.exports = {
   EMAIL_IS_INVALID,
   EMAIL_IS_REQUIRED,
   EMAIL_IS_NOT_EMPTY,
+  EXPIRED_OR_INVALID_TOKEN,
+  MISSING_TOKEN,
   PASSWORD_IS_REQUIRED,
   PASSWORD_IS_NOT_EMPTY,
   PASSWORD_NAME_TOO_SHORT,

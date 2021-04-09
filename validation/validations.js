@@ -1,8 +1,12 @@
+const jwt = require('jsonwebtoken');
+
 const {
   DISPLAY_NAME_TOO_SHORT,
   EMAIL_IS_INVALID,
   EMAIL_IS_REQUIRED,
   EMAIL_IS_NOT_EMPTY,
+  EXPIRED_OR_INVALID_TOKEN,
+  MISSING_TOKEN,
   PASSWORD_IS_REQUIRED,
   PASSWORD_IS_NOT_EMPTY,
   PASSWORD_NAME_TOO_SHORT,
@@ -12,8 +16,10 @@ const {
 const {
   BAD_REQUEST,
   CONFLICT,
+  UNAUTHORIZED,
 } = require('../dictionary/statusCodes');
 const { User } = require('../models');
+const { SECRET } = require('../dictionary/constants');
 
 const validateEmailForm = async (request, response, next) => {
   const { email } = request.body;
@@ -108,6 +114,22 @@ const validatePasswordLength = async (request, response, next) => {
   next();
 };
 
+const validateToken = async (request, response, next) => {
+  try {
+    const token = request.headers.authorization;
+    if (!token) {
+      return response.status(UNAUTHORIZED).send({ message: MISSING_TOKEN });
+    }
+
+    jwt.verify(token, SECRET);
+
+    next();
+  } catch (error) {
+    console.log(error);
+    return response.status(UNAUTHORIZED).send({ message: EXPIRED_OR_INVALID_TOKEN });
+  }
+};
+
 const validateUserExistence = async (request, response, next) => {
   const { email } = request.body;
   const foundUser = await User.findOne({ where: { email } });
@@ -128,5 +150,6 @@ module.exports = {
   validateNameLength,
   validatePassordIsRequired,
   validatePasswordLength,
+  validateToken,
   validateUserExistence,
 };

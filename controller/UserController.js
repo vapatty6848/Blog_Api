@@ -1,7 +1,10 @@
 const { Router } = require('express');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
-const { CREATED } = require('../dictionary/statusCodes');
+const {
+  CREATED,
+  OK,
+} = require('../dictionary/statusCodes');
 const { SECRET } = require('../dictionary/constants');
 const {
   validateNameLength,
@@ -10,15 +13,10 @@ const {
   validateEmailUniqueness,
   validatePassordIsRequired,
   validatePasswordLength,
+  validateToken,
 } = require('../validation/validations');
 
 const UserController = new Router();
-
-UserController.get('/', async (_request, response) => {
-  const users = await User.findAll();
-
-  response.status(200).json(users);
-});
 
 UserController.post(
   '/',
@@ -41,6 +39,16 @@ UserController.post(
     } catch (error) {
       console.log(error);
     }
+  },
+);
+
+UserController.get(
+  '/',
+  validateToken,
+  async (_request, response) => {
+    const foundUsers = await User.findAll();
+
+    response.status(OK).json(foundUsers);
   },
 );
 
