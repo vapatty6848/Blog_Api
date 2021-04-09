@@ -17,29 +17,28 @@ const validateToken = require('../auth/validateToken');
 userRouter.post('/', isDisplayName, isEmail, isPassword, (req, res) => {
   const { displayName, email, password, image } = req.body;
 
-  User.create({displayName, email, password, image})
-  .then((newUser) => {
+  User.create({ displayName, email, password, image })
+    .then((newUser) => {
+      const {
+        password: passwordDB, ...userWithoutPassword
+      } = newUser;
+      const token = createToken(userWithoutPassword);
 
-    const {
-       password: passwordDB, ...userWithoutPassword 
-    } = newUser;
-    const token = createToken(userWithoutPassword);
-
-    return res.status(201).json({token:token});
-  })
-  .catch((e) => {
-    console.log(e.message);
-    res.status(500).send({ message: 'Erro Interno'});
-  })
+      return res.status(201).json({ token });
+    })
+    .catch((e) => {
+      console.log(e.message);
+      res.status(500).send({ message: 'Erro Interno' });
+    });
 });
 
 userRouter.get('/', async (req, res) => {
   const { authorization } = req.headers;
 
-  if (!authorization) return res.status(401).json({message: 'Token não encontrado'});
+  if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
 
   const isToken = validateToken(authorization);
-  if (!isToken) return res.status(401).json({message: 'Token expirado ou inválido'});
+  if (!isToken) return res.status(401).json({ message: 'Token expirado ou inválido' });
 
   const listUser = await User.findAll();
 
@@ -47,7 +46,6 @@ userRouter.get('/', async (req, res) => {
 });
 
 userRouter.get('/', verifyToken, async (_req, res) => {
-
   const listUser = await User.findAll();
 
   return res.status(200).json(listUser);
@@ -59,10 +57,10 @@ userRouter.get('/:id', verifyToken, async (req, res) => {
   const findOneUser = await User.findOne({
     where: {
       id,
-    }
+    },
   });
 
-  if(!findOneUser) return res.status(404).json({message: 'Usuário não existe'})
+  if (!findOneUser) return res.status(404).json({ message: 'Usuário não existe' });
 
   return res.status(200).json(findOneUser);
 });
@@ -74,8 +72,8 @@ userRouter.delete('/me', verifyToken, (req, res) => {
 
   User.destroy({
     where: {
-        id: payload.id,
-    }
+      id: payload.id,
+    },
   });
 
   res.status(204).json();
