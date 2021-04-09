@@ -1,7 +1,8 @@
 const express = require('express');
 
 const { User } = require('../models');
-const userService = require('../Service/UserValidations');
+const user = require('../Service/UserValidations');
+const tk = require('../Service/TokenCreate');
 
 const userRouter = express.Router();
 
@@ -14,10 +15,10 @@ const userRouter = express.Router();
 //   });
 // });
 
-userRouter.post('/', userService.nameVerification, userService.passwordVerification, userService.emailVerification, userService.createToken, async (req, res, _next) => {
+userRouter.post('/', user.nameVerification, user.passwordVerification, user.emailVerification, async (req, res, _next) => {
   const { displayName, email, password, image } = req.body;
   await User.create({ displayName, email, password, image });
-  const { token } = req;
+  const token = tk.createToken({ displayName, email, image });
   res.status(201).json({ token });
 });
 
