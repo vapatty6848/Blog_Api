@@ -1,6 +1,5 @@
 const express = require('express');
 
-const { User } = require('../models');
 const login = require('../Service/LoginValidation');
 const tk = require('../Service/TokenCreate');
 
