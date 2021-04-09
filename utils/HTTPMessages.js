@@ -14,6 +14,7 @@ const messages = {
   REQUIRED_TITLE: '"title" is required',
   SMT_WRONG: 'Something went wrong.',
   TOKEN_NOT_FOUND: 'Token não encontrado',
+  UNAUTHORIZED: 'Usuário não autorizado',
   USER_EXISTS: 'Usuário já existe',
 };
 

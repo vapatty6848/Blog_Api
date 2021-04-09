@@ -38,8 +38,34 @@ const newPost = async (data) => {
   }
 };
 
+const updatePost = async (data) => {
+  try {
+    const result = await sequelize.transaction(async (t) => {
+      const { title, content, id, userId } = data;
+
+      const success = await BlogPost.update(
+        { title, content },
+        { where: { id, userId } },
+        { transaction: t },
+      );
+
+      if (success[0] === 0) return { status: status.UNAUTHORIZED, message: messages.UNAUTHORIZED };
+
+      const post = await BlogPost.findByPk(id, {
+        attributes: ['title', 'content', 'userId'],
+      });
+
+      return { status: status.OK, post };
+    });
+    return result;
+  } catch (err) {
+    return { status: status.INTERNAL_ERROR, message: messages.SMT_WRONG };
+  }
+};
+
 module.exports = {
   findAllPosts,
   findPost,
   newPost,
+  updatePost,
 };

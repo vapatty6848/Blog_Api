@@ -26,4 +26,17 @@ BlogPostController.post('/', postValidationRules(), validatePost, async (req, re
   res.status(status).json(message);
 });
 
+BlogPostController.put('/:id', postValidationRules(), validatePost, async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  const userId = req.user.id;
+
+  data.userId = userId;
+  data.id = id;
+
+  const { status, message, post } = await BlogPostServices.updatePost(data);
+
+  return (!post) ? res.status(status).json({ message }) : res.status(status).json(post);
+});
+
 module.exports = BlogPostController;
