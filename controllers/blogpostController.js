@@ -9,24 +9,14 @@ const blogpostRouter = express.Router();
 const verifyToken = require('../middlewares/verifyToken');
 const isTitle = require('../middlewares/isTitle');
 const isContent = require('../middlewares/isContent');
+const returnAllPosts = require('../middlewares/returnAllPosts');
 
 // auth
 const validateToken = require('../auth/validateToken');
 // const { verify } = require('jsonwebtoken');
 
-blogpostRouter.get('/search', verifyToken, async (req, res) => {
+blogpostRouter.get('/search', returnAllPosts, verifyToken, async (req, res) => {
   const { q } = req.query;
-
-  if (!q) {
-    const emptySearch = await Blogpost.findAll({
-      include: [{
-        model: User,
-        as: 'user',
-      }],
-      attributes: { exclude: ['userId'] },
-    });
-    return res.status(200).json(emptySearch);
-  }
 
   const arraySearch = await Blogpost.findAll({
     where: {
@@ -53,7 +43,7 @@ blogpostRouter.post('/', verifyToken, isTitle, isContent, (req, res) => {
   const userId = payload.id;
 
   Blogpost.create({ title, content, userId })
-    .then((newBlogpost) => {
+    .then(() => {
       res.status(201).json({ title, content, userId });
     })
     .catch((e) => {
@@ -119,8 +109,8 @@ blogpostRouter.put('/:id', verifyToken, async (req, res) => {
   const { authorization } = req.headers;
   const { id } = req.params;
 
-  if (!title) return res.status(400).json({ message: '\"title\" is required' });
-  if (!content) return res.status(400).json({ message: '\"content\" is required' });
+  if (!title) return res.status(400).json({ message: '"title" is required' });
+  if (!content) return res.status(400).json({ message: '"content" is required' });
 
   const payload = validateToken(authorization);
   const postWillBeUpdate = await Blogpost.findByPk(id);
@@ -132,7 +122,9 @@ blogpostRouter.put('/:id', verifyToken, async (req, res) => {
   postWillBeUpdate.title = title;
   postWillBeUpdate.content = content;
   await postWillBeUpdate.save();
-  return res.status(200).json({ title: postWillBeUpdate.title, content: postWillBeUpdate.content, userId: payload.id });
+  return res.status(200).json({
+    title: postWillBeUpdate.title, content: postWillBeUpdate.content, userId: payload.id,
+  });
 });
 
 module.exports = blogpostRouter;
