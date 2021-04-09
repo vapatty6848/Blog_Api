@@ -4,6 +4,8 @@ const BlogPostService = require('../services/BlogPostService');
 const BlogPostValidation = require('../middlewares/BlogPostValidation');
 const FindBlogPostsService = require('../services/FindBlogPostsService');
 const FindBlogPostService = require('../services/FindBlogPostService');
+const BlogPostUpdateService = require('../services/BlogPostUpdateService');
+const UserChecker = require('../middlewares/UserChecker');
 
 const BlogPostController = Router();
 
@@ -42,12 +44,22 @@ BlogPostController.get('/:id', IsUserLoggedIn, async (req, res) => {
   }
 });
 
-// BlogPostController.put('/:id', IsUserLoggedIn, async (req, res) => {
-//   try {
-
-//   } catch (e) {
-
-//   }
-// })
+BlogPostController.put(
+  '/:id',
+  IsUserLoggedIn,
+  BlogPostValidation,
+  UserChecker,
+  async (req, res) => {
+    try {
+      const { dataValues: { id: userId } } = req.user;
+      const { title, content } = req.body;
+      const { id: blogPostId } = req.params;
+      await BlogPostUpdateService(title, content, userId, blogPostId);
+      return res.status(200).json({ title, content, userId });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+);
 
 module.exports = BlogPostController;
