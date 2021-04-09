@@ -9,7 +9,7 @@ const loginUser = async (info) => {
     if (!result) return { status: status.BAD_REQUEST, message: messages.INVALID_FIELD_DATA };
 
     const {
-      id, password, ...userInfo
+      password, ...userInfo
     } = result.dataValues;
 
     const token = createToken(userInfo);

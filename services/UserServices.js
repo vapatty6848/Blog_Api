@@ -7,9 +7,7 @@ const registerUser = async (info) => {
     const result = await sequelize.transaction(async (t) => {
       const newUser = await User.create({ ...info }, { transaction: t });
 
-      const {
-        id, password, ...userWithoutPassword
-      } = newUser;
+      const { password, ...userWithoutPassword } = newUser.dataValues;
 
       const token = createToken(userWithoutPassword);
 
@@ -25,14 +23,14 @@ const registerUser = async (info) => {
 
 const findAllUsers = async () => {
   const allUsers = await User.findAll({
-    attributes: ['id', 'displayName', 'email', 'image'],
+    attributes: { exclude: ['password'] },
   });
 
   return { status: status.OK, message: allUsers };
 };
 
 const findUser = async (id) => {
-  const user = await User.findByPk(id, { attributes: ['id', 'displayName', 'email', 'image'] });
+  const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
 
   if (user === null) return { status: status.NOT_FOUND, message: messages.USER_NOT_FOUND };
 
