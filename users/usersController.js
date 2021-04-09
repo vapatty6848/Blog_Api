@@ -1,4 +1,5 @@
 const usersService = require('./usersService');
+const { Users } = require('../models');
 
 const createUser = async (req, res) => {
   console.log('controller');
@@ -30,10 +31,17 @@ const getById = async (req, res) => {
   return res.status(200).json(userById);
 };
 
-// comentário teste: requisitos 2 e 3 passam localmente e no remoto não
+const removeUser = async (req, res) => {
+  const { userId } = req;
+
+  await Users.destroy({ where: { id: userId } });
+
+  return res.send(204);
+};
 
 module.exports = {
   createUser,
   getAllUsers,
   getById,
+  removeUser,
 };
