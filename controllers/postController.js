@@ -1,13 +1,13 @@
 const { Router } = require('express');
-const { Users, BlogPosts } = require('../models');
+const { User, BlogPosts } = require('../models');
 const { validateToken } = require('../auth');
 const validatePost = require('../middlewares/validatePost');
 // const findByEmail = require('../utils/findByEmail');
 
 const routerPost = Router();
 
-routerPost.get('/', async (_req, res) => {
-  BlogPosts.findAll({ include: { model: Users, as: 'user' } })
+routerPost.get('/', validateToken, async (_req, res) => {
+  BlogPosts.findAll({ include: { model: User, as: 'user' } })
     .then((posts) => {
       res.status(200).json(posts);
     });
