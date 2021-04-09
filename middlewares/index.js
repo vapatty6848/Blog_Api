@@ -1,7 +1,7 @@
 const UNHANDLED_ERROR_STATUS = 500;
 const UNHANDLED_ERROR = 'internal Error';
 
-const handleError = (err, req, res, next) => {
+const handleError = (err, _req, res, _next) => {
   const { payload, status } = err;
   console.log(err);
   if (!payload) {
