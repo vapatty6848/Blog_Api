@@ -1,8 +1,9 @@
 const { Router } = require('express');
-const { CREATED, OK } = require('../dictionary/statusCode');
+const { CREATED, OK, NOT_FOUND } = require('../dictionary/statusCode');
 const { BlogPost, User } = require('../models');
 const validateToken = require('../auth/validateToken');
 const Validation = require('../middlewares/blogPostValidation');
+const { POST_NOT_FOUND } = require('../dictionary/errorMessage');
 
 const blogPostsRouter = new Router();
 
@@ -39,6 +40,27 @@ blogPostsRouter.get(
     });
 
     return res.status(OK).json(posts);
+  },
+);
+
+blogPostsRouter.get(
+  '/:id',
+  validateToken,
+  async (req, res) => {
+    const post = await BlogPost.findAll({
+      where: { id: req.params.id },
+      include: {
+        model: User,
+        as: 'user',
+        attributes: { exclude: ['password'] },
+      },
+      attributes: { exclude: ['userId'] },
+    });
+    const postNotFound = !post.length;
+
+    if (postNotFound) return res.status(NOT_FOUND).json(POST_NOT_FOUND);
+
+    return res.status(OK).json(post[0]);
   },
 );
 

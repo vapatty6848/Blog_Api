@@ -13,4 +13,5 @@ module.exports = {
   INVALID_TOKEN: { message: 'Token expirado ou inválido' },
   CONTENT_REQUIRED: { message: '"content" is required' },
   TITLE_REQUIRED: { message: '"title" is required' },
+  POST_NOT_FOUND: { message: 'Post não existe' },
 };
