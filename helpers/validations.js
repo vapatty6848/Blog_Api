@@ -64,6 +64,12 @@ const invalidTokenError = () => {
   err.message = 'Token expirado ou inválido';
   return err;
 };
+const userDoesNotExistsError = () => {
+  const err = {};
+  err.status = '404';
+  err.message = 'Usuário não existe';
+  return err;
+};
 
 module.exports = {
   nameLengthError,
@@ -77,4 +83,5 @@ module.exports = {
   invalidDataError,
   requiredTokenError,
   invalidTokenError,
+  userDoesNotExistsError,
 };
