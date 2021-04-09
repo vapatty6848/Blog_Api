@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 const { CREATED, OK, NOT_FOUND } = require('../dictionary/statusCode');
 const { BlogPost, User } = require('../models');
 const validateToken = require('../auth/validateToken');
@@ -31,6 +32,32 @@ blogPostsRouter.get(
   validateToken,
   async (_req, res) => {
     const posts = await BlogPost.findAll({
+      include: {
+        model: User,
+        as: 'user',
+        attributes: { exclude: ['password'] },
+      },
+      attributes: { exclude: ['userId'] },
+    });
+
+    return res.status(OK).json(posts);
+  },
+);
+
+blogPostsRouter.get(
+  '/search',
+  validateToken,
+  async (req, res) => {
+    const { q } = req.query;
+    const searchTerm = `%${q.split(' ').join('%')}%`;
+
+    const posts = await BlogPost.findAll({
+      where: {
+        [Op.or]: [
+          { content: { [Op.like]: searchTerm } },
+          { title: { [Op.like]: searchTerm } },
+        ],
+      },
       include: {
         model: User,
         as: 'user',
