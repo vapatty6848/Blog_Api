@@ -15,7 +15,7 @@ blogRouter.get('/user', middlewares.authorization, controllers.getAllUsers);
 blogRouter.get('/user/:id', middlewares.authorization, controllers.getUserById);
 blogRouter.delete('/user/me', middlewares.authorization, controllers.deleteLoggedUser);
 blogRouter.post('/post', middlewares.authorization, middlewares.createPostValidation, controllers.createPost);
-blogRouter.get('/post');
+blogRouter.get('/post', middlewares.authorization, controllers.getAllPosts);
 blogRouter.put('/post/:id');
 blogRouter.get('/post/:id');
 blogRouter.delete('post/:id');
