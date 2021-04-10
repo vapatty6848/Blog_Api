@@ -3,7 +3,7 @@ const rescue = require('express-rescue');
 
 const router = Router();
 
-const { createNewUser, listAllUsers } = require('../services/userService');
+const { createNewUser, listAllUsers, IdUsers } = require('../services/userService');
 
 const createToken = require('../middlewares/Req1/createToken');
 
@@ -17,13 +17,13 @@ router.get('/', usersAuthorized, rescue(async (_req, res) => {
   res.status(200).json(users);
 }));
 
-// router.get('/:id', rescue(async (req, res) => {
-//   const { id } = req.params;
+router.get('/:id', usersAuthorized, rescue(async (req, res) => {
+  const { id } = req.params;
 
-//   const user = await User.findByPk(id);
-
-//   res.status(200).json(user);
-// }));
+  const [user] = await IdUsers(id);
+  if (!user) return res.status(404).json({ message: 'Usuário não existe' });
+  return res.status(200).json(user);
+}));
 
 router.post('/', verifications, checkEmailUser, rescue(async (req, res) => {
   const { displayName, email, password, image } = req.body;
