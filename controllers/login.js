@@ -1,7 +1,7 @@
 const { Router } = require('express');
-const { User } = require('../models');
+const service = require('../services/login');
 const { OK, BAD_REQUEST } = require('../dictionary/statusCode');
-const { USER_NOT_FOUND } = require('../dictionary/errorMessage');
+const { INVALID_FIELDS } = require('../dictionary/errorMessage');
 const Validation = require('../middlewares/userValidation');
 const createToken = require('../auth/createToken');
 
@@ -12,16 +12,14 @@ loginRouter.post(
   Validation.requiredInfo,
   Validation.emptyRequiredInfo,
   async (req, res) => {
-    const { email, password } = req.body;
-    const userRegistered = await User.findAll({ where: { email, password } });
-    const userNotExists = !userRegistered.length;
+    const userRegistered = await service.findByEmail(req.body.email);
 
-    if (userNotExists) return res.status(BAD_REQUEST).json(USER_NOT_FOUND);
+    if (!userRegistered) return res.status(BAD_REQUEST).json(INVALID_FIELDS);
 
     const token = createToken({
-      id: userRegistered[0].id,
-      email,
-      name: userRegistered[0].displayName,
+      id: userRegistered.id,
+      email: userRegistered.email,
+      name: userRegistered.displayName,
     });
 
     return res.status(OK).json({ token });
