@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const { validatedUsers, verifyEmailUser } = require('../middlewares/validateUsers');
-const AuthorizationUsers = require('../middlewares/authentectionToken');
+const AuthorizationUsers = require('../middlewares/authenticates');
 const { createNewUser, usersAll, userId, userDelete } = require('../services/UserServices');
 const createToken = require('../services/tokenCreate');
 const validateToken = require('../middlewares/validateToken');
