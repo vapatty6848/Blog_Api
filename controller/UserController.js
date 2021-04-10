@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const {
   CREATED,
+  NO_CONTENT,
   OK,
 } = require('../dictionary/statusCodes');
 const { SECRET } = require('../dictionary/constants');
@@ -62,6 +63,20 @@ UserController.get(
     const foundUser = await User.findByPk(id);
 
     response.status(OK).json(foundUser);
+  },
+);
+
+UserController.delete(
+  '/me',
+  validateToken,
+  async (request, response) => {
+    const { user: { email } } = request;
+    console.log('teste', email);
+    const userWasDeleted = await User.destroy({ where: { email } });
+
+    if (userWasDeleted) {
+      return response.status(NO_CONTENT).send();
+    }
   },
 );
 

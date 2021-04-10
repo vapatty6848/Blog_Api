@@ -123,11 +123,10 @@ const validateToken = async (request, response, next) => {
       return response.status(UNAUTHORIZED).send({ message: MISSING_TOKEN });
     }
 
-    jwt.verify(token, SECRET);
+    request.user = jwt.verify(token, SECRET);
 
     next();
   } catch (error) {
-    console.log(error);
     return response.status(UNAUTHORIZED).send({ message: EXPIRED_OR_INVALID_TOKEN });
   }
 };
