@@ -6,16 +6,12 @@ const tk = require('../Service/TokenCreate');
 
 const userRouter = express.Router();
 
-// userRouter.get('/', (req, res, _next) => {
-//   User.findAll().then((users) => {
-//     res.status(200).json(users);
-//   }).catch((err) => {
-//     console.error(err.message);
-//     res.status(401).json({ message: 'deu ruim' });
-//   });
-// });
+userRouter.get('/', tk.allUsersverification, async (req, res) => {
+  const users = await User.findAll();
+  res.status(200).json(users);
+});
 
-userRouter.post('/', user.nameVerification, user.passwordVerification, user.emailVerification, async (req, res, _next) => {
+userRouter.post('/', user.nameVerification, user.passwordVerification, user.emailVerification, async (req, res) => {
   const { displayName, email, password, image } = req.body;
   await User.create({ displayName, email, password, image });
   const token = tk.createToken({ displayName, email, image });

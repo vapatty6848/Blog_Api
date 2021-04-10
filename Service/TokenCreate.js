@@ -6,12 +6,28 @@ const jwtConfig = {
   algorithm: 'HS256',
 };
 
+const createError = (message, status) => ({ message, status });
+
 const createToken = (payload) => {
   const token = jwt.sign(payload, secret, jwtConfig);
   return token;
 };
 
+const allUsersverification = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return next(createError('Token não encontrado', 401));
+  }
+  jwt.verify(token, secret, (error, _decoded) => {
+    if (error) {
+      return next(createError('Token expirado ou inválido', 401));
+    }
+  });
+
+  next();
+};
+
 module.exports = {
   createToken,
-
+  allUsersverification,
 };

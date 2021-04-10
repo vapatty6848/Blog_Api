@@ -21,7 +21,7 @@ const emailLoginVerification = async (req, _res, next) => {
   const verifyEmail = await User.findOne({ where: { email, password } });
 
   if (!verifyEmail) return next(createError('Campos inválidos', 400));
-  req.kissyla = verifyEmail;
+  req.info = verifyEmail;
 
   next();
 };
