@@ -18,6 +18,7 @@ router.post('/user', validateCreateUser, userController.createUser, generateToke
 router.post('/login', validateLogin, generateToken);
 
 // Rotas de BlogPost
+router.get('/post', validateToken, postController.getPostsAll);
 router.post('/post', validateToken, validatePost, postController.createPost);
 
 module.exports = router;
