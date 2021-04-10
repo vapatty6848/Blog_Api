@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { userRouter, loginRouter } = require('./controllers');
+const { loginRouter, postRouter, userRouter } = require('./controllers');
 
 const app = express();
 
@@ -16,3 +16,5 @@ app.use(bodyParser.json());
 app.use('/user', userRouter);
 
 app.use('/login', loginRouter);
+
+app.use('/post', postRouter);

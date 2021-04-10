@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { User } = require('../models');
-const validateLogin = require('../middlewares/validateLogin');
+const { validateLogin } = require('../middlewares');
 const createToken = require('../auth/createToken');
 
 const loginRouter = new Router();

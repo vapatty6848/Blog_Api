@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const { User } = require('../models');
-const validateUser = require('../middlewares/validateUser');
-const validateToken = require('../middlewares/validateToken');
+const { validateToken, validateUser } = require('../middlewares');
 const createToken = require('../auth/createToken');
 const verifyToken = require('../auth/verifyToken');
 
