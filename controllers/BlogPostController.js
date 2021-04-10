@@ -2,6 +2,14 @@ const BlogPostController = require('express').Router();
 const { postValidationRules, validatePost } = require('../middlewares/validatePost');
 const BlogPostServices = require('../services/BlogPostServices');
 
+BlogPostController.get('/search', async (req, res) => {
+  const { q } = req.query;
+
+  const { status, message } = await BlogPostServices.searchPost(q);
+
+  return res.status(status).json(message);
+});
+
 BlogPostController.get('/', async (req, res) => {
   const { status, message } = await BlogPostServices.findAllPosts();
 
