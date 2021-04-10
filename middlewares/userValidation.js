@@ -2,9 +2,9 @@ const { INVALID_DISPLAYNAME, INVALID_EMAIL, EMAIL_REQUIRED, PASSWORD_REQUIRED, I
 const { BAD_REQUEST } = require('../dictionary/statusCode');
 
 const displayName = (req, res, next) => {
-  const displaynameIsValid = req.body.displayName.length >= 8;
+  const displaynameIsInvalid = req.body.displayName.length < 8;
 
-  if (!displaynameIsValid) return res.status(BAD_REQUEST).json(INVALID_DISPLAYNAME);
+  if (displaynameIsInvalid) return res.status(BAD_REQUEST).json(INVALID_DISPLAYNAME);
 
   next();
 };
@@ -21,17 +21,17 @@ const requiredInfo = (req, res, next) => {
 
 const email = (req, res, next) => {
   const emailRegEx = /\S+@\S+\.\S+/gi;
-  const emailIsValid = emailRegEx.test(req.body.email);
+  const emailIsInvalid = !emailRegEx.test(req.body.email);
 
-  if (!emailIsValid) return res.status(BAD_REQUEST).json(INVALID_EMAIL);
+  if (emailIsInvalid) return res.status(BAD_REQUEST).json(INVALID_EMAIL);
 
   next();
 };
 
 const password = (req, res, next) => {
-  const passwordIsValid = req.body.password.length >= 6;
+  const passwordIsInvalid = req.body.password.length < 6;
 
-  if (!passwordIsValid) return res.status(BAD_REQUEST).json(INVALID_PASSWORD);
+  if (passwordIsInvalid) return res.status(BAD_REQUEST).json(INVALID_PASSWORD);
 
   next();
 };
