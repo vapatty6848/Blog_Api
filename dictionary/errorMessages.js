@@ -1,3 +1,4 @@
+const CONTENT_IS_REQUIRED = '"content" is required';
 const DISPLAY_NAME_TOO_SHORT = '"displayName" length must be at least 8 characters long';
 const EMAIL_IS_INVALID = '"email" must be a valid email';
 const EMAIL_IS_REQUIRED = '"email" is required';
@@ -8,10 +9,12 @@ const MISSING_TOKEN = 'Token não encontrado';
 const PASSWORD_IS_REQUIRED = '"password" is required';
 const PASSWORD_IS_NOT_EMPTY = '"password" is not allowed to be empty';
 const PASSWORD_NAME_TOO_SHORT = '"password" length must be 6 characters long';
+const TITLE_IS_REQUIRED = '"title" is required';
 const USER_ALREADY_REGISTERED = 'Usuário já existe';
 const USER_DOES_NOT_EXIST = 'Usuário não existe';
 
 module.exports = {
+  CONTENT_IS_REQUIRED,
   DISPLAY_NAME_TOO_SHORT,
   EMAIL_IS_INVALID,
   EMAIL_IS_REQUIRED,
@@ -22,6 +25,7 @@ module.exports = {
   PASSWORD_IS_REQUIRED,
   PASSWORD_IS_NOT_EMPTY,
   PASSWORD_NAME_TOO_SHORT,
+  TITLE_IS_REQUIRED,
   USER_ALREADY_REGISTERED,
   USER_DOES_NOT_EXIST,
 };

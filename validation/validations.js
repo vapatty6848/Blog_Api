@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const {
+  CONTENT_IS_REQUIRED,
   DISPLAY_NAME_TOO_SHORT,
   EMAIL_IS_INVALID,
   EMAIL_IS_REQUIRED,
@@ -11,6 +12,7 @@ const {
   PASSWORD_IS_REQUIRED,
   PASSWORD_IS_NOT_EMPTY,
   PASSWORD_NAME_TOO_SHORT,
+  TITLE_IS_REQUIRED,
   USER_ALREADY_REGISTERED,
   USER_DOES_NOT_EXIST,
 } = require('../dictionary/errorMessages');
@@ -22,6 +24,19 @@ const {
 } = require('../dictionary/statusCodes');
 const { User } = require('../models');
 const { SECRET } = require('../dictionary/constants');
+
+const validateContentIsRequired = async (request, response, next) => {
+  const blogPost = request.body;
+  const contentIsMissing = !blogPost.content;
+
+  if (contentIsMissing) {
+    return response
+      .status(BAD_REQUEST)
+      .json({ message: CONTENT_IS_REQUIRED });
+  }
+
+  next();
+};
 
 const validateEmailForm = async (request, response, next) => {
   const { email } = request.body;
@@ -116,6 +131,19 @@ const validatePasswordLength = async (request, response, next) => {
   next();
 };
 
+const validateTitleIsRequired = async (request, response, next) => {
+  const blogPost = request.body;
+  const titleIsMissing = !blogPost.title;
+
+  if (titleIsMissing) {
+    return response
+      .status(BAD_REQUEST)
+      .json({ message: TITLE_IS_REQUIRED });
+  }
+
+  next();
+};
+
 const validateToken = async (request, response, next) => {
   try {
     const token = request.headers.authorization;
@@ -156,12 +184,14 @@ const validateUserExistence = async (request, response, next) => {
 };
 
 module.exports = {
+  validateContentIsRequired,
   validateEmailForm,
   validateEmailIsRequired,
   validateEmailUniqueness,
   validateNameLength,
   validatePassordIsRequired,
   validatePasswordLength,
+  validateTitleIsRequired,
   validateToken,
   validateValidInformation,
   validateUserExistence,

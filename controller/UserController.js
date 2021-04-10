@@ -71,7 +71,6 @@ UserController.delete(
   validateToken,
   async (request, response) => {
     const { user: { email } } = request;
-    console.log('teste', email);
     const userWasDeleted = await User.destroy({ where: { email } });
 
     if (userWasDeleted) {
