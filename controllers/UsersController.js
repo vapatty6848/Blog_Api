@@ -3,13 +3,14 @@ const { Router } = require('express');
 const router = Router();
 
 const { validateUser } = require('../utils/userValidation');
+const validateJWT = require('../utils/validateJWT');
 const generateToken = require('../utils/generateToken');
 const { User } = require('../models');
 const { st } = require('../utils/dictionary');
 
 // GET ALL
-router.get('/', async (req, res) => {
-  const users = await User.findAll();
+router.get('/', validateJWT, async (req, res) => {
+  const users = await User.findAll({ attributes: { exclude: ['password'] } });
 
   res.status(200).json(users);
 });
