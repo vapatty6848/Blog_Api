@@ -63,9 +63,33 @@ const updatePost = async (data) => {
   }
 };
 
+const deletePost = async (data) => {
+  try {
+    const result = await sequelize.transaction(async (t) => {
+      const { id, userId } = data;
+      const post = await BlogPost.findByPk(id);
+
+      if (!post) return { status: status.NOT_FOUND, message: messages.NOT_FOUND_POST };
+
+      if (post.id === Number(id) && post.userId !== userId) {
+        return { status: status.UNAUTHORIZED, message: messages.UNAUTHORIZED };
+      }
+
+      if (post.id === Number(id) && post.userId === userId) {
+        await BlogPost.destroy({ where: { id, userId } }, { transaction: t });
+      }
+      return { status: status.NO_CONTENT, post };
+    });
+    return result;
+  } catch (err) {
+    return { status: status.INTERNAL_ERROR, message: messages.SMT_WRONG };
+  }
+};
+
 module.exports = {
   findAllPosts,
   findPost,
   newPost,
   updatePost,
+  deletePost,
 };

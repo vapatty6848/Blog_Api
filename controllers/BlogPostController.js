@@ -39,4 +39,17 @@ BlogPostController.put('/:id', postValidationRules(), validatePost, async (req, 
   return (!post) ? res.status(status).json({ message }) : res.status(status).json(post);
 });
 
+BlogPostController.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+  const data = {};
+
+  data.userId = userId;
+  data.id = id;
+
+  const { status, message, post } = await BlogPostServices.deletePost(data);
+
+  return (!post) ? res.status(status).json({ message }) : res.status(status).json(post);
+});
+
 module.exports = BlogPostController;
