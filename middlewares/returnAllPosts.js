@@ -1,10 +1,10 @@
-const { Blogpost, User } = require('../models');
+const { BlogPost, User } = require('../models');
 
 const returnAllPosts = async (req, res, next) => {
   const { q } = req.query;
 
   if (!q) {
-    const emptySearch = await Blogpost.findAll({
+    const emptySearch = await BlogPost.findAll({
       include: [{
         model: User,
         as: 'user',

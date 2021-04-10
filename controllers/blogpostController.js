@@ -1,7 +1,7 @@
 const express = require('express');
 const { Op } = require('sequelize');
 
-const { Blogpost, User } = require('../models');
+const { BlogPost, User } = require('../models');
 
 const blogpostRouter = express.Router();
 
@@ -18,7 +18,7 @@ const validateToken = require('../auth/validateToken');
 blogpostRouter.get('/search', returnAllPosts, verifyToken, async (req, res) => {
   const { q } = req.query;
 
-  const arraySearch = await Blogpost.findAll({
+  const arraySearch = await BlogPost.findAll({
     where: {
       [Op.or]: {
         title: { [Op.substring]: q },
@@ -42,7 +42,7 @@ blogpostRouter.post('/', verifyToken, isTitle, isContent, (req, res) => {
   const payload = validateToken(authorization);
   const userId = payload.id;
 
-  Blogpost.create({ title, content, userId })
+  BlogPost.create({ title, content, userId })
     .then(() => {
       res.status(201).json({ title, content, userId });
     })
@@ -53,7 +53,7 @@ blogpostRouter.post('/', verifyToken, isTitle, isContent, (req, res) => {
 });
 
 blogpostRouter.get('/', verifyToken, async (_req, res) => {
-  const listBlogpost = await Blogpost.findAll({
+  const listBlogpost = await BlogPost.findAll({
     include: [{
       model: User,
       as: 'user',
@@ -70,12 +70,12 @@ blogpostRouter.delete('/:id', verifyToken, async (req, res) => {
 
   const payload = validateToken(authorization);
 
-  const postWillBeDelete = await Blogpost.findByPk(id);
+  const postWillBeDelete = await BlogPost.findByPk(id);
 
   if (!postWillBeDelete) return res.status(404).json({ message: 'Post não existe' });
 
   if (postWillBeDelete.userId === payload.id) {
-    await Blogpost.destroy({
+    await BlogPost.destroy({
       where: {
         id,
       },
@@ -88,7 +88,7 @@ blogpostRouter.delete('/:id', verifyToken, async (req, res) => {
 blogpostRouter.get('/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
 
-  const onePost = await Blogpost.findOne({
+  const onePost = await BlogPost.findOne({
     where: {
       id,
     },
@@ -113,7 +113,7 @@ blogpostRouter.put('/:id', verifyToken, async (req, res) => {
   if (!content) return res.status(400).json({ message: '"content" is required' });
 
   const payload = validateToken(authorization);
-  const postWillBeUpdate = await Blogpost.findByPk(id);
+  const postWillBeUpdate = await BlogPost.findByPk(id);
 
   if (payload.id !== postWillBeUpdate.id) {
     return res.status(401).json({ message: 'Usuário não autorizado' });
