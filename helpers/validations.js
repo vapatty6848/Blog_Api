@@ -70,6 +70,18 @@ const userDoesNotExistsError = () => {
   err.message = 'Usuário não existe';
   return err;
 };
+const requiredPostTitleError = () => {
+  const err = {};
+  err.status = '400';
+  err.message = '"title" is required';
+  return err;
+};
+const requiredPostContentError = () => {
+  const err = {};
+  err.status = '400';
+  err.message = '"content" is required';
+  return err;
+};
 
 module.exports = {
   nameLengthError,
@@ -84,4 +96,6 @@ module.exports = {
   requiredTokenError,
   invalidTokenError,
   userDoesNotExistsError,
+  requiredPostTitleError,
+  requiredPostContentError,
 };
