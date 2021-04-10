@@ -1,55 +1,58 @@
-const { User } = require('../models');
+const UserServices = require('../services/UserServices');
+const { SUCESS, CREATED, NO_CONTENT, NOT_FOUND, INTERNAL_SERVER_ERROR } = require('./httpStatus');
 
-const SUCESS = 200;
-const NOT_FOUND = 404;
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await UserServices.getAllUsers();
 
-const getAllUsers = (req, res) => {
-  User.findAll({ attributes: { exclude: ['password'] } })
-    .then((users) => res.status(SUCESS).json(users))
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
-    });
+    res.status(SUCESS).json(users);
+  } catch (e) {
+    console.log(e.message);
+    res.status(INTERNAL_SERVER_ERROR).send({ message: 'Algo deu errado' });
+  }
 };
 
-const getUserById = (req, res) => {
+const getUserById = async (req, res) => {
   const { id } = req.params;
 
-  User.findByPk(id, { attributes: { exclude: ['password'] } })
-    .then((user) => {
-      if (user === null) {
-        return res.status(NOT_FOUND).send({ message: 'Usuário não existe' });
-      }
-      return res.status(SUCESS).json(user);
-    })
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).json({ message: 'Algo deu errado' });
-    });
+  try {
+    const userById = await UserServices.getUserById(id);
+
+    if (userById === null) {
+      return res.status(NOT_FOUND).send({ message: 'Usuário não existe' });
+    }
+
+    return res.status(SUCESS).json(userById);
+  } catch (e) {
+    console.log(e.message);
+    res.status(INTERNAL_SERVER_ERROR).json({ message: 'Algo deu errado' });
+  }
 };
 
-const deleteUser = (req, res) => {
-  User.destroy({ where: { id: req.userId } })
-    .then(() => res.status(204).send())
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
-    });
+const deleteUser = async (req, res) => {
+  try {
+    await UserServices.deleteUser(req.userId);
+
+    res.status(NO_CONTENT).send();
+  } catch (e) {
+    console.log(e.message);
+    res.status(INTERNAL_SERVER_ERROR).send({ message: 'Algo deu errado' });
+  }
 };
 
-const createUser = (req, res, next) => {
+const createUser = async (req, res, next) => {
   const { displayName, email, password, image } = req.body;
 
-  User.create({ displayName, email, password, image })
-    .then(() => {
-      req.status = 201;
+  try {
+    await UserServices.createUser(displayName, email, password, image);
 
-      next();
-    })
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
-    });
+    req.status = CREATED;
+
+    next();
+  } catch (e) {
+    console.log(e.message);
+    res.status(INTERNAL_SERVER_ERROR).send({ message: 'Algo deu errado' });
+  }
 };
 
 module.exports = {

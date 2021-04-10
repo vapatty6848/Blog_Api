@@ -10,6 +10,8 @@ const messageDictionary = {
   invalidFieldsMsg: 'Campos inválidos',
   tokenNotFound: 'Token não encontrado',
   invalidToken: 'Token expirado ou inválido',
+  titleRequiredMsg: '"title" is required',
+  contentRequiredMsg: '"content" is required',
 };
 
 const error = (err, _req, res, _next) => {

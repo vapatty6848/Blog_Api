@@ -29,12 +29,12 @@ const validateUser = async (displayName, email, password) => {
   const isUserAlreadyregistered = await doesEmailAlreadyExists(email);
 
   switch (true) {
-    case !isDisplayNameValid(displayName): return { status: 400, message: 'displayMsg' };
-    case !email || isBlank(email): return { status: 400, message: 'emailRequiredMsg' };
-    case !isEmailValid(email): return { status: 400, message: 'emailInvalidMsg' };
-    case !password || isBlank(password): return { status: 400, message: 'passwordRequiredMsg' };
-    case isLessThan(password, 6): return { status: 400, message: 'passwordLengthMsg' };
-    case isUserAlreadyregistered !== false: return { status: 409, message: 'emailAlreadyExistsMsg' };
+    case !isDisplayNameValid(displayName): return { message: 'displayMsg' };
+    case !email || isBlank(email): return { message: 'emailRequiredMsg' };
+    case !isEmailValid(email): return { message: 'emailInvalidMsg' };
+    case !password || isBlank(password): return { message: 'passwordRequiredMsg' };
+    case isLessThan(password, 6): return { message: 'passwordLengthMsg' };
+    case isUserAlreadyregistered !== false: return { message: 'emailAlreadyExistsMsg' };
 
     default: return {};
   }
@@ -59,17 +59,25 @@ const validateLogin = async (email, password) => {
   const areFieldsValid = await validateLoginFields(email, password);
 
   switch (true) {
-    case isBlank(email): return { status: 400, message: 'emailEmptyMsg' };
-    case !email: return { status: 400, message: 'emailRequiredMsg' };
-    case isBlank(password): return { status: 400, message: 'passwordEmptyMsg' };
-    case !password: return { status: 400, message: 'passwordRequiredMsg' };
-    case !areFieldsValid: return { status: 400, message: 'invalidFieldsMsg' };
+    case isBlank(email): return { message: 'emailEmptyMsg' };
+    case !email: return { message: 'emailRequiredMsg' };
+    case isBlank(password): return { message: 'passwordEmptyMsg' };
+    case !password: return { message: 'passwordRequiredMsg' };
+    case !areFieldsValid: return { message: 'invalidFieldsMsg' };
 
     default: return {};
   }
 };
 
+const validateBlogPost = (title, content) => {
+  if (!title) return { status: 400, message: 'titleRequiredMsg' };
+  if (!content) return { status: 400, message: 'contentRequiredMsg' };
+
+  return {};
+};
+
 module.exports = {
   validateUser,
   validateLogin,
+  validateBlogPost,
 };
