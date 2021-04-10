@@ -10,4 +10,14 @@ const validateToken = (token) => {
   }
 };
 
-module.exports = validateToken;
+const usersAuthorized = async (req, res, next) => {
+  const { authorization: token } = req.headers;
+  const payload = await validateToken(token);
+  if (!token) return res.status(401).json({ message: 'Token não encontrado' });
+  if (!payload) return res.status(401).json({ message: 'Token expirado ou inválido' });
+  next();
+};
+
+module.exports = {
+  usersAuthorized,
+};

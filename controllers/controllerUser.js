@@ -3,17 +3,19 @@ const rescue = require('express-rescue');
 
 const router = Router();
 
-const { createNewUser } = require('../services/userService');
+const { createNewUser, listAllUsers } = require('../services/userService');
 
 const createToken = require('../middlewares/Req1/createToken');
 
 const { verifications, checkEmailUser } = require('../middlewares/Req1/verifications');
 
-// router.get('/', rescue(async (req, res) => {
-//   const user = await User.findAll();
+const { usersAuthorized } = require('../middlewares/Req1/validateToken');
 
-//   res.status(200).json(user);
-// }));
+router.get('/', usersAuthorized, rescue(async (_req, res) => {
+  const users = await listAllUsers();
+
+  res.status(200).json(users);
+}));
 
 // router.get('/:id', rescue(async (req, res) => {
 //   const { id } = req.params;
