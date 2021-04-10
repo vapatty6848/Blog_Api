@@ -43,9 +43,17 @@ async function loginValidation(req, res, next) {
   next();
 }
 
+async function deleteChecksUser(req, res, next) {
+  const token = req.headers.authorization;
+  if (!token) return res.status(401).json({ message: 'Token não encontrado' });
+  if (token === '') return res.status(401).json({ message: 'Token expirado ou inválido' });
+  next();
+}
+
 module.exports = {
   verifications,
   checkEmailUser,
   checkMailLogin,
   loginValidation,
+  deleteChecksUser,
 };

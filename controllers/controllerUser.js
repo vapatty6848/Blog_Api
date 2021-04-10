@@ -3,13 +3,15 @@ const rescue = require('express-rescue');
 
 const router = Router();
 
-const { createNewUser, listAllUsers, IdUsers } = require('../services/userService');
+const { createNewUser, listAllUsers, IdUsers, deleteUser } = require('../services/userService');
 
 const createToken = require('../middlewares/Req1/createToken');
-
+// deleteChecksUser
 const { verifications, checkEmailUser } = require('../middlewares/Req1/verifications');
 
 const { usersAuthorized } = require('../middlewares/Req1/validateToken');
+
+const validateToken = require('../middlewares/Req1/validateToken');
 
 router.get('/', usersAuthorized, rescue(async (_req, res) => {
   const users = await listAllUsers();
@@ -45,16 +47,12 @@ router.post('/', verifications, checkEmailUser, rescue(async (req, res) => {
 //   res.status(200).json(user);
 // }));
 
-// router.delete('/:id', async (req, res) => {
-//   const { id } = req.params;
+router.delete('/:me', usersAuthorized, async (req, res) => {
+  const token = req.headers.authorization;
+  const identifiedUser = await validateToken(token);
+  await deleteUser(identifiedUser);
 
-//   await User.destroy(
-//     {
-//       where: { id },
-//     },
-//   );
-
-//   res.status(204).end();
-// });
+  res.status(204).end();
+});
 
 module.exports = router;
