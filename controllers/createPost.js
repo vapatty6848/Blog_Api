@@ -9,7 +9,7 @@ const createPost = async (req, res) => {
   const user = await User.findOne({ where: { email } });
   const userId = user.dataValues.id;
   BlogPost.create({ title, content, userId })
-    .then((elem) => console.log(elem))
+    .then((post) => res.status(201).json(post))
     .catch((e) => {
       console.log(e.message);
       res.status(500).send({ message: 'Algo deu errado' });
