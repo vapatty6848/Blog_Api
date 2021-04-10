@@ -1,5 +1,5 @@
 const BlogpostModel = (sequelize, DataTypes) => {
-  const Blogpost = sequelize.define('Blogpost', {
+  const Blogpost = sequelize.define('BlogPost', {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     published: { type: DataTypes.DATE, defaultValue: new Date() },
