@@ -13,10 +13,11 @@ const validateToken = (token) => {
 };
 
 async function AuthorizationUsers(req, res, next) {
-  const { authorization: token } = req.headers;
-  if (!token) return res.status(code).json({ message: 'Token não encontrado' });
-  const payload = await validateToken(token);
+  const { authorization } = req.headers;
+  if (!authorization) return res.status(code).json({ message: 'Token não encontrado' });
+  const payload = await validateToken(authorization);
   if (!payload) return res.status(code).json({ message: 'Token expirado ou inválido' });
+  req.user = payload;
   next();
 }
 

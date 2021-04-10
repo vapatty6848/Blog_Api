@@ -7,10 +7,8 @@ const LoginController = new Router();
 
 LoginController.post('/', validatedLogin, verifyEmailLogin, async (req, res) => {
   const { email, password } = req.body;
-  console.log(password, 'login password', email);
-  const userToken = { email };
-  const token = createToken(userToken);
-  console.log('token ', token);
+  console.log(password, email, 'login');
+  const token = createToken({ email });
   res.status(200).json({ token });
 });
 

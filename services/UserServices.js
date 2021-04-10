@@ -43,7 +43,6 @@ const userId = async (id) => {
 };
 
 const userDelete = async (email) => {
-  console.log(email, 'delete');
   const userDeleted = await Users.destroy({
     where: {
       email,

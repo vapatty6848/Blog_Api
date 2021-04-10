@@ -51,11 +51,12 @@ async function verifyEmailLogin(req, res, next) {
 
 async function validatedLogin(req, res, next) {
   const { email, password } = req.body;
-  console.log(email, 'email', password, 'validatedLogin');
   if (password === '') {
+    console.log(password, 'passwordValidatedLogin');
     return res.status(BADREQUEST).json({ message: '"password" is not allowed to be empty' });
   }
   if (!password) {
+    console.log(req.body);
     return res.status(BADREQUEST).json({ message: '"password" is required' });
   }
 

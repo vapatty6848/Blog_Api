@@ -4,16 +4,24 @@ const { validatedUsers, verifyEmailUser } = require('../middlewares/validateUser
 const AuthorizationUsers = require('../middlewares/authenticates');
 const { createNewUser, usersAll, userId, userDelete } = require('../services/UserServices');
 const createToken = require('../services/tokenCreate');
-const validateToken = require('../middlewares/validateToken');
+// const validateToken = require('../middlewares/validateToken');
 
 const UserController = new Router();
 
 UserController.post('/', validatedUsers, verifyEmailUser, async (req, res) => {
   const { displayName, email, password, image } = req.body;
   await createNewUser(displayName, email, password, image);
-  const userToken = { displayName, email };
+  const userToken = { email };
   const token = createToken(userToken);
   res.status(201).json({ token });
+});
+
+UserController.delete('/me', AuthorizationUsers, async (req, res) => {
+  // const { authorization } = req.headers;
+  // const idUser = await validateToken(authorization);
+  const { email } = req.user;
+  await userDelete(email);
+  return res.status(204).json();
 });
 
 UserController.get('/:id', AuthorizationUsers, async (req, res) => {
@@ -27,12 +35,4 @@ UserController.get('/', AuthorizationUsers, async (req, res) => {
   const users = await usersAll();
   res.status(200).json(users);
 });
-
-UserController.delete('/:me', AuthorizationUsers, async (req, res) => {
-  const { authorization: token } = req.headers;
-  const idUser = await validateToken(token);
-  await userDelete(idUser.email);
-  res.status(204);
-});
-
 module.exports = UserController;
