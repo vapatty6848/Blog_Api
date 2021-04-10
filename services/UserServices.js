@@ -30,7 +30,6 @@ const createNewUser = async (displayName, email, password, image) => {
 
 const usersAll = async () => {
   const listOfUsers = await Users.findAll();
-  console.log(listOfUsers);
   return listOfUsers;
 };
 
@@ -43,10 +42,20 @@ const userId = async (id) => {
   return listOfUser;
 };
 
+const userDelete = async (email) => {
+  console.log(email);
+  const userDeleted = await Users.destroy({
+    where: {
+      email,
+    },
+  });
+  return userDeleted;
+};
 
 module.exports = {
   findEmailExist,
   createNewUser,
   usersAll,
   userId,
+  userDelete,
 };

@@ -1,9 +1,10 @@
 const { Router } = require('express');
 
 const { validatedUsers, verifyEmailUser } = require('../middlewares/validateUsers');
-const AuthorizationUsers = require('../middlewares/authentictionToken');
-const { createNewUser, usersAll, userId } = require('../services/UserServices');
+const AuthorizationUsers = require('../middlewares/authentectionToken');
+const { createNewUser, usersAll, userId, userDelete } = require('../services/UserServices');
 const createToken = require('../services/tokenCreate');
+const validateToken = require('../middlewares/validateToken');
 
 const UserController = new Router();
 
@@ -25,6 +26,13 @@ UserController.get('/:id', AuthorizationUsers, async (req, res) => {
 UserController.get('/', AuthorizationUsers, async (req, res) => {
   const users = await usersAll();
   res.status(200).json(users);
+});
+
+UserController.delete('/:me', AuthorizationUsers, async (req, res) => {
+  const { authorization: token } = req.headers;
+  const idUser = await validateToken(token);
+  await userDelete(idUser.email);
+  res.status(204);
 });
 
 module.exports = UserController;

@@ -6,8 +6,7 @@ const CONFLICT = 409;
 function validatedUsers(req, res, next) {
   const { displayName, email, password } = req.body;
   if (displayName.length <= 7 || !displayName) {
-    return res
-      .status(BADREQUEST)
+    return res.status(BADREQUEST)
       .json({ message: '"displayName" length must be at least 8 characters long' });
   }
   if (!password) {
