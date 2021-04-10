@@ -48,4 +48,13 @@ router.post('/', async (req, res) => {
   return res.status(status).json({ message: ms });
 });
 
+// DELETE
+router.delete('/me', validateJWT, async (req, res) => {
+  const { id } = req.user.dataValues;
+
+  await User.destroy({ where: { id } });
+
+  res.status(st.NO_CONTENT).send();
+});
+
 module.exports = router;
