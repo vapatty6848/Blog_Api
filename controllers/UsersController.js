@@ -12,7 +12,17 @@ const { st } = require('../utils/dictionary');
 router.get('/', validateJWT, async (req, res) => {
   const users = await User.findAll({ attributes: { exclude: ['password'] } });
 
-  res.status(200).json(users);
+  res.status(st.OK).json(users);
+});
+
+// FIND BY ID
+router.get('/:id', validateJWT, async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findByPk(id, { attributes: { exclude: ['password'] } });
+
+  if (!user) return res.status(st.NOT_FOUND).json({ message: 'Usuário não existe' });
+
+  res.status(st.OK).json(user);
 });
 
 // CREATE USER
