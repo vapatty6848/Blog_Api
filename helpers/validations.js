@@ -88,6 +88,12 @@ const postDoesNotExistsError = () => {
   err.message = 'Post não existe';
   return err;
 };
+const userError = () => {
+  const err = {};
+  err.status = '401';
+  err.message = 'Usuário não autorizado';
+  return err;
+};
 
 module.exports = {
   nameLengthError,
@@ -105,4 +111,5 @@ module.exports = {
   requiredPostTitleError,
   requiredPostContentError,
   postDoesNotExistsError,
+  userError,
 };
