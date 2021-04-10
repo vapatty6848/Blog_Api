@@ -82,6 +82,12 @@ const requiredPostContentError = () => {
   err.message = '"content" is required';
   return err;
 };
+const postDoesNotExistsError = () => {
+  const err = {};
+  err.status = '404';
+  err.message = 'Post não existe';
+  return err;
+};
 
 module.exports = {
   nameLengthError,
@@ -98,4 +104,5 @@ module.exports = {
   userDoesNotExistsError,
   requiredPostTitleError,
   requiredPostContentError,
+  postDoesNotExistsError,
 };

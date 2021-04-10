@@ -1,7 +1,7 @@
 const { User } = require('../models');
 const validations = require('../helpers/validations');
 
-const getUserValidation = async (req, res) => {
+const getUserById = async (req, res) => {
   const { id } = req.params;
   User.findByPk(id)
     .then((user) => {
@@ -16,4 +16,4 @@ const getUserValidation = async (req, res) => {
     });
 };
 
-module.exports = getUserValidation;
+module.exports = getUserById;
