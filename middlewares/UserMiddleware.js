@@ -1,4 +1,4 @@
-const { validateUser } = require('../schema/UserSchema');
+const { validateUser } = require('../schema/ValidateSchema');
 
 const validateFieldsUser = async (req, res, next) => {
   const { displayName, email, password } = req.body;

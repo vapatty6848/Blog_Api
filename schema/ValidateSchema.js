@@ -71,7 +71,17 @@ const validateLogin = async (email, password) => {
   }
 };
 
+const validatePost = async (title, content) => {
+  switch (true) {
+    case !title: return { status: 400, message: '"title" is required' };
+    case !content: return { status: 400, message: '"content" is required' };
+
+    default: return {};
+  }
+};
+
 module.exports = {
   validateUser,
   validateLogin,
+  validatePost,
 };
