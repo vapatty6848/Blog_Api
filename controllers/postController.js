@@ -28,6 +28,20 @@ postRouter.post('/', validateToken, validatePost, async (req, res) => {
     .then(() => res.status(201).json({ title, content, userId }));
 });
 
+postRouter.get('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+
+  const post = await BlogPost.findOne({
+    where: { id },
+    attributes: { exclude: ['userId'] },
+    include: [{ model: User, as: 'user' }],
+  });
+
+  if (!post) return res.status(404).json({ message: 'Post não existe' });
+
+  return res.status(200).json(post);
+});
+
 postRouter.get('/', validateToken, async (_req, res) => {
   const posts = await BlogPost.findAll({
     attributes: { exclude: ['userId'] },
