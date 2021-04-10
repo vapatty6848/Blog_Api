@@ -28,4 +28,13 @@ postRouter.post('/', validateToken, validatePost, async (req, res) => {
     .then(() => res.status(201).json({ title, content, userId }));
 });
 
+postRouter.get('/', validateToken, async (_req, res) => {
+  const posts = await BlogPost.findAll({
+    attributes: { exclude: ['userId'] },
+    include: [{ model: User, as: 'user' }],
+  });
+
+  return res.status(200).json(posts);
+});
+
 module.exports = postRouter;
