@@ -4,7 +4,7 @@ const { OK } = require('../dictionary/statusCodes');
 const { SECRET } = require('../dictionary/constants');
 const {
   validateEmailIsRequired,
-  validateUserExistence,
+  validateValidInformation,
   validatePassordIsRequired,
 } = require('../validation/validations');
 
@@ -14,7 +14,7 @@ LoginController.post(
   '/',
   validateEmailIsRequired,
   validatePassordIsRequired,
-  validateUserExistence,
+  validateValidInformation,
   async (request, response) => {
     const { email, password } = request.body;
     const jwtConfig = { expiresIn: '7d', algorithm: 'HS256' };

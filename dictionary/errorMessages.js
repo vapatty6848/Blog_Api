@@ -3,12 +3,13 @@ const EMAIL_IS_INVALID = '"email" must be a valid email';
 const EMAIL_IS_REQUIRED = '"email" is required';
 const EMAIL_IS_NOT_EMPTY = '"email" is not allowed to be empty';
 const EXPIRED_OR_INVALID_TOKEN = 'Token expirado ou inválido';
+const INVALID_INFORMATION = 'Campos inválidos';
 const MISSING_TOKEN = 'Token não encontrado';
 const PASSWORD_IS_REQUIRED = '"password" is required';
 const PASSWORD_IS_NOT_EMPTY = '"password" is not allowed to be empty';
 const PASSWORD_NAME_TOO_SHORT = '"password" length must be 6 characters long';
 const USER_ALREADY_REGISTERED = 'Usuário já existe';
-const USER_NOT_FOUND = 'Campos inválidos';
+const USER_DOES_NOT_EXIST = 'Usuário não existe';
 
 module.exports = {
   DISPLAY_NAME_TOO_SHORT,
@@ -16,10 +17,11 @@ module.exports = {
   EMAIL_IS_REQUIRED,
   EMAIL_IS_NOT_EMPTY,
   EXPIRED_OR_INVALID_TOKEN,
+  INVALID_INFORMATION,
   MISSING_TOKEN,
   PASSWORD_IS_REQUIRED,
   PASSWORD_IS_NOT_EMPTY,
   PASSWORD_NAME_TOO_SHORT,
   USER_ALREADY_REGISTERED,
-  USER_NOT_FOUND,
+  USER_DOES_NOT_EXIST,
 };

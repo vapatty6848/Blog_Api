@@ -14,6 +14,7 @@ const {
   validatePassordIsRequired,
   validatePasswordLength,
   validateToken,
+  validateUserExistence,
 } = require('../validation/validations');
 
 const UserController = new Router();
@@ -49,6 +50,18 @@ UserController.get(
     const foundUsers = await User.findAll();
 
     response.status(OK).json(foundUsers);
+  },
+);
+
+UserController.get(
+  '/:id',
+  validateUserExistence,
+  validateToken,
+  async (request, response) => {
+    const { id } = request.params;
+    const foundUser = await User.findByPk(id);
+
+    response.status(OK).json(foundUser);
   },
 );
 

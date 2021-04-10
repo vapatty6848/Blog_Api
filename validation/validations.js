@@ -6,16 +6,18 @@ const {
   EMAIL_IS_REQUIRED,
   EMAIL_IS_NOT_EMPTY,
   EXPIRED_OR_INVALID_TOKEN,
+  INVALID_INFORMATION,
   MISSING_TOKEN,
   PASSWORD_IS_REQUIRED,
   PASSWORD_IS_NOT_EMPTY,
   PASSWORD_NAME_TOO_SHORT,
   USER_ALREADY_REGISTERED,
-  USER_NOT_FOUND,
+  USER_DOES_NOT_EXIST,
 } = require('../dictionary/errorMessages');
 const {
   BAD_REQUEST,
   CONFLICT,
+  NOT_FOUND,
   UNAUTHORIZED,
 } = require('../dictionary/statusCodes');
 const { User } = require('../models');
@@ -130,14 +132,25 @@ const validateToken = async (request, response, next) => {
   }
 };
 
-const validateUserExistence = async (request, response, next) => {
+const validateValidInformation = async (request, response, next) => {
   const { email } = request.body;
   const foundUser = await User.findOne({ where: { email } });
 
   if (!foundUser) {
     return response
       .status(BAD_REQUEST)
-      .send({ message: USER_NOT_FOUND });
+      .send({ message: INVALID_INFORMATION });
+  }
+
+  next();
+};
+
+const validateUserExistence = async (request, response, next) => {
+  const { id } = request.params;
+  const foundUser = await User.findByPk(id);
+
+  if (!foundUser) {
+    return response.status(NOT_FOUND).json({ message: USER_DOES_NOT_EXIST });
   }
 
   next();
@@ -151,5 +164,6 @@ module.exports = {
   validatePassordIsRequired,
   validatePasswordLength,
   validateToken,
+  validateValidInformation,
   validateUserExistence,
 };
