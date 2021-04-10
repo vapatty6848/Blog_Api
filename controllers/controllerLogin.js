@@ -2,13 +2,15 @@ const { Router } = require('express');
 const rescue = require('express-rescue');
 
 const router = Router();
+const createToken = require('../middlewares/Req1/createToken');
+const { checkMailLogin, loginValidation } = require('../middlewares/Req1/verifications');
 
-router.post('/', rescue(async (req, res) => {
-  const { email, password } = req.body;
+router.post('/', loginValidation, checkMailLogin, rescue(async (req, res) => {
+  const { email } = req.body;
 
-  const token = req.headers.authorization;
+  const tokenUser = { email };
+  const token = createToken(tokenUser);
 
-  await ({ email, password });
   return res.status(200).json({ token });
 }));
 
