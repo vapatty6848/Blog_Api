@@ -7,6 +7,8 @@ const postsRouter = express.Router();
 
 postsRouter.post('/', validateToken, validateTitle, validateContent, postsController.createPost);
 
+postsRouter.get('/search?:q', validateToken, postsController.searchPosts);
+
 postsRouter.get('/', validateToken, postsController.getAllPosts);
 
 postsRouter.get('/:id', validateToken, postsController.getById);

@@ -56,9 +56,21 @@ const updatePost = async (id, userId, title, content) => {
   return { updatedPost };
 };
 
+const searchPosts = async (searchTerm) => {
+  console.log('SEARCH POST SERVICE');
+  const posts = await getAllPosts();
+
+  const foundPosts = posts.filter(
+    (post) => post.title.includes(searchTerm) || post.content.includes(searchTerm),
+  );
+
+  return foundPosts;
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getById,
   updatePost,
+  searchPosts,
 };

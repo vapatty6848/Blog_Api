@@ -60,9 +60,22 @@ const updatePost = async (req, res) => {
   }
 };
 
+const searchPosts = async (req, res) => {
+  try {
+    console.log('SEARCH POST CONTROLLER');
+    const searchTerm = req.query.q;
+
+    const foundPosts = await postsService.searchPosts(searchTerm);
+    return res.status(200).json(foundPosts);
+  } catch (err) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getById,
   updatePost,
+  searchPosts,
 };
