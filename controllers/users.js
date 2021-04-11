@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { User } = require('../models');
+const service = require('../services/users');
 const { OK, CREATED, CONFLICT, NOT_FOUND, NO_CONTENT } = require('../dictionary/statusCode');
 const { USER_EXISTS, USER_DONT_EXISTS } = require('../dictionary/errorMessage');
 const Validation = require('../middlewares/userValidation');
@@ -16,12 +17,12 @@ usersRouter.post(
   Validation.email,
   async (req, res) => {
     const { displayName, email, password, image } = req.body;
-    const emailAlreadyUsed = (await User.findAll({ where: { email } })).length;
+    const emailAlreadyUsed = await service.findByEmail(email);
 
     if (emailAlreadyUsed) return res.status(CONFLICT).json(USER_EXISTS);
 
-    const newUser = await User.create({ displayName, email, password, image });
-    const token = createToken({ id: newUser.id, email, name: displayName });
+    const newUser = service.createUser(displayName, email, password, image);
+    const token = createToken({ id: newUser.id, email });
 
     return res.status(CREATED).json({ token });
   },
