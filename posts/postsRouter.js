@@ -7,4 +7,6 @@ const postsRouter = express.Router();
 
 postsRouter.post('/', validateToken, validateTitle, validateContent, postsController.createPost);
 
+postsRouter.get('/', validateToken, postsController.getAllPosts);
+
 module.exports = postsRouter;
