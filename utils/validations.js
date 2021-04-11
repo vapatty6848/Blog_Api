@@ -1,4 +1,4 @@
-// this file can grow faster
+const { User } = require('../models');
 
 // name validation
 const isValidName = (name) => {
@@ -41,11 +41,42 @@ const isValidPassword = (password) => {
   return true;
 };
 
-//
+// check if email is not empty
+const EmptyEmail = (bodyObj) => {
+  if (bodyObj.email === '') {
+    return true;
+  }
+  return false;
+};
+
+// check if password is not empty
+const EmptyPassword = (bodyObj) => {
+  if (bodyObj.password === '') {
+    return true;
+  }
+  return false;
+};
+
+// check if user exists
+const userExists = async (bodyObj) => {
+  const foundUser = await User.findOne({
+    raw: true,
+    where: {
+      email: bodyObj.email,
+      password: parseInt(bodyObj.password, 10),
+    },
+  });
+
+  return foundUser;
+};
+
 module.exports = {
   isValidName,
   haveEmailField,
   isValidEmail,
   havePasswordField,
   isValidPassword,
+  EmptyEmail,
+  EmptyPassword,
+  userExists,
 };
