@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 const { User, BlogPost } = require('../models');
 const { validatePost, validateToken, validatePostOwner } = require('../middlewares');
 const verifyToken = require('../auth/verifyToken');
@@ -28,16 +29,30 @@ postRouter.post('/', validateToken, validatePost, async (req, res) => {
     .then(() => res.status(201).json({ title, content, userId }));
 });
 
-// postRouter.get('/search?', validateToken, async (req, res) => {
-//   const { q } = req.query;
+postRouter.get('/search?', validateToken, async (req, res) => {
+  const { q } = req.query;
 
-//   if (q === '') {
-//     const posts = await BlogPost.findAll();
-//     return res.status(200).json(posts);
-//   }
+  if (q === '') {
+    const posts = await BlogPost.findAll({
+      attributes: { exclude: ['userId'] },
+      include: [{ model: User, as: 'user' }],
+    });
+    return res.status(200).json(posts);
+  }
 
-//   const posts = await BlogPost.findAll()
-// });
+  const posts = await BlogPost.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: `%${q}%` } },
+        { content: { [Op.like]: `%${q}%` } },
+      ],
+    },
+    attributes: { exclude: ['userId'] },
+    include: [{ model: User, as: 'user' }],
+  });
+
+  return res.status(200).json(posts);
+});
 
 postRouter.get('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
