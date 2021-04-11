@@ -1,7 +1,12 @@
 const { Router } = require('express');
 const { Op } = require('sequelize');
 const { User, BlogPost } = require('../models');
-const { validatePost, validateToken, validatePostOwner } = require('../middlewares');
+const {
+  validatePost,
+  validateToken,
+  validatePostOwner,
+  postExistence,
+} = require('../middlewares');
 const verifyToken = require('../auth/verifyToken');
 
 const postRouter = new Router();
@@ -54,7 +59,7 @@ postRouter.get('/search?', validateToken, async (req, res) => {
   return res.status(200).json(posts);
 });
 
-postRouter.get('/:id', validateToken, async (req, res) => {
+postRouter.get('/:id', validateToken, postExistence, async (req, res) => {
   const { id } = req.params;
 
   const post = await BlogPost.findOne({
@@ -62,8 +67,6 @@ postRouter.get('/:id', validateToken, async (req, res) => {
     attributes: { exclude: ['userId'] },
     include: [{ model: User, as: 'user' }],
   });
-
-  if (!post) return res.status(404).json({ message: 'Post não existe' });
 
   return res.status(200).json(post);
 });
@@ -93,6 +96,17 @@ postRouter.put('/:id', validateToken,
     });
 
     return res.status(200).json(updatedUser);
+  });
+
+postRouter.delete('/:id', validateToken,
+  postExistence, validatePostOwner, async (req, res) => {
+    const { id } = req.params;
+
+    await BlogPost.destroy({
+      where: { id },
+    });
+
+    return res.status(204).send();
   });
 
 module.exports = postRouter;
