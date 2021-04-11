@@ -68,4 +68,20 @@ BlogPostController.get(
   },
 );
 
+BlogPostController.put(
+  '/:id',
+  validateToken,
+  async (request, response) => {
+    const { id } = request.params;
+    const { title, content } = request.body;
+
+    const updatedBlogPost = await BlogPost.update(
+      { title, content },
+      { where: { id } },
+    );
+
+    response.status(OK).json(updatedBlogPost);
+  },
+);
+
 module.exports = BlogPostController;
