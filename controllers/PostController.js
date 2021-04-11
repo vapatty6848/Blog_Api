@@ -1,14 +1,17 @@
 const { Router } = require('express');
 const validateJWT = require('../utils/validateJWT');
 const { st } = require('../utils/dictionary');
-const { BlogPost } = require('../models');
+const { BlogPost, User } = require('../models');
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-  const posts = await BlogPost.findAll();
+router.get('/', validateJWT, async (req, res) => {
+  const posts = await BlogPost.findAll({
+    attributes: ['id', 'published', 'updated', 'title', 'content'],
+    include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
+  });
 
-  res.status(200).json(posts);
+  res.status(st.OK).json(posts);
 });
 
 router.post('/', validateJWT, async (req, res) => {
