@@ -19,6 +19,18 @@ const createPost = async (req, res) => {
   }
 };
 
+const getPosts = async (req, res) => {
+  try {
+    const posts = await BlogPostsServices.getPosts();
+
+    return res.status(200).json(posts);
+  } catch (e) {
+    console.log(e.message);
+    res.status(INTERNAL_SERVER_ERROR).send({ message: 'Algo deu errado' });
+  }
+};
+
 module.exports = {
   createPost,
+  getPosts,
 };
