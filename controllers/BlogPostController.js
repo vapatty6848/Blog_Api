@@ -33,4 +33,19 @@ router.get(
   },
 );
 
+router.get(
+  '/:id',
+  tokenValidation,
+  async (request, response) => {
+    const { id } = request.params;
+    const retrievedBlogPost = await BlogPostService.getById(id);
+    if (!retrievedBlogPost) {
+      return response
+        .status(statusCode.NOT_FOUND)
+        .json({ message: 'Post não existe' });
+    }
+    return response.status(statusCode.OK).json(retrievedBlogPost);
+  },
+);
+
 module.exports = router;

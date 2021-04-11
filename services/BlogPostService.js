@@ -1,5 +1,9 @@
 const { BlogPosts, Users } = require('../models');
-const { getPosts, removeObjectKeyFromArray } = require('../utils');
+const {
+  getPosts,
+  removeObjectKeyFromArray,
+  removeObjectKey,
+} = require('../utils');
 
 async function create(newBlogpost) {
   const { title, content, published, updated, userId } = newBlogpost;
@@ -24,7 +28,26 @@ async function getAll() {
   return blogpostsInfo;
 }
 
+async function getById(id) {
+  try {
+    const queryResult = await BlogPosts.findByPk(id, {
+      include: {
+        model: Users,
+        as: 'user',
+        attributes: ['id', 'displayName', 'email', 'image'],
+      },
+    });
+    if (!queryResult) return null;
+    const blogpost = queryResult.dataValues;
+    const blogpostInfo = removeObjectKey(blogpost, 'userId');
+    return blogpostInfo;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   create,
   getAll,
+  getById,
 };
