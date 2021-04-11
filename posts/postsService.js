@@ -38,8 +38,27 @@ const getById = async (id) => {
   return { post };
 };
 
+const updatePost = async (id, userId, title, content) => {
+  console.log('UPDATE POST SERVICE');
+  const postById = await BlogPosts.findByPk(id);
+
+  if (postById.userId !== userId) {
+    return { message: 'Usuário não autorizado' };
+  }
+
+  await BlogPosts.update(
+    { title, content },
+    { where: { id } },
+  );
+
+  const updatedPost = { title, content, userId };
+
+  return { updatedPost };
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getById,
+  updatePost,
 };
