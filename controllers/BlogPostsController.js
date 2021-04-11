@@ -1,13 +1,20 @@
 const { Router } = require('express');
-// const { Op } = require('sequelize');
-// o Op deixa vc usa in between etc
-const router = Router();
+const AuthorizationUsers = require('../middlewares/authenticates');
+const validatedBlogPosts = require('../middlewares/validatedPosts');
+const { createNewPost } = require('../services/PostsServices');
 
-const { BlogPosts } = require('../models');
+const BlogPostsController = new Router();
 
-router.get('/', async (req, res) => {
-  const blogPost = await BlogPosts.findAll();
-  res.status(200).json(blogPost);
+BlogPostsController.post('/', validatedBlogPosts, AuthorizationUsers, async (req, res) => {
+  const { title, content } = req.body;
+  const { userId } = req.user;
+  // console.log('user', req.body, 'user', userId, req.user);
+  await createNewPost(title, content, userId);
+  return res.status(201).json({
+    title,
+    content,
+    userId,
+  });
 });
 
-module.exports = router;
+module.exports = BlogPostsController;

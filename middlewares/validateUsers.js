@@ -27,7 +27,6 @@ function validatedUsers(req, res, next) {
 
 async function verifyEmailUser(req, res, next) {
   const { email } = req.body;
-  console.log(email, 'verifyEmail ');
   const existEmailReturn = await usersServices.findEmailExist(email);
   if (existEmailReturn) {
     return res.status(CONFLICT).json({ message: 'Usuário já existe' });
@@ -37,9 +36,8 @@ async function verifyEmailUser(req, res, next) {
 
 async function verifyEmailLogin(req, res, next) {
   const { email, password } = req.body;
-  console.log('find email', email, 'pass ', password);
   const existEmailReturn = await usersServices.findEmailExist(email, password);
-  console.log(' email', existEmailReturn);
+  req.user = existEmailReturn;
   if (!existEmailReturn) {
     return res.status(BADREQUEST).json({ message: 'Campos inválidos' });
   }
@@ -52,7 +50,6 @@ async function verifyEmailLogin(req, res, next) {
 async function validatedLogin(req, res, next) {
   const { email, password } = req.body;
   if (password === '') {
-    console.log(password, 'passwordValidatedLogin');
     return res.status(BADREQUEST).json({ message: '"password" is not allowed to be empty' });
   }
   if (!password) {

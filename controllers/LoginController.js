@@ -6,9 +6,9 @@ const createToken = require('../services/tokenCreate');
 const LoginController = new Router();
 
 LoginController.post('/', validatedLogin, verifyEmailLogin, async (req, res) => {
-  const { email, password } = req.body;
-  console.log(password, email, 'login');
-  const token = createToken({ email });
+  const { email } = req.body;
+  const { id: userId } = req.user;
+  const token = createToken({ email, userId });
   res.status(200).json({ token });
 });
 
