@@ -16,6 +16,7 @@ const {
   TITLE_IS_REQUIRED,
   USER_ALREADY_REGISTERED,
   USER_DOES_NOT_EXIST,
+  USER_NOT_AUTHORIZED,
 } = require('../dictionary/errorMessages');
 const {
   BAD_REQUEST,
@@ -132,6 +133,19 @@ const validatePasswordLength = async (request, response, next) => {
   next();
 };
 
+const validatePostOwner = async (request, response, next) => {
+  const { id } = request.params;
+  const { user: { email } } = request;
+  const foundBlogPost = await BlogPost.findByPk(id);
+  const foundUser = await User.findOne({ where: { email } });
+
+  if (foundBlogPost.userId !== foundUser.id) {
+    return response.status(UNAUTHORIZED).json({ message: USER_NOT_AUTHORIZED });
+  }
+
+  next();
+};
+
 const validateTitleIsRequired = async (request, response, next) => {
   const blogPost = request.body;
   const titleIsMissing = !blogPost.title;
@@ -204,6 +218,7 @@ module.exports = {
   validateNameLength,
   validatePassordIsRequired,
   validatePasswordLength,
+  validatePostOwner,
   validateTitleIsRequired,
   validateToken,
   validateValidInformation,

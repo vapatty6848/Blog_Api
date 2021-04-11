@@ -13,6 +13,7 @@ const PASSWORD_NAME_TOO_SHORT = '"password" length must be 6 characters long';
 const TITLE_IS_REQUIRED = '"title" is required';
 const USER_ALREADY_REGISTERED = 'Usuário já existe';
 const USER_DOES_NOT_EXIST = 'Usuário não existe';
+const USER_NOT_AUTHORIZED = 'Usuário não autorizado';
 
 module.exports = {
   BLOG_POST_DOES_NOT_EXIST,
@@ -30,4 +31,5 @@ module.exports = {
   TITLE_IS_REQUIRED,
   USER_ALREADY_REGISTERED,
   USER_DOES_NOT_EXIST,
+  USER_NOT_AUTHORIZED,
 };

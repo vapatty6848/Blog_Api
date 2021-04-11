@@ -7,6 +7,7 @@ const {
 const {
   validateBlogPostExistence,
   validateContentIsRequired,
+  validatePostOwner,
   validateTitleIsRequired,
   validateToken,
 } = require('../validation/validations');
@@ -71,14 +72,22 @@ BlogPostController.get(
 BlogPostController.put(
   '/:id',
   validateToken,
+  validateContentIsRequired,
+  validateTitleIsRequired,
+  validatePostOwner,
   async (request, response) => {
     const { id } = request.params;
     const { title, content } = request.body;
+    const { user: { email } } = request;
+    const foundUser = await User.findOne({ where: { email } });
+    const userId = foundUser.id;
 
-    const updatedBlogPost = await BlogPost.update(
+    await BlogPost.update(
       { title, content },
       { where: { id } },
     );
+
+    const updatedBlogPost = { title, content, userId };
 
     response.status(OK).json(updatedBlogPost);
   },
