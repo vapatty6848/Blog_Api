@@ -5,6 +5,8 @@ require('dotenv').config();
 const SECRET = process.env.SECRET || 'mySecretToken';
 const CONFIG = { algorithm: 'HS256', expiresIn: '7d' };
 
+const { UNAUTHORIZED } = require('../schema/statusSchema');
+
 const createToken = (user) => {
   const { email, displayName } = user;
   const payload = { email, displayName };
@@ -27,7 +29,17 @@ const verifyToken = async (token) => {
   }
 };
 
+const validateToken = async (req, res, next) => {
+  const validation = await verifyToken(req.headers.authorization);
+  if (validation.message) return res.status(UNAUTHORIZED).json({ message: validation.message });
+
+  req.user = validation.user;
+
+  next();
+};
+
 module.exports = {
   createToken,
   verifyToken,
+  validateToken,
 };

@@ -1,7 +1,6 @@
 const { BlogPosts, Users } = require('../models');
 
 const create = async (post) => {
-  console.log('post service', post);
   const postCreated = await BlogPosts.create(post);
   return postCreated;
 };
@@ -29,9 +28,15 @@ const remove = async (id) => {
   return {};
 };
 
+const update = async (post, id) => {
+  await BlogPosts.update(post, { where: { id } });
+  return {};
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   remove,
+  update,
 };

@@ -15,9 +15,6 @@ const create = async (req, res) => {
 
 // *** GET ALL USERS ***
 const getAll = async (req, res) => {
-  const validation = await verifyToken(req.headers.authorization);
-  if (validation.message) return res.status(UNAUTHORIZED).json({ message: validation.message });
-
   const users = await userService.getAll();
 
   res.status(OK).json(users);
@@ -26,8 +23,6 @@ const getAll = async (req, res) => {
 // *** GET USER BY ID ***
 const getById = async (req, res) => {
   const { id } = req.params;
-  const validation = await verifyToken(req.headers.authorization);
-  if (validation.message) return res.status(UNAUTHORIZED).json({ message: validation.message });
 
   const user = await userService.getById(id);
   if (!user) return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
@@ -37,10 +32,8 @@ const getById = async (req, res) => {
 
 // *** DELETE USER ***
 const remove = async (req, res) => {
-  const validation = await verifyToken(req.headers.authorization);
-  if (validation.message) return res.status(UNAUTHORIZED).json({ message: validation.message });
+  const { id } = req.user;
 
-  const { id } = validation.user;
   const result = await userService.remove(id);
   if (result.message) return res.status(NOT_FOUND).json({ message: result.message });
 
