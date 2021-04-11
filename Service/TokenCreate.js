@@ -18,10 +18,11 @@ const allUsersverification = (req, res, next) => {
   if (!token) {
     return next(createError('Token não encontrado', 401));
   }
-  jwt.verify(token, secret, (error, _decoded) => {
+  jwt.verify(token, secret, (error, decoded) => {
     if (error) {
       return next(createError('Token expirado ou inválido', 401));
     }
+    req.myUser = decoded;
   });
 
   next();
