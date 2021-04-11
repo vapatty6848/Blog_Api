@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { User, BlogPost } = require('../models');
-const { validatePost, validateToken } = require('../middlewares');
+const { validatePost, validateToken, validatePostOwner } = require('../middlewares');
 const verifyToken = require('../auth/verifyToken');
 
 const postRouter = new Router();
@@ -50,5 +50,23 @@ postRouter.get('/', validateToken, async (_req, res) => {
 
   return res.status(200).json(posts);
 });
+
+postRouter.put('/:id', validateToken,
+  validatePost, validatePostOwner, async (req, res) => {
+    const { id } = req.params;
+    const { title, content } = req.body;
+
+    await BlogPost.update(
+      { title, content },
+      { where: { id } },
+    );
+
+    const updatedUser = await BlogPost.findOne({
+      where: { id },
+      attributes: { exclude: ['id', 'published', 'updated'] },
+    });
+
+    return res.status(200).json(updatedUser);
+  });
 
 module.exports = postRouter;
