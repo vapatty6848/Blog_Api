@@ -5,7 +5,7 @@ const {
   havePasswordField,
   isValidPassword } = require('../utils/validations');
 
-const validateUser = async (req, res, next) => {
+const validateCreateUser = async (req, res, next) => {
   try {
     if (!haveEmailField(req.body)) {
       return res.status(400).json({ message: '"email" is required' });
@@ -28,4 +28,4 @@ const validateUser = async (req, res, next) => {
   next();
 };
 
-module.exports = validateUser;
+module.exports = validateCreateUser;

@@ -70,6 +70,14 @@ const userExists = async (bodyObj) => {
   return foundUser;
 };
 
+// // check if have a password field
+const haveTokenField = (reqHeader) => {
+  if (reqHeader.authorization === '') {
+    return false;
+  }
+  return true;
+};
+
 module.exports = {
   isValidName,
   haveEmailField,
@@ -79,4 +87,5 @@ module.exports = {
   EmptyEmail,
   EmptyPassword,
   userExists,
+  haveTokenField,
 };
