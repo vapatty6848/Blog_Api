@@ -28,4 +28,15 @@ userRouter.get('/', validateToken, async (req, res) => {
   return res.status(200).json(users);
 });
 
+userRouter.get('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const users = await User.findOne({ where: { id } });
+
+  if (!users) {
+    return res.status(404).json({ message: 'Usuário não existe' });
+  }
+
+  return res.status(200).json(users);
+});
+
 module.exports = userRouter;
