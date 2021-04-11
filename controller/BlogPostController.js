@@ -42,12 +42,7 @@ BlogPostController.get(
         required: true,
       }],
     });
-    // const { user: { email } } = request;
-    // const recoveredUser = await User.findOne({ where: { email } });
-    // blogPost.user = recoveredUser;
-    // foundPosts.sort()
     foundPosts.sort((a, b) => a.id - b.id);
-    // console.log(`posts`, foundPosts[0])
 
     response.status(OK).json(foundPosts);
   },
