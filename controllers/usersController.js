@@ -5,6 +5,8 @@ const usersController = Router();
 const validateCreateUser = require('../middlewares/validateCreateUserMiddleware');
 const validateGetUsers = require('../middlewares/validateGetUsersMiddleware');
 const validateGetUsersById = require('../middlewares/validateGetUsersByIdMiddleware');
+const validateDeleteUsers = require('../middlewares/validateDeleteUsersMiddleware');
+
 const { User } = require('../models');
 
 const generateToken = require('../utils/generateToken');
@@ -22,5 +24,7 @@ usersController.post('/user', validateCreateUser, async (req, res, _next) => {
     return res.status(409).json({ message: 'Usuário já existe' });
   }
 });
+
+usersController.delete('/user/me', validateDeleteUsers, async (_req, _res, _next) => {});
 
 module.exports = usersController;

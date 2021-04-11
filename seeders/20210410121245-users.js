@@ -18,8 +18,7 @@ module.exports = {
         image: 'https://sportbuzz.uol.com.br/media/_versions/gettyimages-52491565_widelg.jpg',
         createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
         updatedAt: Sequelize.literal('CURRENT_TIMESTAMP'),
-      },
-      ]);
+      }]);
   },
 
   down: async (queryInterface, _Sequelize) => {
