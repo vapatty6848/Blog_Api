@@ -11,7 +11,10 @@ const createPost = async (title, content, userId) => {
 const getAllPosts = async () => {
   console.log('GET ALL POSTS SERVICE');
 
-  const posts = await BlogPosts.findAll({ attributes: { exclude: ['userId'] }, include: { model: Users, as: 'user' } });
+  const posts = await BlogPosts.findAll({
+    attributes: { exclude: ['userId'] },
+    include: { model: Users, as: 'user', attributes: { exclude: ['password'] } },
+  });
 
   return posts;
 };
