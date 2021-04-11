@@ -1,34 +1,46 @@
 const postsService = require('./postsService');
 
 const createPost = async (req, res) => {
-  console.log('CREATE POST CONTROLLER');
+  try {
+    console.log('CREATE POST CONTROLLER');
 
-  const { title, content } = req.body;
-  const { userId } = req;
+    const { title, content } = req.body;
+    const { userId } = req;
 
-  const newPost = await postsService.createPost(title, content, userId);
+    const newPost = await postsService.createPost(title, content, userId);
 
-  res.status(201).json(newPost);
+    return res.status(201).json(newPost);
+  } catch (err) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
 };
 
 const getAllPosts = async (req, res) => {
-  console.log('GET ALL POSTS CONTROLLER');
+  try {
+    console.log('GET ALL POSTS CONTROLLER');
 
-  const posts = await postsService.getAllPosts();
+    const posts = await postsService.getAllPosts();
 
-  res.status(200).json(posts);
+    return res.status(200).json(posts);
+  } catch (err) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
 };
 
 const getById = async (req, res) => {
-  console.log('GET BY ID CONTROLLER');
+  try {
+    console.log('GET BY ID CONTROLLER');
 
-  const { id } = req.params;
+    const { id } = req.params;
 
-  const { post, message } = await postsService.getById(id);
+    const { post, message } = await postsService.getById(id);
 
-  if (message) return res.status(404).json({ message });
+    if (message) return res.status(404).json({ message });
 
-  res.status(200).json(post);
+    return res.status(200).json(post);
+  } catch (err) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
 };
 
 module.exports = {
