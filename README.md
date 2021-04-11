@@ -26,22 +26,21 @@ Aqui você vai encontrar os detalhes de como estruturar o desenvolvimento do seu
 - [Como desenvolver](#como-desenvolver)
   - [Linter](#linter)
 - [Requisitos do projeto](#requisitos-do-projeto)
-  - [Observações importantes](#👀-Observações-importantes)
+  - [Antes de começar](#antes-de-começar)
+  - [Observações importantes](#-observações-importantes)
     - [Dicas](#dicas)
   - [Lista de Requisitos](#lista-de-requisitos)
-    - [1 - Sua aplicação deve ter o endpoint POST `/user`](#1---Sua-aplicação-deve-ter-o-endpoint-POST-/user)
-    - [2 - Sua aplicação deve ter o endpoint POST `/login`](#2---Sua-aplicação-deve-ter-o-endpoint-POST-`/login`)
-    - [3 - Sua aplicação deve ter o endpoint GET `/user`](#3---Sua-aplicação-deve-ter-o-endpoint-GET-`/user``)
-    - [4 - Sua aplicação deve ter o endpoint GET `/user/:id`](#4---Sua-aplicação-deve-ter-o-endpoint-GET-`/user/:id`)
-    - [5 - Sua aplicação deve ter o endpoint DELETE `/user/me`](#5---Sua-aplicação-deve-ter-o-endpoint-DELETE-`/user/me`)
-    - [6 - Sua aplicação deve ter o endpoint POST `/post`](#6---Sua-aplicação-deve-ter-o-endpoint-POST-`/post`)
-    - [7 - Sua aplicação deve ter o endpoint GET `/post`](#7---Sua-aplicação-deve-ter-o-endpoint-GET-`/post`)
-    - [8 - Sua aplicação deve ter o endpoint GET `post/:id`](#8---Sua-aplicação-deve-ter-o-endpoint-GET-`post/:id`)
-    - [9 - Sua aplicação deve ter o endpoint PUT `/post/:id`](#9---Sua-aplicação-deve-ter-o-endpoint-PUT-`/post/:id`)
-    - [10 - Sua aplicação deve ter o endpoint GET `post/search?q=:searchTerm`](#10---Sua-aplicação-deve-ter-o-endpoint-GET-`post/search?q=:searchTerm`)
-    - [11 - Sua aplicação deve ter o endpoint DELETE `post/:id`](#11---Sua-aplicação-deve-ter-o-endpoint-DELETE-`post/:id`)
-  - [Antes de começar](#antes-de-começar)
-  - [Lista de requisitos](#lista-de-requisitos)
+    - [1 - Sua aplicação deve ter o endpoint POST `/user`](#1---sua-aplicação-deve-ter-o-endpoint-post-user)
+    - [2 - Sua aplicação deve ter o endpoint POST `/login`](#2---sua-aplicação-deve-ter-o-endpoint-post-login)
+    - [3 - Sua aplicação deve ter o endpoint GET `/user`](#3---sua-aplicação-deve-ter-o-endpoint-get-user)
+    - [4 - Sua aplicação deve ter o endpoint GET `/user/:id`](#4---sua-aplicação-deve-ter-o-endpoint-get-userid)
+    - [5 - Sua aplicação deve ter o endpoint DELETE `/user/me`](#5---sua-aplicação-deve-ter-o-endpoint-delete-userme)
+    - [6 - Sua aplicação deve ter o endpoint POST `/post`](#6---sua-aplicação-deve-ter-o-endpoint-post-post)
+    - [7 - Sua aplicação deve ter o endpoint GET `/post`](#7---sua-aplicação-deve-ter-o-endpoint-get-post)
+    - [8 - Sua aplicação deve ter o endpoint GET `post/:id`](#8---sua-aplicação-deve-ter-o-endpoint-get-postid)
+    - [9 - Sua aplicação deve ter o endpoint PUT `/post/:id`](#9---sua-aplicação-deve-ter-o-endpoint-put-postid)
+    - [10 - Sua aplicação deve ter o endpoint GET `post/search?q=:searchTerm`](#10---sua-aplicação-deve-ter-o-endpoint-get-postsearchqsearchterm)
+    - [11 - Sua aplicação deve ter o endpoint DELETE `post/:id`](#11---sua-aplicação-deve-ter-o-endpoint-delete-postid)
 - [Avisos Finais](#avisos-finais)
 
 # Habilidades 
@@ -75,7 +74,7 @@ Para fazer um post é necessário usuário e login, portanto será trabalhada a 
  
 ### Data de Entrega
 
-O projeto tem até a seguinte data: `15/03/2021 - 14:00h`. Para ser entregue a avaliação final.
+O projeto tem até a seguinte data: `15/04/2021 - 14:00h`. Para ser entregue a avaliação final.
 
 ---
 
@@ -197,26 +196,26 @@ app.get('/', (request, response) => {
 
 ```
 module.exports = {
-  "development": {
-    "username": process.env.MYSQL_USER,
-    "password": process.env.MYSQL_PASSWORD, 
-    "database": 'blogs_api', 
-    "host": process.env.HOSTNAME,
-    "dialect": 'mysql',
+  development: {
+    username: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: 'blogs_api',
+    host: process.env.HOSTNAME,
+    dialect: 'mysql',
   },
-  "test": {
-    "username": process.env.MYSQL_USER,
-    "password": process.env.MYSQL_PASSWORD,
-    "database": 'blogs_api',
-    "host": process.env.HOSTNAME,
-    "dialect": "mysql",
+  test: {
+    username: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: 'blogs_api',
+    host: process.env.HOSTNAME,
+    dialect: 'mysql',
   },
-  "production": {
-    "username": process.env.MYSQL_USER,
-    "password": process.env.MYSQL_PASSWORD,
-    "database": 'blogs_api',
-    "host": process.env.HOSTNAME,
-    "dialect": 'mysql',
+  production: {
+    username: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: 'blogs_api',
+    host: process.env.HOSTNAME,
+    dialect: 'mysql',
   },
 };
 ```
@@ -257,7 +256,7 @@ Alguns exemplos:
 
 - O seu projeto deverá usar um `ORM` para criar e atualizar o seu banco. A clonagem do projeto seguida de um comando de migrate deve deixá-lo em sua forma esperada.
 
-- Deve conter uma tabela chamada **Users**, contendo os seguinte dados:
+- Deve conter uma tabela chamada **Users**, contendo dados com a seguinte estrutura:
 
   ```json
   {
@@ -269,14 +268,14 @@ Alguns exemplos:
   }
   ```
 
-- Deve conter uma tabela chamada **BlogPosts**, contendo os seguinte dados:
+- Deve conter uma tabela chamada **BlogPosts**, contendo dados com a seguinte estrutura:
 
   ```json
   {
     "id": "7706273476706534553",
     "title": "Latest updates, August 1st",
     "content": "The whole text for the blog post goes here in this key",
-    "user_id": "401465483996", // esse é o id que referência usuário que é o autor do post
+    "userId": "401465483996", // esse é o id que referência usuário que é o autor do post
     "published": "2011-08-01T19:58:00.000Z",
     "updated": "2011-08-01T19:58:51.947Z",
   }
@@ -308,7 +307,7 @@ Alguns exemplos:
   {
     "displayName": "Brett Wiltshire",
     "email": "brett@email.com",
-    "password": 123456,
+    "password": "123456",
     "image": "http://4.bp.blogspot.com/_YA50adQ-7vQ/S1gfR_6ufpI/AAAAAAAAAAk/1ErJGgRWZDg/S45/brett.png"
   }
   ```
