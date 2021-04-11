@@ -12,6 +12,7 @@ const messageDictionary = {
   invalidToken: 'Token expirado ou inválido',
   titleRequiredMsg: '"title" is required',
   contentRequiredMsg: '"content" is required',
+  postNotFound: 'Post não existe',
 };
 
 const error = (err, _req, res, _next) => {

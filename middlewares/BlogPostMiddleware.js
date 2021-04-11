@@ -1,5 +1,5 @@
 const BlogPostsServices = require('../services/BlogPostsServices');
-const { CREATED, INTERNAL_SERVER_ERROR } = require('./httpStatus');
+const { CREATED, INTERNAL_SERVER_ERROR, NOT_FOUND } = require('./httpStatus');
 
 const createPost = async (req, res) => {
   const { title, content } = req.body;
@@ -30,7 +30,28 @@ const getPosts = async (req, res) => {
   }
 };
 
+const getPostById = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const [post] = await BlogPostsServices.getPostById(id);
+
+    if (!post) {
+      return next({
+        statusCode: NOT_FOUND,
+        customMessage: 'postNotFound',
+      });
+    }
+
+    return res.status(200).json(post);
+  } catch (e) {
+    console.log(e.message);
+    res.status(INTERNAL_SERVER_ERROR).send({ message: 'Algo deu errado' });
+  }
+};
+
 module.exports = {
   createPost,
   getPosts,
+  getPostById,
 };

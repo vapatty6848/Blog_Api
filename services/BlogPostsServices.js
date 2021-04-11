@@ -17,7 +17,18 @@ const getPosts = () => BlogPost
     attributes: { exclude: ['userId'] },
   });
 
+const getPostById = (id) => BlogPost
+  .findAll({
+    where: { id },
+    include: [{
+      model: User,
+      as: 'user',
+      attributes: { exclude: ['password'] } }],
+    attributes: { exclude: ['userId'] },
+  });
+
 module.exports = {
   createPost,
   getPosts,
+  getPostById,
 };
