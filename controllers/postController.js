@@ -29,7 +29,6 @@ postRouter.get('/', validateToken, async (req, res) => {
 });
 
 postRouter.get('/:id', validateToken, async (req, res) => {
-  // const { id: userId } = req.payload;
   const { id } = req.params;
   const post = await BlogPosts.findOne({
     where: { id },
@@ -42,6 +41,26 @@ postRouter.get('/:id', validateToken, async (req, res) => {
   }
 
   return res.status(200).json(post);
+});
+
+postRouter.put('/:id', validateToken, validatePost, async (req, res) => {
+  const { id: userId } = req.payload;
+  const { id } = req.params;
+  const { title, content } = req.body;
+
+  const postToUpdate = await BlogPosts.findOne({ where: { id } });
+  if (postToUpdate.userId !== userId) {
+    return res.status(401).json({ message: 'Usuário não autorizado' });
+  }
+  try {
+    postToUpdate.title = title;
+    postToUpdate.content = content;
+    await postToUpdate.save();
+    await postToUpdate.reload();
+    return res.status(200).json(postToUpdate);
+  } catch (err) {
+    return res.status(500).json({ err });
+  }
 });
 
 module.exports = postRouter;
