@@ -13,27 +13,25 @@ const getAll = async () => {
   return posts;
 };
 
-// const getById = async (id) => {
-//   const user = await BlogPosts.findByPk(id);
-//   return user;
-// };
+const getById = async (id) => {
+  const post = await BlogPosts.findOne({
+    where: { id },
+    include: [
+      { model: Users, as: 'user', attributes: { exclude: ['password'] } },
+    ],
+  });
+  return post;
+};
 
-// const getByEmail = async (email) => {
-//   const user = await BlogPosts.findOne({ where: { email } });
-//   return user;
-// };
+const remove = async (id) => {
+  await BlogPosts.destroy({ where: { id } });
 
-// const remove = async (id) => {
-//   const removeUser = await BlogPosts.destroy({ where: { id } });
-//   if (!removeUser) return { message: 'Usuário não existe' };
-
-//   return {};
-// };
+  return {};
+};
 
 module.exports = {
   create,
   getAll,
-  // getById,
-  // getByEmail,
-  // remove,
+  getById,
+  remove,
 };

@@ -1,7 +1,7 @@
 const blogPostService = require('../services/BlogPostsService');
 const { verifyToken } = require('../middlewares/CheckToken');
 
-const { OK, CREATED, UNAUTHORIZED } = require('../schema/statusSchema');
+const { OK, CREATED, UNAUTHORIZED, NOT_FOUND, NO_CONTENT } = require('../schema/statusSchema');
 
 // *** CREATE NEW POST ***
 const create = async (req, res) => {
@@ -29,33 +29,29 @@ const getAll = async (req, res) => {
   res.status(OK).json(posts);
 };
 
-// // *** GET POST BY ID ***
-// const getById = async (req, res) => {
-//   const { id } = req.params;
-//   const validation = await verifyToken(req.headers.authorization);
-//   if (validation.message) return res.status(UNAUTHORIZED).json({ message: validation.message });
+// *** GET POST BY ID ***
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const validation = await verifyToken(req.headers.authorization);
+  if (validation.message) return res.status(UNAUTHORIZED).json({ message: validation.message });
 
-//   const user = await userService.getById(id);
-//   if (!user) return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
+  const post = await blogPostService.getById(id);
+  if (!post) return res.status(NOT_FOUND).json({ message: 'Post não existe' });
 
-//   res.status(OK).json(user);
-// };
+  res.status(OK).json(post);
+};
 
-// // *** GET POST BY ID ***
-// const remove = async (req, res) => {
-//   const validation = await verifyToken(req.headers.authorization);
-//   if (validation.message) return res.status(UNAUTHORIZED).json({ message: validation.message });
+// *** DELETE POST ***
+const remove = async (req, res) => {
+  const { id } = req.params;
+  await blogPostService.remove(id);
 
-//   const { id } = validation.user;
-//   const result = await userService.remove(id);
-//   if (result.message) return res.status(NOT_FOUND).json({ message: result.message });
-
-//   res.status(NO_CONTENT).json();
-// };
+  res.status(NO_CONTENT).json();
+};
 
 module.exports = {
   create,
   getAll,
-  // getById,
-  // remove,
+  getById,
+  remove,
 };

@@ -35,7 +35,7 @@ const getById = async (req, res) => {
   res.status(OK).json(user);
 };
 
-// *** GET USER BY ID ***
+// *** DELETE USER ***
 const remove = async (req, res) => {
   const validation = await verifyToken(req.headers.authorization);
   if (validation.message) return res.status(UNAUTHORIZED).json({ message: validation.message });
