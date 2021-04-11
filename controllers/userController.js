@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { User } = require('../models');
+const models = require('../models');
 const { validateUser } = require('../services/userService');
 const { createToken } = require('../services/authorization');
 
@@ -7,13 +7,21 @@ const userRouter = Router();
 
 userRouter.post('/', validateUser, async (req, res) => {
   const { displayName, email, password, image } = req.body;
-  const userExists = await User.findOne({ where: { email } });
-  if (userExists) return res.status(409).json({ message: 'Usuário já existe' });
+  const userExists = await models.User.findOne({ where: { email } });
 
-  const user = await User.create({ displayName, email, password, image });
+  if (userExists) {
+    return res.status(409).json({ message: 'Usuário já existe' });
+  }
+  try {
+    const user = await models.User.create({ displayName, email, password, image });
+    const token = createToken(user);
 
-  const token = await createToken(user);
-  return res.status(201).json({ token });
+    return res.status(201).json({ token });
+  } catch (err) {
+    console.log('-----------AQUI----------');
+    // console.log(err);
+    return res.status(500).json({ err });
+  }
 });
 
 module.exports = userRouter;

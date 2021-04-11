@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const SECRETKEY = process.env.SECRETKEY || 'M1P455W0RD';
-const config = { algorithm: 'HS512', expiresIn: '1d' };
+const config = { algorithm: 'HS256', expiresIn: '1d' };
 
 const createToken = (payload) => jwt.sign(payload.dataValues, SECRETKEY, config);
 
