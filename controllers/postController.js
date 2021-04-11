@@ -28,6 +28,17 @@ postRouter.post('/', validateToken, validatePost, async (req, res) => {
     .then(() => res.status(201).json({ title, content, userId }));
 });
 
+// postRouter.get('/search?', validateToken, async (req, res) => {
+//   const { q } = req.query;
+
+//   if (q === '') {
+//     const posts = await BlogPost.findAll();
+//     return res.status(200).json(posts);
+//   }
+
+//   const posts = await BlogPost.findAll()
+// });
+
 postRouter.get('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
 
