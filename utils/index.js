@@ -3,7 +3,7 @@ const validateEmail = require('./validateEmail');
 const validatePassword = require('./validatePassword');
 const getUsers = require('./getUsers');
 const getPosts = require('./getPosts');
-const removeObjectKeyFromArray =require('./removeObjectKeyFromArray')
+const removeObjectKeyFromArray = require('./removeObjectKeyFromArray');
 
 module.exports = {
   generateToken,

@@ -4,9 +4,10 @@ const { getPosts, removeObjectKeyFromArray } = require('../utils');
 async function create(newBlogpost) {
   const { title, content, published, updated, userId } = newBlogpost;
   try {
-    const createdPost = await BlogPosts.create({ title, content, published, updated, userId });
+    await BlogPosts.create({ title, content, published, updated, userId });
     return { title, content, userId };
   } catch (error) {
+    console.log(error);
   }
 }
 

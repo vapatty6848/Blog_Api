@@ -1,5 +1,5 @@
 function getPosts(postsList) {
-  return postsList.map((element, index) => element.dataValues);
+  return postsList.map((element) => element.dataValues);
 }
 
 module.exports = getPosts;
