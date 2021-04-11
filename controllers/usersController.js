@@ -4,18 +4,14 @@ const usersController = Router();
 
 const validateCreateUser = require('../middlewares/validateCreateUserMiddleware');
 const validateGetUsers = require('../middlewares/validateGetUsersMiddleware');
-
+const validateGetUsersById = require('../middlewares/validateGetUsersByIdMiddleware');
 const { User } = require('../models');
 
 const generateToken = require('../utils/generateToken');
 
-usersController.get('/user', validateGetUsers, async (req, res, _next) => {
-  try {
-    return res.status(200).json({ message: 'ok' });
-  } catch (error) {
-    console.log(error);
-  }
-});
+usersController.get('/user', validateGetUsers, async (_req, _res, _next) => {});
+
+usersController.get('/user/:id', validateGetUsersById, async (_req, _res, _next) => {});
 
 usersController.post('/user', validateCreateUser, async (req, res, _next) => {
   try {
