@@ -4,6 +4,7 @@ module.exports = {
   EMAIL_REQUIRED: { message: '"email" is required' },
   INVALID_DISPLAYNAME: { message: '"displayName" length must be at least 8 characters long' },
   INVALID_EMAIL: { message: '"email" must be a valid email' },
+  INVALID_FIELDS: { message: 'Campos inválidos' },
   INVALID_PASSWORD: { message: '"password" length must be 6 characters long' },
   INVALID_TOKEN: { message: 'Token expirado ou inválido' },
   PASSWORD_EMPTY: { message: '"password" is not allowed to be empty' },
@@ -14,5 +15,4 @@ module.exports = {
   USER_DONT_EXISTS: { message: 'Usuário não existe' },
   USER_EXISTS: { message: 'Usuário já existe' },
   USER_NOT_AUTHORIZED: { message: 'Usuário não autorizado' },
-  INVALID_FIELDS: { message: 'Campos inválidos' },
 };
