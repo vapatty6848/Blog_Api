@@ -1,34 +1,34 @@
-const { BlogPost, User } = require('../../models');
+// const { BlogPost, User } = require('../../models');
 
-const NOT_FOUND = 404;
+// const NOT_FOUND = 404;
 
-const postDoesNotExists = {
-  payload: { message: 'Post não existe' },
-  status: NOT_FOUND,
-};
+// const postDoesNotExists = {
+//   payload: { message: 'Post não existe' },
+//   status: NOT_FOUND,
+// };
 
-const validatePost = async ({ postId, action, title = null, content = null }) => {
-  if (action === 'FIND') {
-    const result = await BlogPost.findAll({
-      where: { id: postId },
-      include: [{ model: User, as: 'user' }],
-    });
+// const validatePost = async ({ postId, action, title = null, content = null }) => {
+//   if (action === 'FIND') {
+//     const result = await BlogPost.findAll({
+//       where: { id: postId },
+//       include: [{ model: User, as: 'user' }],
+//     });
 
-    if (!result.length) return postDoesNotExists;
-    return result;
-  }
+//     if (!result.length) return postDoesNotExists;
+//     return result;
+//   }
 
-  if (action === 'DELETE') {
-    const result = await BlogPost.destroy({ where: { id: postId } });
+//   if (action === 'DELETE') {
+//     const result = await BlogPost.destroy({ where: { id: postId } });
 
-    return result;
-  }
+//     return result;
+//   }
 
-  if (action === 'UPDATE') {
-    const result = await BlogPost.update({ title, content }, { where: { id: postId } });
+//   if (action === 'UPDATE') {
+//     const result = await BlogPost.update({ title, content }, { where: { id: postId } });
 
-    return result;
-  }
-};
+//     return result;
+//   }
+// };
 
-module.exports = validatePost;
+// module.exports = validatePost;
