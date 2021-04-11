@@ -1,8 +1,8 @@
 const { Router } = require('express');
-const { BlogPost } = require('../models');
-const { User } = require('../models');
+const { BlogPost, User } = require('../models');
 const {
   CREATED,
+  OK,
 } = require('../dictionary/statusCodes');
 const {
   validateContentIsRequired,
@@ -28,6 +28,28 @@ BlogPostController.post(
     const createdBlogPost = await BlogPost.create(blogPost);
 
     response.status(CREATED).json(createdBlogPost);
+  },
+);
+
+BlogPostController.get(
+  '/',
+  validateToken,
+  async (_request, response) => {
+    const foundPosts = await BlogPost.findAll({
+      include: [{
+        model: User,
+        as: 'user',
+        required: true,
+      }],
+    });
+    // const { user: { email } } = request;
+    // const recoveredUser = await User.findOne({ where: { email } });
+    // blogPost.user = recoveredUser;
+    // foundPosts.sort()
+    foundPosts.sort((a, b) => a.id - b.id);
+    // console.log(`posts`, foundPosts[0])
+
+    response.status(OK).json(foundPosts);
   },
 );
 
