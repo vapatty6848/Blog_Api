@@ -38,8 +38,27 @@ const emailVerification = async (req, _res, next) => {
   next();
 };
 
+const findAll = async (req, res, next) => {
+  const users = await User.findAll();
+  req.users = users;
+  next();
+};
+
+const userByIdVerification = async (req, res, next) => {
+  const { id } = req.params;
+  const user = await User.findAll({ where: { id },
+    attributes: ['id', 'displayName', 'email', 'image'] });
+  if (!user.length) {
+    return next(createError('Usuário não existe', 404));
+  }
+  req.user = user;
+  next();
+};
+
 module.exports = {
   nameVerification,
   emailVerification,
   passwordVerification,
+  findAll,
+  userByIdVerification,
 };
