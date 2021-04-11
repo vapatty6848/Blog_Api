@@ -30,13 +30,21 @@ userRouter.get('/', validateToken, async (req, res) => {
 
 userRouter.get('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
-  const users = await User.findOne({ where: { id } });
+  const user = await User.findOne({ where: { id } });
 
-  if (!users) {
+  if (!user) {
     return res.status(404).json({ message: 'Usuário não existe' });
   }
 
-  return res.status(200).json(users);
+  return res.status(200).json(user);
+});
+
+userRouter.delete('/me', validateToken, async (req, res) => {
+  const { email } = req.payload;
+
+  const userDeleted = await User.destroy({ where: { email } });
+
+  return res.status(204).json(userDeleted);
 });
 
 module.exports = userRouter;
