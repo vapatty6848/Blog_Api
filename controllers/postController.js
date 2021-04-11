@@ -87,4 +87,23 @@ postRouter.put('/:id', validateToken, validatePost, async (req, res) => {
   }
 });
 
+postRouter.delete('/:id', validateToken, async (req, res) => {
+  const { id: userId } = req.payload;
+  const { id } = req.params;
+
+  const postToDelete = await BlogPosts.findOne({ where: { id } });
+  if (!postToDelete) {
+    return res.status(404).json({ message: 'Post não existe' });
+  }
+  if (postToDelete.userId !== userId) {
+    return res.status(401).json({ message: 'Usuário não autorizado' });
+  }
+  try {
+    await BlogPosts.destroy({ where: { id } });
+    return res.status(204).json();
+  } catch (err) {
+    return res.status(500).json({ err });
+  }
+});
+
 module.exports = postRouter;
