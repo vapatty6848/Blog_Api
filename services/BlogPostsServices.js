@@ -27,8 +27,14 @@ const getPostById = (id) => BlogPost
     attributes: { exclude: ['userId'] },
   });
 
+const updatePost = (id, title, content) => BlogPost.update(
+  { title, content },
+  { where: { id } },
+);
+
 module.exports = {
   createPost,
   getPosts,
   getPostById,
+  updatePost,
 };

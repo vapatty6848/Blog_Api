@@ -13,6 +13,7 @@ const messageDictionary = {
   titleRequiredMsg: '"title" is required',
   contentRequiredMsg: '"content" is required',
   postNotFound: 'Post não existe',
+  userNotAuthorized: 'Usuário não autorizado',
 };
 
 const error = (err, _req, res, _next) => {

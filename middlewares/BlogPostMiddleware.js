@@ -50,8 +50,29 @@ const getPostById = async (req, res, next) => {
   }
 };
 
+const updatePost = async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+
+  try {
+    await BlogPostsServices.updatePost(id, title, content);
+    const [post] = await BlogPostsServices.getPostById(id);
+    const { dataValues } = post;
+
+    return res.status(200).json({
+      title: dataValues.title,
+      content: dataValues.content,
+      userId: dataValues.user.dataValues.id,
+    });
+  } catch (e) {
+    console.log(e.message);
+    res.status(INTERNAL_SERVER_ERROR).send({ message: 'Algo deu errado' });
+  }
+};
+
 module.exports = {
   createPost,
   getPosts,
   getPostById,
+  updatePost,
 };

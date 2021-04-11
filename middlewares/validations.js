@@ -1,5 +1,6 @@
 const { validateUser, validateLogin, validateBlogPost } = require('../schemas/Users');
-const { SUCESS, BAD_REQUEST, CONFLICT } = require('./httpStatus');
+const { SUCESS, BAD_REQUEST, CONFLICT, UNAUTHORIZED } = require('./httpStatus');
+const BlogPostsServices = require('../services/BlogPostsServices');
 
 const userValidation = async (req, res, next) => {
   const { displayName, email, password } = req.body;
@@ -48,8 +49,24 @@ const BlogPostValidation = (req, res, next) => {
   next();
 };
 
+const checkPostCreator = async (req, res, next) => {
+  const { id } = req.params;
+  const [post] = await BlogPostsServices.getPostById(id);
+  const creatorId = post.dataValues.user.dataValues.id;
+
+  if (creatorId !== req.userId) {
+    return next({
+      statusCode: UNAUTHORIZED,
+      customMessage: 'userNotAuthorized',
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   userValidation,
   LoginValidation,
   BlogPostValidation,
+  checkPostCreator,
 };
