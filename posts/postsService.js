@@ -67,10 +67,31 @@ const searchPosts = async (searchTerm) => {
   return foundPosts;
 };
 
+const removePost = async (id, userId) => {
+  console.log('DELETE POST SERVICE');
+
+  const { post } = await getById(id);
+
+  if (!post) {
+    return { notFound: 404, message: 'Post não existe' };
+  }
+
+  if (post.user.id !== userId) {
+    return { message: 'Usuário não autorizado' };
+  }
+
+  console.log('DETALHES', post.user.id);
+
+  await BlogPosts.destroy({ where: { id } });
+
+  return { status: 204 };
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getById,
   updatePost,
   searchPosts,
+  removePost,
 };

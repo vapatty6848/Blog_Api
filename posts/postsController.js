@@ -72,10 +72,29 @@ const searchPosts = async (req, res) => {
   }
 };
 
+const removePost = async (req, res) => {
+  try {
+    console.log('DELETE POST CONTROLLER');
+
+    const { id } = req.params;
+    const { userId } = req;
+
+    const { status, notFound, message } = await postsService.removePost(id, userId);
+
+    if (notFound) return res.status(notFound).json({ message });
+    if (message) return res.status(401).json({ message });
+
+    res.send(status);
+  } catch (err) {
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
   getById,
   updatePost,
   searchPosts,
+  removePost,
 };
