@@ -14,6 +14,20 @@ router.get('/', validateJWT, async (req, res) => {
   res.status(st.OK).json(posts);
 });
 
+router.get('/:id', validateJWT, async (req, res) => {
+  const { id } = req.params;
+
+  const post = await BlogPost.findOne({
+    where: { id },
+    attributes: ['id', 'published', 'updated', 'title', 'content'],
+    include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
+  });
+
+  if (!post) return res.status(st.NOT_FOUND).json({ message: 'Post não existe' });
+
+  res.status(st.OK).json(post);
+});
+
 router.post('/', validateJWT, async (req, res) => {
   const { title, content } = req.body;
   const { id } = req.user.dataValues;
