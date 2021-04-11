@@ -1,9 +1,33 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 const { BlogPosts, User } = require('../models');
 const { validateToken } = require('../services/authorization');
 const { validatePost } = require('../services/postService');
 
 const postRouter = Router();
+
+postRouter.get('/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+
+  const posts = await BlogPosts.findAll({
+    where: {
+      [Op.or]: [{
+        title: {
+          [Op.like]: `%${q}%`,
+        },
+      },
+      {
+        content: {
+          [Op.like]: `%${q}%`,
+        },
+      }],
+    },
+    attributes: { exclude: 'userId' },
+    include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+  });
+  if (!posts) return res.status(404).json({ message: 'Post não existe' });
+  return res.status(200).json(posts);
+});
 
 postRouter.post('/', validateToken, validatePost, async (req, res) => {
   const { title, content } = req.body;
