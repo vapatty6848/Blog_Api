@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const {
+  BLOG_POST_DOES_NOT_EXIST,
   CONTENT_IS_REQUIRED,
   DISPLAY_NAME_TOO_SHORT,
   EMAIL_IS_INVALID,
@@ -22,7 +23,7 @@ const {
   NOT_FOUND,
   UNAUTHORIZED,
 } = require('../dictionary/statusCodes');
-const { User } = require('../models');
+const { User, BlogPost } = require('../models');
 const { SECRET } = require('../dictionary/constants');
 
 const validateContentIsRequired = async (request, response, next) => {
@@ -183,7 +184,19 @@ const validateUserExistence = async (request, response, next) => {
   next();
 };
 
+const validateBlogPostExistence = async (request, response, next) => {
+  const { id } = request.params;
+  const foundBlogPost = await BlogPost.findByPk(id);
+
+  if (!foundBlogPost) {
+    return response.status(NOT_FOUND).json({ message: BLOG_POST_DOES_NOT_EXIST });
+  }
+
+  next();
+};
+
 module.exports = {
+  validateBlogPostExistence,
   validateContentIsRequired,
   validateEmailForm,
   validateEmailIsRequired,

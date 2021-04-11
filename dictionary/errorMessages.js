@@ -1,3 +1,4 @@
+const BLOG_POST_DOES_NOT_EXIST = 'Post não existe';
 const CONTENT_IS_REQUIRED = '"content" is required';
 const DISPLAY_NAME_TOO_SHORT = '"displayName" length must be at least 8 characters long';
 const EMAIL_IS_INVALID = '"email" must be a valid email';
@@ -14,6 +15,7 @@ const USER_ALREADY_REGISTERED = 'Usuário já existe';
 const USER_DOES_NOT_EXIST = 'Usuário não existe';
 
 module.exports = {
+  BLOG_POST_DOES_NOT_EXIST,
   CONTENT_IS_REQUIRED,
   DISPLAY_NAME_TOO_SHORT,
   EMAIL_IS_INVALID,
