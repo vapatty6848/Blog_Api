@@ -19,7 +19,20 @@ const getAllPosts = async (req, res) => {
   res.status(200).json(posts);
 };
 
+const getById = async (req, res) => {
+  console.log('GET BY ID CONTROLLER');
+
+  const { id } = req.params;
+
+  const { post, message } = await postsService.getById(id);
+
+  if (message) return res.status(404).json({ message });
+
+  res.status(200).json(post);
+};
+
 module.exports = {
   createPost,
   getAllPosts,
+  getById,
 };
