@@ -1,7 +1,7 @@
 const { userService } = require('../services');
-const { createToken, verifyToken } = require('../middlewares/CheckToken');
+const { createToken } = require('../middlewares/CheckToken');
 
-const { OK, CREATED, UNAUTHORIZED, NOT_FOUND, NO_CONTENT } = require('../schema/statusSchema');
+const { OK, CREATED, NOT_FOUND, NO_CONTENT } = require('../schema/statusSchema');
 
 // *** CREATE NEW USER ***
 const create = async (req, res) => {
