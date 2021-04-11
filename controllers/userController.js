@@ -23,9 +23,9 @@ userRouter.post('/', validateUser, async (req, res) => {
 });
 
 userRouter.get('/', validateToken, async (req, res) => {
-  const users = await User.findAll();
+  const allUsers = await User.findAll();
 
-  return res.status(200).json(users);
+  return res.status(200).json(allUsers);
 });
 
 userRouter.get('/:id', validateToken, async (req, res) => {

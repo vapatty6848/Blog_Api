@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { BlogPosts } = require('../models');
+const { BlogPosts, User } = require('../models');
 const { validateToken } = require('../services/authorization');
 const { validatePost } = require('../services/postService');
 
@@ -15,6 +15,17 @@ postRouter.post('/', validateToken, validatePost, async (req, res) => {
   } catch (err) {
     return res.status(404).json({ message: err.message });
   }
+});
+
+postRouter.get('/', validateToken, async (req, res) => {
+  const { id: userId } = req.payload;
+  const allPosts = await BlogPosts.findAll({
+    where: { userId },
+    attributes: { exclude: 'userId' },
+    include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+  });
+
+  return res.status(200).json(allPosts);
 });
 
 module.exports = postRouter;
