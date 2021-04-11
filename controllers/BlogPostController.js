@@ -24,4 +24,13 @@ router.post(
   },
 );
 
+router.get(
+  '/',
+  tokenValidation,
+  async (request, response) => {
+    const blogposts = await BlogPostService.getAll();
+    return response.status(statusCode.OK).json(blogposts);
+  },
+);
+
 module.exports = router;
