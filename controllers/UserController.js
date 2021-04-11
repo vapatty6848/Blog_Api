@@ -12,8 +12,7 @@ userRouter.get('/:id', tk.allUsersverification, userServ.userByIdVerification, a
 });
 
 userRouter.get('/', tk.allUsersverification, userServ.findAll, async (req, res) => {
-  const users = req.users;
-  res.status(200).json(users);
+  res.status(200).json(req.users);
 });
 
 userRouter.post('/', userServ.nameVerification, userServ.passwordVerification, userServ.emailVerification, async (req, res) => {
@@ -21,6 +20,11 @@ userRouter.post('/', userServ.nameVerification, userServ.passwordVerification, u
   await User.create({ displayName, email, password, image });
   const token = tk.createToken({ displayName, email, image });
   res.status(201).json({ token });
+});
+
+userRouter.delete('/me', async (req, res) => {
+  const [user] = req.user;
+  res.status(200).json(user);
 });
 
 module.exports = userRouter;
