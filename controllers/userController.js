@@ -18,8 +18,6 @@ userRouter.post('/', validateUser, async (req, res) => {
 
     return res.status(201).json({ token });
   } catch (err) {
-    console.log('-----------AQUI----------');
-    // console.log(err);
     return res.status(500).json({ err });
   }
 });
