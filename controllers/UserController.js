@@ -22,9 +22,4 @@ userRouter.post('/', userServ.nameVerification, userServ.passwordVerification, u
   res.status(201).json({ token });
 });
 
-userRouter.delete('/me', async (req, res) => {
-  const [user] = req.user;
-  res.status(200).json(user);
-});
-
 module.exports = userRouter;
