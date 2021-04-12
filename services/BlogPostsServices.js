@@ -32,9 +32,12 @@ const updatePost = (id, title, content) => BlogPost.update(
   { where: { id } },
 );
 
+const deletePost = (id) => BlogPost.destroy({ where: { id } });
+
 module.exports = {
   createPost,
   getPosts,
   getPostById,
   updatePost,
+  deletePost,
 };

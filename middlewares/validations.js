@@ -1,5 +1,5 @@
 const { validateUser, validateLogin, validateBlogPost } = require('../schemas/Users');
-const { SUCESS, BAD_REQUEST, CONFLICT, UNAUTHORIZED } = require('./httpStatus');
+const { SUCESS, BAD_REQUEST, CONFLICT, UNAUTHORIZED, NOT_FOUND } = require('./httpStatus');
 const BlogPostsServices = require('../services/BlogPostsServices');
 
 const userValidation = async (req, res, next) => {
@@ -51,8 +51,16 @@ const BlogPostValidation = (req, res, next) => {
 
 const checkPostCreator = async (req, res, next) => {
   const { id } = req.params;
-  const [post] = await BlogPostsServices.getPostById(id);
-  const creatorId = post.dataValues.user.dataValues.id;
+  const post = await BlogPostsServices.getPostById(id);
+
+  if (post.length === 0) {
+    return next({
+      statusCode: NOT_FOUND,
+      customMessage: 'postNotFound',
+    });
+  }
+
+  const creatorId = post[0].dataValues.user.dataValues.id;
 
   if (creatorId !== req.userId) {
     return next({
