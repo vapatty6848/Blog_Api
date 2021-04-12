@@ -70,9 +70,25 @@ const userExists = async (bodyObj) => {
   return foundUser;
 };
 
-// // check if have a password field
+// check if have a password field
 const haveTokenField = (reqHeader) => {
   if (reqHeader.authorization === '') {
+    return false;
+  }
+  return true;
+};
+
+// check if have a content field
+const haveContentField = (bodyObj) => {
+  if (!Object.keys(bodyObj).includes('content')) {
+    return false;
+  }
+  return true;
+};
+
+// check if have a title field
+const haveTitleField = (bodyObj) => {
+  if (!Object.keys(bodyObj).includes('title')) {
     return false;
   }
   return true;
@@ -88,4 +104,6 @@ module.exports = {
   EmptyPassword,
   userExists,
   haveTokenField,
+  haveContentField,
+  haveTitleField,
 };

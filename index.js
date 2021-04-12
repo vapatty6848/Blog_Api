@@ -13,5 +13,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', controller.usersController);
 app.use('/', controller.loginController);
+app.use('/', controller.postsController);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
