@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const AuthorizationUsers = require('../middlewares/authenticates');
 const validatedBlogPosts = require('../middlewares/validatedPosts');
-const { createNewPost } = require('../services/PostsServices');
+const { createNewPost, listPosts } = require('../services/PostsServices');
 
 const BlogPostsController = new Router();
 
@@ -15,6 +15,10 @@ BlogPostsController.post('/', validatedBlogPosts, AuthorizationUsers, async (req
     content,
     userId,
   });
+});
+BlogPostsController.get('/', AuthorizationUsers, async (req, res) => {
+  const post = await listPosts();
+  return res.status(200).json(post);
 });
 
 module.exports = BlogPostsController;

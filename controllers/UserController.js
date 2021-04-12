@@ -11,7 +11,7 @@ const UserController = new Router();
 UserController.post('/', validatedUsers, verifyEmailUser, async (req, res) => {
   const { displayName, email, password, image } = req.body;
   const userToken = await createNewUser(displayName, email, password, image);
-  const payload = { email, userId: userToken.id };
+  const payload = { email, displayName, userId: userToken.id };
   const token = createToken(payload);
   res.status(201).json({ token });
 });
