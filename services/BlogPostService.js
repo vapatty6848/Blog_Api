@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPosts, Users } = require('../models');
 const {
   getPosts,
@@ -51,8 +52,8 @@ async function update(id, title, content) {
     { title, content },
     {
       where: { id },
-      returning: true,
-      plain: true,
+      returning: true, // remover
+      plain: true, // remover
     },
   );
 
@@ -60,9 +61,31 @@ async function update(id, title, content) {
   return updatedBlogPost;
 }
 
+async function findBySearchTerm(searchTerm) {
+  if (!searchTerm) return getAll();
+  const queryResult = await BlogPosts.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: `%${searchTerm}%` } },
+        { content: { [Op.like]: `%${searchTerm}%` } },
+      ],
+    },
+    include: {
+      model: Users,
+      as: 'user',
+      attributes: ['id', 'displayName', 'email', 'image'],
+    },
+  });
+  if (!queryResult) return [];
+  const blogposts = getPosts(queryResult);
+  const blogpostsInfo = removeObjectKeyFromArray(blogposts, 'userId');
+  return blogpostsInfo;
+}
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
+  findBySearchTerm,
 };

@@ -35,6 +35,16 @@ router.get(
 );
 
 router.get(
+  '/search',
+  tokenValidation,
+  async (request, response) => {
+    const searchTerm = request.query.q;
+    const blogPosts = await BlogPostService.findBySearchTerm(searchTerm);
+    return response.status(statusCode.OK).json(blogPosts);
+  },
+);
+
+router.get(
   '/:id',
   tokenValidation,
   async (request, response) => {
