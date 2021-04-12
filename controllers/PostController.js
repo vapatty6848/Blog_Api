@@ -3,11 +3,12 @@ const rescue = require('express-rescue');
 
 const PostService = require('../service/PostService');
 const { validateToken } = require('../auth/validateToken');
-const { validateFields, postIdExist } = require('../middlewares/postValidation');
+const { validateFields, postIdExist, checkAuthorization } = require('../middlewares/postValidation');
 
 const PostController = Router();
 const CREATED = 201;
 const OK = 200;
+const NO_CONTENT = 204;
 
 PostController.post('/post', validateToken, validateFields, rescue(async (req, res) => {
   const { title, content } = req.body;
@@ -34,6 +35,23 @@ PostController.get('/post/:id', validateToken, postIdExist, rescue(async (req, r
   const { id } = req.params;
   const post = await PostService.findPostById(id);
   return res.status(OK).json(post);
+}));
+
+PostController.put('/post/:id', validateToken, validateFields, checkAuthorization, rescue(async (req, res) => {
+  const { id: userId } = req.user;
+  const { id } = req.params;
+  const { title, content } = req.body;
+  await PostService.editPost(id, userId, title, content);
+
+  return res.status(OK).json({ title, content, userId });
+}));
+
+PostController.delete('/post/:id', validateToken, postIdExist, checkAuthorization, rescue(async (req, res) => {
+  const { id } = req.params;
+  const { id: userId } = req.user;
+  await PostService.deletePost(id, userId);
+
+  return res.status(NO_CONTENT).json({});
 }));
 
 module.exports = PostController;

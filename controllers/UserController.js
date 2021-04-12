@@ -66,7 +66,7 @@ UserController.delete('/user/me', validateToken, rescue((async (req, res) => {
   const { id } = req.user;
 
   UserService.deleteUser(id);
-  res.status(NO_CONTENT).json({});
+  return res.status(NO_CONTENT).json({});
 })));
 
 module.exports = UserController;
