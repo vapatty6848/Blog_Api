@@ -15,6 +15,7 @@ const userValidate = require('../utils/userValidation');
 
 const statusCreate = 201;
 const statusOK = 200;
+const statusDel = 204;
 
 router.post('/', async (req, res) => {
   const { displayName, email, password, image } = req.body;
@@ -50,6 +51,16 @@ router.get('/:id', async (req, res) => {
   const user = await Users.findByPk(id);
 
   res.status(statusOK).json(user);
+});
+
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  await userValidate.tokenValidation();
+
+  await Users.destroy({ where: id });
+
+  res.status(statusDel).end();
 });
 
 module.exports = router;

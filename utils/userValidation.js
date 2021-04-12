@@ -1,5 +1,6 @@
-const { Users } = require('../models');
+const jwt = require('jsonwebtoken');
 const validEmail = require('./validEmail');
+const { Users } = require('../models');
 
 const errStatus = 400;
 const errUserExist = 409;
@@ -63,7 +64,9 @@ const tokenValidation = async (req, res, next) => {
   if (!token) {
     res.status(errToken).json({ message: 'Token não encontrado' });
   }
-  // Fazer verificação de Token Inválido!
+  if (!jwt.verify(token)) {
+    res.status(errToken).json({ message: 'Token expirado ou inválido' });
+  }
   next();
 };
 
