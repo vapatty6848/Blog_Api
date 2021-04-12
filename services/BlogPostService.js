@@ -82,10 +82,20 @@ async function findBySearchTerm(searchTerm) {
   return blogpostsInfo;
 }
 
+async function remove(id) {
+  const queryResult = await BlogPosts.destroy({
+    where: { id },
+  });
+
+  if (!queryResult) return null;
+  return true;
+}
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
   findBySearchTerm,
+  remove,
 };

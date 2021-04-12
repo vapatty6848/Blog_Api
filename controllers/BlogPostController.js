@@ -77,4 +77,20 @@ router.put(
   },
 );
 
+router.delete(
+  '/:id',
+  tokenValidation,
+  userAuthorization,
+  async (request, response) => {
+    const { id } = request.params;
+    const removedPost = await BlogPostService.remove(id);
+    if (!removedPost) {
+      return response
+        .status(statusCode.NOT_FOUND)
+        .json({ message: 'Post não existe' });
+    }
+    return response.status(statusCode.NO_CONTENT).end();
+  },
+);
+
 module.exports = router;
