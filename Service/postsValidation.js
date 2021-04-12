@@ -13,15 +13,15 @@ const createNewPost = async (req, res, next) => {
   next();
 };
 
-const getAllPosts = async (req, res, next) => {
-  const posts = await BlogPost.findAll({
-    include: { model: User,
-      as: 'user',
-      attributes: { exclude: ['password'] } },
-    attribude: { exclude: ['userId'] } });
-  req.posts = posts;
-  next();
-};
+// const getAllPosts = async (req, res, next) => {
+//   const posts = await BlogPost.findAll({
+//     include: { model: User,
+//       as: 'user',
+//       attributes: { exclude: ['password'] } },
+//     attribude: { exclude: ['userId'] } });
+//   req.posts = posts;
+//   next();
+// };
 
 const getPostById = async (req, res, next) => {
   const { id } = req.params;
@@ -54,7 +54,7 @@ const editPostById = async (req, res, next) => {
 
 module.exports = {
   createNewPost,
-  getAllPosts,
+  // getAllPosts,
   getPostById,
   editPostById,
 };

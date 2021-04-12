@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { BlogPost } = require('../models');
+const { BlogPost, User } = require('../models');
 const postServ = require('../Service/postsValidation');
 const tk = require('../Service/TokenCreate');
 
@@ -19,8 +19,13 @@ postsRouter.get('/:id', tk.allUsersverification, postServ.getPostById, async (re
   res.status(200).json(post);
 });
 
-postsRouter.get('/', tk.allUsersverification, postServ.getAllPosts, async (req, res) => {
-  res.status(200).json(req.posts);
+postsRouter.get('/', tk.allUsersverification, async (req, res) => {
+  const posts = await BlogPost.findAll({
+    include: { model: User,
+      as: 'userId',
+      attributes: { exclude: ['password'] } },
+    attribudes: { exclude: ['userId'] } });
+  res.status(200).json(posts);
 });
 
 postsRouter.put('/:id', tk.allUsersverification, postServ.editPostById, async (req, res) => {
