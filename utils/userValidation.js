@@ -54,7 +54,7 @@ const loginValidation = async (req, res, next) => {
   }
   const emailValido = await Users.findAll({ where: { email } });
   if (!emailValido) {
-    res.status(errStatus).json({ message: 'Campos inválidos' });
+    return res.status(errStatus).json({ message: 'Campos inválidos' });
   }
   next();
 };
@@ -62,11 +62,11 @@ const loginValidation = async (req, res, next) => {
 const tokenValidation = async (req, res, next) => {
   const token = req.headers.authorization;
 
-  if (!token) {
-    res.status(errToken).json({ message: 'Token não encontrado' });
-  }
   if (!jwt.verify(token, segredo)) {
-    res.status(errToken).json({ message: 'Token expirado ou inválido' });
+    return res.status(errToken).json({ message: 'Token expirado ou inválido' });
+  }
+  if (!token) {
+    return res.status(errToken).json({ message: 'Token não encontrado' });
   }
   next();
 };
@@ -76,14 +76,14 @@ const userIdValidation = async (req, res, next) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    res.status(errToken).json({ message: 'Token não encontrado' });
+    return res.status(errToken).json({ message: 'Token não encontrado' });
   }
   if (!jwt.verify(token, segredo)) {
-    res.status(errToken).json({ message: 'Token expirado ou inválido' });
+    return res.status(errToken).json({ message: 'Token expirado ou inválido' });
   }
   const userId = await Users.findByPk(id);
   if (!userId) {
-    res.status(errNotFound).json({ message: 'Usuário não existe' });
+    return res.status(errNotFound).json({ message: 'Usuário não existe' });
   }
 
   next();

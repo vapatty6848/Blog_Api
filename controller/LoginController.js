@@ -18,9 +18,14 @@ const statusLogin = 200;
 router.post('/', userValidate.loginValidation, async (req, res) => {
   const { email, password } = req.body;
 
-  const token = jwt.sign({ data: { email, password } }, secret, jwtConfig);
+  const payload = {
+    email,
+    password,
+  };
 
-  await Users.findOne({ where: { email, password } });
+  const token = jwt.sign({ data: payload }, secret, jwtConfig);
+
+  await Users.findOne({ where: payload });
 
   res.status(statusLogin).send({ token });
 });
