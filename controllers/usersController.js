@@ -2,6 +2,7 @@ const express = require('express');
 const { User } = require('../models');
 const { validateUserRegister } = require('../middlewares/UserMiddleware');
 const tokenGenerator = require('../utils/TokenGenerator');
+const validateToken = require('../middlewares/validateToken');
 
 const router = express.Router();
 
@@ -14,8 +15,16 @@ router.post('/', validateUserRegister, async (req, res) => {
   res.status(201).json({ token });
 });
 
-router.get('/', async (_req, res, next) => {
+router.get('/', validateToken, async (req, res, next) => {
   try {
+    // const { authorization } = req.headers;
+    // if (!authorization) {
+    //   // res.status(401).json({ message: 'Token não encontrado' });
+    //   return next({
+    //     status: 401,
+    //     message: 'Token não encontrado',
+    //   });
+    // }
     const user = await User.findAll();
     res.status(200).json(user);
   } catch (err) {
