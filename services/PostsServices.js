@@ -9,6 +9,21 @@ const createNewPost = async (title, content, userId) => {
     updated: new Date(),
   });
 };
+const listPostsId = async (id) => {
+  const post = await BlogPosts.findAll({
+    where: {
+      id,
+    },
+    include: {
+      association: 'user',
+      attributes: {
+        exclude: ['password'],
+      },
+    },
+  });
+  return post;
+};
+
 const listPosts = async () => {
   const post = await BlogPosts.findAll({
     include: {
@@ -23,4 +38,5 @@ const listPosts = async () => {
 module.exports = {
   createNewPost,
   listPosts,
+  listPostsId,
 };
