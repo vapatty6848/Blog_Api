@@ -6,8 +6,8 @@ const loginRoutes = require('./loginRoutes');
 
 const routes = Router();
 
-routes.use('/login', loginRoutes);
-routes.use('/user', usersRoutes);
+routes.use('/', loginRoutes);
+routes.use('/', usersRoutes);
 // routes.use('/post', postsRoutes);
 
 module.exports = routes;

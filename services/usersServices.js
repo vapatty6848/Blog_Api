@@ -14,4 +14,17 @@ const createUser = async ({ displayName, email, password, image }) => {
   return generateToken({ email });
 };
 
-module.exports = { createUser };
+const findAllUsers = async () => User.findAll();
+
+const findById = async (id) => {
+  const userById = await User.findByPk(id);
+  if (!userById) throw new AppError('404', 'Usuário não existe');
+
+  return userById;
+};
+
+module.exports = {
+  createUser,
+  findAllUsers,
+  findById,
+};

@@ -5,9 +5,9 @@ const authenticateUser = async (req, res, next) => {
     const userCredentials = req.body;
     const token = await services.authenticateUser(userCredentials);
 
-    return res.status(200).json({ token });
+    res.status(200).json({ token });
   } catch (err) {
-    return next(err);
+    next(err);
   }
 };
 
