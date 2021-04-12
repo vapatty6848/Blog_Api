@@ -23,6 +23,6 @@ module.exports = async (req, res, next) => {
     req.user = email;
     return next();
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };

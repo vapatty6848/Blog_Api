@@ -8,5 +8,5 @@ module.exports = (err, _req, res, _next) => {
   if (err instanceof AppError) return res.status(code).json({ message });
   if (err instanceof JsonWebTokenError) return res.status(code).json({ message });
 
-  res.status(500).json({ message: 'Internal Server Error' });
+  return res.status(500).json({ message: 'Internal Server Error' });
 };
