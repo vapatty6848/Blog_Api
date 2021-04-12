@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const { User } = require('../models');
 const service = require('../services/users');
 const { OK, CREATED, CONFLICT, NOT_FOUND, NO_CONTENT } = require('../dictionary/statusCode');
 const { USER_EXISTS, USER_DONT_EXISTS } = require('../dictionary/errorMessage');
@@ -32,9 +31,7 @@ usersRouter.get(
   '/',
   validateToken,
   async (_req, res) => {
-    const users = await User.findAll({
-      attributes: ['id', 'displayName', 'email', 'image'],
-    });
+    const users = await service.findAllUsers();
 
     return res.status(OK).json(users);
   },
@@ -44,16 +41,11 @@ usersRouter.get(
   '/:id',
   validateToken,
   async (req, res) => {
-    const { id } = req.params;
-    const user = await User.findAll({
-      where: { id },
-      attributes: ['id', 'displayName', 'email', 'image'],
-    });
-    const userNotFound = !user.length;
+    const user = await service.findUserById(req.params.id);
 
-    if (userNotFound) return res.status(NOT_FOUND).json(USER_DONT_EXISTS);
+    if (!user) return res.status(NOT_FOUND).json(USER_DONT_EXISTS);
 
-    return res.status(OK).json(user[0]);
+    return res.status(OK).json(user);
   },
 );
 
@@ -61,9 +53,9 @@ usersRouter.delete(
   '/me',
   validateToken,
   async (req, res) => {
-    const { id, email, displayName } = (req.user);
+    const { id, email } = req.user;
 
-    await User.destroy({ where: { id, email, displayName } });
+    await service.deleteUser(id, email);
 
     return res.status(NO_CONTENT).json();
   },
