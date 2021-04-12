@@ -11,6 +11,7 @@ const jwtConfig = {
 const router = Router();
 
 const { Users } = require('../models');
+const userValidate = require('../utils/userValidation');
 
 const statusCreate = 201;
 const statusOK = 200;
@@ -18,7 +19,14 @@ const statusOK = 200;
 router.post('/', async (req, res) => {
   const { displayName, email, password, image } = req.body;
 
-  const token = jwt.sign({ data: { email, password } }, secret, jwtConfig);
+  await userValidate.postValidation();
+
+  const payload = {
+    email,
+    password,
+  };
+
+  const token = jwt.sign({ data: payload }, secret, jwtConfig);
 
   await Users.create({ displayName, email, password, image });
 
@@ -27,10 +35,24 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const { token } = req.headers.authorization;
+
+  await userValidate.tokenValidation();
+
   const users = await Users.findAll();
 
   res.status(statusOK).json(users);
 });
 
+router.get('/:id', async (req, res) => {
+  const { token } = req.headers.authorization;
+  const { id } = req.params;
+
+  await userValidate.tokenValidation();
+  await userValidate.userIdValidation();
+
+  const user = await Users.findByPk(id);
+
+  res.status(statusOK).json(user);
+});
 
 module.exports = router;

@@ -11,11 +11,14 @@ const jwtConfig = {
 const router = Router();
 
 const { Users } = require('../models');
+const userValidate = require('../utils/userValidation');
 
 const statusLogin = 200;
 
 router.post('/', async (req, res) => {
   const { email, password } = req.body;
+
+  await userValidate.loginValidation();
 
   const token = jwt.sign({ data: { email, password } }, secret, jwtConfig);
 

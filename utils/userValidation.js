@@ -3,6 +3,8 @@ const validEmail = require('./validEmail');
 
 const errStatus = 400;
 const errUserExist = 409;
+const errToken = 401;
+const errNotFound = 404;
 const displayLength = 8;
 const passLength = 6;
 const emailMinLength = 0;
@@ -28,7 +30,7 @@ const postValidation = async (req, res, next) => {
   if (password.length < passLength) {
     return res.status(errStatus).json({ message: '"password" length must be 6 characters long' });
   }
-  const getEmail = await Users.findAll({ where: { email }});
+  const getEmail = await Users.findAll({ where: { email } });
   if (getEmail) res.status(errUserExist).json({ message: 'Usuário já existe' });
   next();
 };
@@ -55,7 +57,30 @@ const loginValidation = async (req, res, next) => {
   next();
 };
 
+const tokenValidation = async (req, res, next) => {
+  const { token } = req.headers.authorization;
+
+  if (!token) {
+    res.status(errToken).json({ message: 'Token não encontrado' });
+  }
+  // Fazer verificação de Token Inválido!
+  next();
+};
+
+const userIdValidation = async (req, res, next) => {
+  const { id } = req.params;
+
+  const userId = await Users.findByPk(id);
+  if (!userId) {
+    res.status(errNotFound).json({ message: 'Usuário não existe' });
+  }
+
+  next();
+};
+
 module.exports = {
   postValidation,
   loginValidation,
+  tokenValidation,
+  userIdValidation,
 };
