@@ -3,6 +3,7 @@ const { User } = require('../models');
 
 const SUCCESS = 200;
 const CREATED = 201;
+const NOT_FOUND = 404;
 
 // Desafio 6 - Cadastrar Post
 const createPost = async (req, res) => {
@@ -24,7 +25,23 @@ const getPostsAll = async (req, res) => {
   return res.status(SUCCESS).json(posts);
 };
 
+// Desafio 8 - Listar post pelo id
+const getPostId = async (req, res) => {
+  const { id } = req.params;
+  const postId = await BlogPosts.findOne({
+    where: { id },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+    ],
+  });
+  if (postId === null) {
+    return res.status(NOT_FOUND).send({ message: 'Post não existe' });
+  }
+  return res.status(SUCCESS).json(postId);
+};
+
 module.exports = {
   createPost,
   getPostsAll,
+  getPostId,
 };
