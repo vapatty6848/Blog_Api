@@ -34,8 +34,6 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const { token } = req.headers.authorization;
-
   await userValidate.tokenValidation();
 
   const users = await Users.findAll();
@@ -44,7 +42,6 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  const { token } = req.headers.authorization;
   const { id } = req.params;
 
   await userValidate.tokenValidation();
