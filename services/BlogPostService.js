@@ -46,8 +46,23 @@ async function getById(id) {
   }
 }
 
+async function update(id, title, content) {
+  const updatedBlogPost = await BlogPosts.update(
+    { title, content },
+    {
+      where: { id },
+      returning: true,
+      plain: true,
+    },
+  );
+
+  if (!updatedBlogPost) return null;
+  return updatedBlogPost;
+}
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };

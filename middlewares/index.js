@@ -4,6 +4,7 @@ const passwordValidation = require('./passwordValidation');
 const validateUniqueEmail = require('./validateUniqueEmail');
 const tokenValidation = require('./tokenValidation');
 const blogpostValidation = require('./blogpostValidation');
+const userAuthorization = require('./userAuthorization');
 
 module.exports = {
   validateDisplayName,
@@ -12,4 +13,5 @@ module.exports = {
   validateUniqueEmail,
   tokenValidation,
   blogpostValidation,
+  userAuthorization,
 };
