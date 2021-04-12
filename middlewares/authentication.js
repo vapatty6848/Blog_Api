@@ -12,13 +12,13 @@ module.exports = async (req, res, next) => {
     const token = req.headers.authorization;
     if (!token) return next(missingToken);
 
-    const { email } = jwt.verify(token, secret);
+    const { email, id } = jwt.verify(token, secret);
     if (!email) return next(invalidToken);
 
     const isUserValid = await User.findOne({ where: { email } });
     if (!isUserValid) return next(invalidToken);
 
-    req.email = email;
+    req.user = { email, userId: id };
     return next();
   } catch (err) {
     return next(err);

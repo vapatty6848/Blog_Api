@@ -4,9 +4,9 @@ const authentication = require('../middlewares/authentication');
 
 const users = Router();
 
+users.post('/user', createUser);
 users.get('/user/:id', authentication, findById);
 users.delete('/user/me', authentication, deleteUser);
 users.get('/user', authentication, findAllUsers);
-users.post('/user', createUser);
 
 module.exports = users;
