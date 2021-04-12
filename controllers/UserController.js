@@ -27,6 +27,7 @@ UserController.post('/user', validateName, validateEmail, validatePassword, emai
     email,
     image,
   };
+  console.log('dados usuario criação', userData);
 
   const token = createToken(userData);
 
@@ -44,6 +45,7 @@ UserController.post('/login', validateEmail, validatePassword, unknownUser, resc
     email,
     image,
   };
+  console.log('dados usuario criação', user);
   const token = createToken(user);
 
   return res.status(OK).json({ token });

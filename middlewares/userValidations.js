@@ -15,7 +15,7 @@ const validateName = (req, res, next) => {
 
 const validateEmail = (req, res, next) => {
   const { email } = req.body;
-  const emailFormat = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/;
+  const emailFormat = /^[a-zA-Z0-9.]+@[a-z0-9]+\.[a-z]+$/;
   const emailIsValid = emailFormat.test(email);
   if (email === undefined) {
     return res.status(BAD_REQUEST).json({ message: '"email" is required' });
