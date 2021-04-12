@@ -52,8 +52,6 @@ async function update(id, title, content) {
     { title, content },
     {
       where: { id },
-      returning: true, // remover
-      plain: true, // remover
     },
   );
 
