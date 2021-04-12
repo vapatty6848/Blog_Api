@@ -33,11 +33,11 @@ module.exports = {
       updated: {
         defaultValue: new Date(),
         type: Sequelize.DATE,
-      }
+      },
     })
   },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('BlogPosts');
-  }
+  },
 };
