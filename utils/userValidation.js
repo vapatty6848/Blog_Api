@@ -10,7 +10,7 @@ const displayLength = 8;
 const passLength = 6;
 const emailMinLength = 0;
 const passMinLength = 0;
-const segredo = "cabeça";
+const segredo = 'cabeça';
 
 const postValidation = async (req, res, next) => {
   const { displayName, email, password } = req.body;

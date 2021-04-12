@@ -33,7 +33,6 @@ router.post('/', userValidate.postValidation, async (req, res) => {
 });
 
 router.get('/', userValidate.tokenValidation, async (req, res) => {
-
   const users = await Users.findAll();
 
   res.status(statusOK).json(users);
@@ -48,12 +47,9 @@ router.get('/:id', userValidate.userIdValidation, async (req, res) => {
 });
 
 router.delete('/me', userValidate.tokenValidation, async (req, res) => {
-  const token = req.headers.authorization;
+  /* const token = req.headers.authorization; */
 
   // procurar uma forma de usar o token para excluir...
-  const saveToken = await Users.findAll({ where: { token } });
-  await Users.destroy({ where: { me } });
-
   res.status(statusDel).end();
 });
 
