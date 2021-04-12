@@ -4,8 +4,6 @@ const User = (sequelize, DataTypes) => sequelize.define('User', {
   password: DataTypes.STRING,
   image: DataTypes.STRING,
 },
-{
-  timestamps: false,
-});
+{ timestamps: false });
 
 module.exports = User;

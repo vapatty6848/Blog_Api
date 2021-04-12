@@ -9,12 +9,9 @@ const createUser = async ({ displayName, email, password, image }) => {
   const user = await User.findOne({ where: { email } });
   if (user) throw new AppError('409', 'Usuário já existe');
 
-  const { dataValues } = await User.create(
-    { displayName, email, password, image },
-    { returning: true },
-  );
+  await User.create({ displayName, email, password, image });
 
-  return generateToken(dataValues);
+  return generateToken({ email });
 };
 
 module.exports = { createUser };
