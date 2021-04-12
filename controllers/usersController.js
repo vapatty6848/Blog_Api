@@ -17,14 +17,6 @@ router.post('/', validateUserRegister, async (req, res) => {
 
 router.get('/', validateToken, async (req, res, next) => {
   try {
-    // const { authorization } = req.headers;
-    // if (!authorization) {
-    //   // res.status(401).json({ message: 'Token não encontrado' });
-    //   return next({
-    //     status: 401,
-    //     message: 'Token não encontrado',
-    //   });
-    // }
     const user = await User.findAll();
     res.status(200).json(user);
   } catch (err) {
@@ -32,24 +24,16 @@ router.get('/', validateToken, async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, _next) => {
-  await User.findByPk(req.params.id)
-    .then((user) => {
-      if (user === null) {
-        res.status(404).send({ message: 'Usuário não encontrado' });
-      }
-      //  http GET :3000/login/1\?includeBlogPosts=1
-      //  linha 10 em User models
-      if (!req.query.includeBlogPosts) return res.status(200).json(user);
-
-      return user.getBlogPosts().then((posts) => {
-        res.status(200).json({ ...user.dataValues, posts });
-      });
-    })
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).json({ message: 'Algo deu errado' });
-    });
+router.get('/:id', validateToken, async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+    if (!user) return res.status(404).send({ message: 'Usuário não existe' });
+    if (!req.query.includeBlogPosts) return res.status(200).json(user);
+    const posts = await user.getBlogPosts();
+    if (posts) return res.status(200).json({ ...user.dataValues, posts });
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.delete('/:id', async (req, res) => {
