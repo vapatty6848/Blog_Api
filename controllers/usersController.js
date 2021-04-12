@@ -1,37 +1,30 @@
 const express = require('express');
 const { User } = require('../models');
-const { validateUser } = require('../middlewares/UserMiddleware');
+const { validateUserRegister } = require('../middlewares/UserMiddleware');
 const tokenGenerator = require('../utils/TokenGenerator');
 
 const router = express.Router();
 
-router.post('/', validateUser, (req, res) => {
+router.post('/', validateUserRegister, async (req, res) => {
   const { displayName, email, password, image } = req.body;
-  User.create({ displayName, email, password, image })
-    .then((newUser) => {
-      const { password: pwd, ...UserWithoutPassword } = newUser;
-      const token = tokenGenerator(UserWithoutPassword);
-      res.locals.user = token;
-      res.status(201).json({ token });
-    })
-    .catch(() => {
-      res.status(409).send({ message: 'Usuário já existe' });
-    });
+  const user = await User.create({ displayName, email, password, image });
+  const { password: pwd, ...UserWithoutPassword } = user;
+  const token = tokenGenerator(UserWithoutPassword);
+  res.locals.user = token;
+  res.status(201).json({ token });
 });
 
-router.get('/', (_req, res, _next) => {
-  User.findAll()
-    .then((users) => {
-      res.status(200).json(users);
-    })
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).json({ message: 'Algo deu errado' });
-    });
+router.get('/', async (_req, res, next) => {
+  try {
+    const user = await User.findAll();
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.get('/:id', (req, res, _next) => {
-  User.findByPk(req.params.id)
+router.get('/:id', async (req, res, _next) => {
+  await User.findByPk(req.params.id)
     .then((user) => {
       if (user === null) {
         res.status(404).send({ message: 'Usuário não encontrado' });
@@ -50,8 +43,8 @@ router.get('/:id', (req, res, _next) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
-  User.destroy({
+router.delete('/:id', async (req, res) => {
+  await User.destroy({
     where: {
       id: req.params.id,
     },
@@ -65,10 +58,10 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   const { displayName, email, password, image } = req.body;
 
-  User.update(
+  await User.update(
     { displayName, email, password, image },
     {
       where: {

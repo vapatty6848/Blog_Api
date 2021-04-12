@@ -9,7 +9,7 @@ function tokenGenerator(user) {
   };
 
   const payload = {
-    iss: 'Trybeer',
+    iss: 'BlogsAPI',
     aud: 'indentity',
     userData: user,
   };

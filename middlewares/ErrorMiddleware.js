@@ -1,6 +1,6 @@
-const ErrorMiddleware = async (err, _req, res, _next) => {
+const ErrorMiddleware = async (err, req, res, _next) => {
   const internalError = 500;
-  res.status(err.statusCode || internalError).json(err.message);
+  res.status(err.status || internalError).json({ message: err.message });
 };
 
 module.exports = {

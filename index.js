@@ -9,14 +9,20 @@ const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/user', controller.user);
-app.use('/login', controller.blogpost);
-
-app.listen(3000, () => console.log('ouvindo porta 3000!'));
-
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (request, response) => {
   response.send();
 });
+
+app.use('/user', controller.user);
+app.use('/login', controller.login);
+
+app.use((req, res, next) => {
+  const error = new Error('Not found');
+  error.status = 404;
+  next(error);
+});
+
+app.listen(3000, () => console.log('porta 3000!'));
 
 app.use(ErrorMiddleware);

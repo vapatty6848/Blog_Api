@@ -1,21 +1,12 @@
 const express = require('express');
 const { BlogPost, User } = require('../models');
 
-// {
-//   "id": "7706273476706534553",
-//   "title": "Latest updates, August 1st",
-//   "content": "The whole text for the blog post goes here in this key",
-//   "userId": "401465483996", // esse é o id que referência usuário que é o autor do post
-//   "published": "2011-08-01T19:58:00.000Z",
-//   "updated": "2011-08-01T19:58:51.947Z",
-// }
-
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { title, content, userId, published, updated } = req.body;
 
-  BlogPost.create({ title, content, userId, published, updated })
+  await BlogPost.create({ title, content, userId, published, updated })
     .then((newPost) => {
       res.status(200).json(newPost);
     })
@@ -25,8 +16,8 @@ router.post('/', (req, res) => {
     });
 });
 
-router.get('/', (req, res, _next) => {
-  BlogPost.findAll()
+router.get('/', async (req, res, _next) => {
+  await BlogPost.findAll()
     .then((post) => {
       res.status(200).json(post);
     })
@@ -36,8 +27,8 @@ router.get('/', (req, res, _next) => {
     });
 });
 
-router.get('/:id', (req, res, _next) => {
-  BlogPost.findByPk(req.params.id, {
+router.get('/:id', async (req, res, _next) => {
+  await BlogPost.findByPk(req.params.id, {
     include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
     attributes: { exclude: ['userId', 'id'] },
   })
@@ -54,8 +45,8 @@ router.get('/:id', (req, res, _next) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
-  BlogPost.destroy({
+router.delete('/:id', async (req, res) => {
+  await BlogPost.destroy({
     where: {
       id: req.params.id,
     },
@@ -69,10 +60,10 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   const { title, content, userId, published, updated } = req.body;
 
-  BlogPost.update(
+  await BlogPost.update(
     { title, content, userId, published, updated },
     {
       where: {
