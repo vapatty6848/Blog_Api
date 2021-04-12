@@ -21,8 +21,8 @@ const loginSchema = yup.object().shape({
     .min(1, '"email" is not allowed to be empty')
     .required('"email" is required'),
   password: yup.string()
-    .min(1, '"email" is not allowed to be empty')
     .min(6, '"password" length must be 6 characters long')
+    .min(1, '"password" is not allowed to be empty')
     .required('"password" is required'),
 });
 

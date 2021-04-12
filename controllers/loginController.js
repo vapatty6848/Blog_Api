@@ -9,7 +9,7 @@ router.post('/', validateUserLogin, async (req, res) => {
   const { password: pwd, ...UserWithoutPassword } = user;
   const token = tokenGenerator(UserWithoutPassword);
   res.locals.user = token;
-  res.status(201).json({ token });
+  res.status(200).json({ token });
 });
 
 module.exports = router;
