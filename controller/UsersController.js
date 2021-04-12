@@ -17,10 +17,8 @@ const statusCreate = 201;
 const statusOK = 200;
 const statusDel = 204;
 
-router.post('/', async (req, res) => {
+router.post('/', userValidate.postValidation, async (req, res) => {
   const { displayName, email, password, image } = req.body;
-
-  await userValidate.postValidation();
 
   const payload = {
     email,
@@ -34,31 +32,27 @@ router.post('/', async (req, res) => {
   res.status(statusCreate).send({ token });
 });
 
-router.get('/', async (req, res) => {
-  await userValidate.tokenValidation();
+router.get('/', userValidate.tokenValidation, async (req, res) => {
 
   const users = await Users.findAll();
 
   res.status(statusOK).json(users);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', userValidate.userIdValidation, async (req, res) => {
   const { id } = req.params;
-
-  await userValidate.tokenValidation();
-  await userValidate.userIdValidation();
 
   const user = await Users.findByPk(id);
 
   res.status(statusOK).json(user);
 });
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
+router.delete('/me', userValidate.tokenValidation, async (req, res) => {
+  const token = req.headers.authorization;
 
-  await userValidate.tokenValidation();
-
-  await Users.destroy({ where: id });
+  // procurar uma forma de usar o token para excluir...
+  const saveToken = await Users.findAll({ where: { token } });
+  await Users.destroy({ where: { me } });
 
   res.status(statusDel).end();
 });

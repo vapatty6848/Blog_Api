@@ -5,7 +5,7 @@ const createUsers = (sequelize, Datatypes) => {
     password: Datatypes.STRING,
     image: Datatypes.STRING,
   },
-  { timestaps: false });
+  { timestamps: false });
 
   return Users;
 };

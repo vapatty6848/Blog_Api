@@ -15,14 +15,12 @@ const userValidate = require('../utils/userValidation');
 
 const statusLogin = 200;
 
-router.post('/', async (req, res) => {
+router.post('/', userValidate.loginValidation, async (req, res) => {
   const { email, password } = req.body;
-
-  await userValidate.loginValidation();
 
   const token = jwt.sign({ data: { email, password } }, secret, jwtConfig);
 
-  await Users.findAll({ where: email && password });
+  await Users.findOne({ where: { email, password } });
 
   res.status(statusLogin).send({ token });
 });
