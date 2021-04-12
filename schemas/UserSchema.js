@@ -10,6 +10,14 @@ const userSchema = yup.object().shape({
     .min(6, '"password" length must be 6 characters long').required('"password" is required'),
 });
 
+const loginSchema = yup.object().shape({
+  email: yup
+    .string().email('"email" must be a valid email').required('"email" is required'),
+  password: yup.string()
+    .min(6, '"password" length must be 6 characters long').required('"password" is required'),
+});
+
 module.exports = {
   userSchema,
+  loginSchema,
 };
