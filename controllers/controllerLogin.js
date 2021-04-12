@@ -7,10 +7,8 @@ const { checkMailLogin, loginValidation } = require('../middlewares/Req1/verific
 
 router.post('/', loginValidation, checkMailLogin, rescue(async (req, res) => {
   const { email } = req.body;
-
   const tokenUser = { email };
   const token = createToken(tokenUser);
-
   return res.status(200).json({ token });
 }));
 

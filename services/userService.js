@@ -26,6 +26,7 @@ const IdUsers = async (id) => {
 };
 
 const deleteUser = async (email) => {
+  console.log('teste delete');
   const userDeleted = await User.destroy({ where: { email },
   });
   return userDeleted;
