@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
     const isUserValid = await User.findOne({ where: { email } });
     if (!isUserValid) next(invalidToken);
 
-    req.user = email;
+    req.email = email;
     next();
   } catch (err) {
     next(err);

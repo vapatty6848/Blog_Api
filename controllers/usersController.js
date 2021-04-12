@@ -17,7 +17,7 @@ const findAllUsers = async (req, res, next) => {
 
     res.status(200).json(allUser);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -28,7 +28,18 @@ const findById = async (req, res, next) => {
 
     res.status(200).json(allUser);
   } catch (err) {
-    next(err);
+    return next(err);
+  }
+};
+
+const deleteUser = async (req, res, next) => {
+  try {
+    const { email } = req;
+    await services.deleteUser(email);
+
+    res.status(204).end();
+  } catch (err) {
+    return next(err);
   }
 };
 
@@ -36,4 +47,5 @@ module.exports = {
   createUser,
   findAllUsers,
   findById,
+  deleteUser,
 };
