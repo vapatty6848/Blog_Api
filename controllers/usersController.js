@@ -1,11 +1,12 @@
 const { Router } = require('express');
+const { isAName, isAnEmail, isAPassword } = require('../middlewares/userValidations');
 const { User } = require('../models');
 const { statusCode } = require('../utils/dictionary');
 
 const userRouter = Router();
 
-userRouter.post('/', async (req, res) => {
-  // console.log('req.body: ', Object.keys(req).sort()); --> dica do object.keys()
+userRouter.post('/', isAName, isAnEmail, isAPassword, async (req, res) => {
+// console.log('req.body: ', Object.keys(req).sort()); --> dica do object.keys() by Zambs 12/04/2021
   const { displayName, email, password, image } = req.body;
   const newUser = await User.create({ displayName, email, password, image });
   res.status(statusCode.SUCCESS_CREATED).send({ message: 'receberá um token', newUser });
