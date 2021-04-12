@@ -2,14 +2,9 @@ const Post = (sequelize, DataTypes) => {
   const blogPost = sequelize.define('BlogPost', {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    published: {
-      defaultValue: new Date(),
-      type: DataTypes.DATE,
-    },
-    updated: {
-      defaultValue: new Date(),
-      type: DataTypes.DATE,
-    },
+    userId: DataTypes.INTEGER,
+    published: DataTypes.DATE,
+    updated: DataTypes.DATE,
   },
   {
     timestamps: false,
