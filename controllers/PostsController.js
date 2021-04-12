@@ -22,9 +22,9 @@ postsRouter.get('/:id', tk.allUsersverification, postServ.getPostById, async (re
 postsRouter.get('/', tk.allUsersverification, async (req, res) => {
   const posts = await BlogPost.findAll({
     include: { model: User,
-      as: 'userId',
+      as: 'user',
       attributes: { exclude: ['password'] } },
-    attribudes: { exclude: ['userId'] } });
+  });
   res.status(200).json(posts);
 });
 
