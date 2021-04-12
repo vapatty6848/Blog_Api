@@ -23,8 +23,8 @@ userRouter.post('/', userServ.nameVerification, userServ.passwordVerification, u
 });
 
 userRouter.delete('/me', tk.allUsersverification, async (req, res) => {
-  const { email } = req.myUser;
-  await User.destroy({ where: { email } });
+  const { id } = req.myUser;
+  await User.destroy({ where: { id } });
   res.status(204).json();
 });
 

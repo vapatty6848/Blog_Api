@@ -28,7 +28,7 @@ postsRouter.get('/', tk.allUsersverification, async (req, res) => {
   res.status(200).json(posts);
 });
 
-postsRouter.put('/:id', tk.allUsersverification, postServ.editPostById, async (req, res) => {
+postsRouter.put('/:id', tk.allUsersverification, postServ.editPostById, postServ.createNewPost, async (req, res) => {
   const [editedPost] = req.editedPost;
   res.status(200).json(editedPost);
 });

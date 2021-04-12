@@ -13,7 +13,7 @@ const createToken = (payload) => {
   return token;
 };
 
-const allUsersverification = (req, res, next) => {
+const allUsersverification = async (req, res, next) => {
   const token = req.headers.authorization;
   if (!token) {
     return next(createError('Token não encontrado', 401));
@@ -23,6 +23,7 @@ const allUsersverification = (req, res, next) => {
       return next(createError('Token expirado ou inválido', 401));
     }
     req.myUser = decoded;
+    console.log('myUser', req.myUser);
   });
 
   next();

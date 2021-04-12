@@ -13,16 +13,6 @@ const createNewPost = async (req, res, next) => {
   next();
 };
 
-// const getAllPosts = async (req, res, next) => {
-//   const posts = await BlogPost.findAll({
-//     include: { model: User,
-//       as: 'user',
-//       attributes: { exclude: ['password'] } },
-//     attribude: { exclude: ['userId'] } });
-//   req.posts = posts;
-//   next();
-// };
-
 const getPostById = async (req, res, next) => {
   const { id } = req.params;
   const post = await BlogPost.findAll({
@@ -32,7 +22,7 @@ const getPostById = async (req, res, next) => {
       attribute: { exclude: ['password'] } },
     attribude: { exclude: ['userId'] } });
   console.log('post', post);
-  if (!post) return next(createError('Post não existe', 404));
+  if (post.length === 0) return next(createError('Post não existe', 404));
   req.post = post;
   next();
 };
@@ -45,16 +35,15 @@ const editPostById = async (req, res, next) => {
     include: { model: User,
       as: 'user',
       attributes: { exclude: ['password'] } },
-    attribudes: { exclude: ['userId'] } });
+  });
   console.log('editedPost', editedPost);
-  if (!editedPost) return next(createError('Post não existe', 404));
+  if (editedPost.length === 0) return next(createError('Post não existe', 404));
   req.editedPost = editedPost;
   next();
 };
 
 module.exports = {
   createNewPost,
-  // getAllPosts,
   getPostById,
   editPostById,
 };
