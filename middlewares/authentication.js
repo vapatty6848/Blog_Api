@@ -10,17 +10,17 @@ const invalidToken = new AppError(401, 'Token expirado ou inválido');
 module.exports = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
-    if (!token) next(missingToken);
+    if (!token) return next(missingToken);
 
     const { email } = jwt.verify(token, secret);
-    if (!email) next(invalidToken);
+    if (!email) return next(invalidToken);
 
     const isUserValid = await User.findOne({ where: { email } });
-    if (!isUserValid) next(invalidToken);
+    if (!isUserValid) return next(invalidToken);
 
     req.email = email;
-    next();
+    return next();
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
