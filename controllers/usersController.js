@@ -36,19 +36,15 @@ router.get('/:id', validateToken, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
-  await User.destroy({
-    where: {
-      id: req.params.id,
-    },
-  })
-    .then((users) => {
-      res.status(200).send({ message: 'Usuário excluído com sucesso.', users });
-    })
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
-    });
+router.delete('/me', validateToken, async (req, res, next) => {
+  try {
+    const { user: { email } } = req.body;
+    await User.destroy({ where: { email } });
+    res.status(204).end();
+    // console.log(res.locals);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.put('/:id', async (req, res) => {
