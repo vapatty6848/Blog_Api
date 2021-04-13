@@ -30,13 +30,14 @@ router.get('/', validateToken, async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', validateToken, async (req, res, next) => {
   try {
-    const posts = await BlogPost.findByPk(req.params.id, {
+    const post = await BlogPost.findByPk(req.params.id, {
       include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
-      attributes: { exclude: ['userId', 'id'] },
+      attributes: { exclude: ['userId'] },
     });
-    if (!posts) return res.status(404).send({ message: 'Post não encontrado' });
+    if (!post) return res.status(404).send({ message: 'Post não existe' });
+    return res.status(200).json(post);
   } catch (err) {
     next(err);
   }
