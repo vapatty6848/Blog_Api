@@ -8,7 +8,7 @@ const createPosts = async (req, res, next) => {
     } = req;
 
     const {
-      dataValues: { id, ...postCreated },
+      dataValues: { id, published, updated, ...postCreated },
     } = await services.createPosts(title, content, userId);
 
     return res.status(201).json(postCreated);
@@ -38,8 +38,24 @@ const findById = async (req, res, next) => {
   }
 };
 
+const deletePost = async (req, res, next) => {
+  try {
+    const {
+      params: { id },
+      user: { email },
+    } = req;
+
+    await services.deletePost(id, email);
+
+    return res.status(204).end();
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   createPosts,
   findAllPosts,
   findById,
+  deletePost,
 };
