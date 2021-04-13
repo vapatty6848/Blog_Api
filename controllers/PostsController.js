@@ -35,4 +35,8 @@ postsRouter.put('/:id', tk.allUsersverification, postServ.createNewPost, postSer
   res.status(200).json({ title, content, userId: idNumber });
 });
 
+postsRouter.delete('/:id', tk.allUsersverification, postServ.deletePost, async (req, res) => {
+  res.status(204).json();
+});
+
 module.exports = postsRouter;
