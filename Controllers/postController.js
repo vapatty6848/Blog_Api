@@ -30,9 +30,11 @@ router.get('/:id', verifyAuthorization, async (req, res) => {
     where: { id },
     include: { model: Users, as: 'user' },
   });
-  if (!post) res.status(404).json({ message: 'Post não existe' });
 
-  res.status(200).json(post);
+  if (!post) {
+    return res.status(404).json({ message: 'Post não existe' });
+  }
+  return res.status(200).json(post);
 });
 
 router.put('/:id', verifyAuthorization, validateTitleEntries,
@@ -52,7 +54,7 @@ router.put('/:id', verifyAuthorization, validateTitleEntries,
 
     await BlogPosts.update({ title, content }, { where: { id } });
     const postAreadyUpdated = await BlogPosts.findOne({ where: { id } });
-    res.status(200).json({
+    return res.status(200).json({
       title: postAreadyUpdated.title,
       content: postAreadyUpdated.content,
       userId: postAreadyUpdated.userId,
