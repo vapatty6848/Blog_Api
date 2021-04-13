@@ -2,6 +2,7 @@ const express = require('express');
 const rescue = require('express-rescue');
 const bodyParser = require('body-parser');
 
+const UserServices = require('./services/UserServices');
 const UsersController = require('./controllers/UsersController');
 require('dotenv').config();
 
@@ -15,6 +16,8 @@ app.get('/', (request, response) => {
 });
 
 app.use('/user', rescue(UsersController));
+
+app.use('/login', rescue(UserServices.loginUser));
 
 app.use((err, req, res, _) => {
   const codeStatus = (err.codeStatus) ? err.codeStatus : 500;

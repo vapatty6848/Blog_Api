@@ -31,13 +31,20 @@ const createUser = async (req, res, next) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ where: { email, password } });
 
-  if (!user) res.status(404).json({ message: 'Not authorized' });
+  switch (true) {
+    case (email === ''): return res.status(400).json({ message: '"email" is not allowed to be empty' });
+    case (password === ''): return res.status(400).json({ message: '"password" is not allowed to be empty' });
+    case (!email): return res.status(400).json({ message: '"email" is required' });
+    case (!password): return res.status(400).json({ message: '"password" is required' });
+    default: break;
+  }
+
+  const user = await User.findOne({ where: { email, password } });
+  if (!user) return res.status(400).json({ message: 'Campos inválidos' });
 
   const token = jwt.sign({ user }, secret);
-
-  return res.status(201).json({ token });
+  return res.status(200).json({ token });
 };
 
 module.exports = {
