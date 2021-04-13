@@ -56,14 +56,21 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', validatePost, validateToken, async (req, res, next) => {
   try {
-    const { title, content, userId, published, updated } = req.body;
-    const posts = await BlogPost.update(
-      { title, content, userId, published, updated },
-      { where: { id: req.params.id } },
-    );
-    return res.status(200).send({ message: 'Post atualizado com sucesso.' }, posts);
+    const { title, content } = req.body;
+    const { authorization: token } = req.headers;
+    const { id } = req.params;
+
+    const { id: userIdToken } = getTokenUser(token);
+    const { userId: userIdPost } = await BlogPost.findByPk(id);
+
+    if (userIdToken !== userIdPost) {
+      return res.status(401).send({ message: 'Usuário não autorizado' });
+    }
+
+    await BlogPost.update({ title, content, updated: new Date() }, { where: { id } });
+    return res.status(200).json({ title, content, userId: userIdPost });
   } catch (err) {
     next(err);
   }
