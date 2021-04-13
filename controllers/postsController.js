@@ -54,14 +54,21 @@ router.get('/:id', validateToken, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', validateToken, async (req, res, next) => {
   try {
-    const posts = await BlogPost.destroy({
-      where: {
-        id: req.params.id,
-      },
-    });
-    if (posts) return res.status(200).send({ message: 'Post excluído com sucesso.' }, posts);
+    const { authorization: token } = req.headers;
+    const { id } = req.params;
+    const { id: userIdToken } = getTokenUser(token);
+
+    const post = await BlogPost.findByPk(id);
+
+    if (!post) return res.status(404).send({ message: 'Post não existe' });
+
+    const { userId: userIdPost } = post;
+
+    if (userIdToken !== userIdPost) return res.status(401).send({ message: 'Usuário não autorizado' });
+    await BlogPost.destroy({ where: { id } });
+    return res.status(204).end();
   } catch (err) {
     next(err);
   }
