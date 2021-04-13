@@ -1,6 +1,5 @@
 const { Router } = require('express');
-const { BlogPosts } = require('../models');
-
+const { BlogPosts, Users } = require('../models');
 const verifyAuthorization = require('../Auth/verifyAuthorization');
 const { validateTitleEntries, validateContentEntries } = require('../Middlewares/postValidations');
 
@@ -16,4 +15,14 @@ router.post('/', verifyAuthorization, validateTitleEntries,
     return res.status(201).json(post);
   });
 
+router.get('/', verifyAuthorization, async (req, res) => {
+  const postArray = await BlogPosts.findAll({
+    include: [{
+      model: Users, as: 'user', attributes: { exclude: ['password'] },
+    }],
+    attributes: { exclude: ['userId'] },
+  });
+  console.log('array', postArray);
+  return res.status(200).json(postArray);
+});
 module.exports = router;
