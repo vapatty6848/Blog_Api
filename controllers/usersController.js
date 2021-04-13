@@ -1,7 +1,7 @@
 const express = require('express');
 const { User } = require('../models');
 const { validateUserRegister } = require('../middlewares/UserMiddleware');
-const tokenGenerator = require('../utils/TokenGenerator');
+const { tokenGenerator, getTokenUser } = require('../utils/TokenUtils');
 const validateToken = require('../middlewares/validateToken');
 
 const router = express.Router();
@@ -38,10 +38,10 @@ router.get('/:id', validateToken, async (req, res, next) => {
 
 router.delete('/me', validateToken, async (req, res, next) => {
   try {
-    const { user: { email } } = req.body;
+    const { authorization: token } = req.headers;
+    const email = getTokenUser(token);
     await User.destroy({ where: { email } });
     res.status(204).end();
-    // console.log(res.locals);
   } catch (err) {
     next(err);
   }

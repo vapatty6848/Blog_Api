@@ -1,6 +1,6 @@
 const express = require('express');
 const { validateUserLogin } = require('../middlewares/UserMiddleware');
-const tokenGenerator = require('../utils/TokenGenerator');
+const { tokenGenerator } = require('../utils/TokenUtils');
 
 const router = express.Router();
 

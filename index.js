@@ -16,6 +16,7 @@ app.get('/', (request, response) => {
 
 app.use('/user', controller.user);
 app.use('/login', controller.login);
+app.use('/post', controller.post);
 
 app.use((req, res, next) => {
   const error = new Error('Not found');
