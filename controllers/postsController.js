@@ -18,9 +18,12 @@ router.post('/', validatePost, validateToken, async (req, res, next) => {
   }
 });
 
-router.get('/', async (req, res, next) => {
+router.get('/', validateToken, async (req, res, next) => {
   try {
-    const posts = await BlogPost.findAll();
+    const posts = await BlogPost.findAll({
+      include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      attributes: { exclude: ['userId'] },
+    });
     if (posts) return res.status(200).json(posts);
   } catch (err) {
     next(err);
