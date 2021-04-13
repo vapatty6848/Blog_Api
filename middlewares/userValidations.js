@@ -24,14 +24,10 @@ const isAnEmail = async (req, res, next) => {
     return res.status(statusCode.BAD_REQUEST)
       .send({ message: statusMsg.EMAIL_VALID });
   }
-
-  const emailAlreadyExists = await User.findOne({ where: { email } });
-  if (emailAlreadyExists !== null) {
-    return res.status(statusCode.CONFLICT)
-      .send({ message: statusMsg.USER_EXISTS });
-  }
   next();
 };
+
+const emailAlreadyExists = async (email) => await User.findOne({ where: { email } });
 
 const isAPassword = (req, res, next) => {
   const { password } = req.body;
@@ -47,4 +43,4 @@ const isAPassword = (req, res, next) => {
   next();
 };
 
-module.exports = { isAName, isAnEmail, isAPassword };
+module.exports = { isAName, isAnEmail, emailAlreadyExists, isAPassword };
