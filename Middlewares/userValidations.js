@@ -66,9 +66,75 @@ const newEmail = async (req, _res, next) => {
   next();
 };
 
+const validateLoginEmailEntries = (req, _res, next) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return next({
+      status: 400,
+      message: '"email" is required',
+    });
+  }
+  next();
+};
+
+const validateLoginNotEmpty = (req, _res, next) => {
+  const { email } = req.body;
+  if (email === '') {
+    return next({
+      status: 400,
+      message: '"email" is not allowed to be empty',
+    });
+  }
+  next();
+};
+
+const validateLoginPasswordEntries = (req, _res, next) => {
+  const { password } = req.body;
+
+  if (!password) {
+    return next({
+      status: 400,
+      message: '"password" is required',
+    });
+  }
+
+  next();
+};
+
+const validateLoginPasswordNotEmpty = (req, _res, next) => {
+  const { password } = req.body;
+  if (password === '') {
+    return next({
+      status: 400,
+      message: '"password" is not allowed to be empty',
+    });
+  }
+
+  next();
+};
+
+const userEmail = async (req, _res, next) => {
+  const { email } = req.body;
+  const userAlreadyExists = await Users.findOne({ where: { email } });
+
+  if (!userAlreadyExists) {
+    return next({
+      status: 400,
+      message: 'Campos inválidos',
+    });
+  }
+  next();
+};
+
 module.exports = {
   validateDisplaynameEntries,
   validatePasswordEntries,
   validateEmailEntries,
   newEmail,
+  validateLoginEmailEntries,
+  validateLoginNotEmpty,
+  validateLoginPasswordEntries,
+  validateLoginPasswordNotEmpty,
+  userEmail,
 };
