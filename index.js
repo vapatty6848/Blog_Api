@@ -1,3 +1,4 @@
+require('dotenv').config();
 const bodyParser = require('body-parser');
 const express = require('express');
 
@@ -11,7 +12,7 @@ const login = require('./controller/LoginController');
 // User
 const createUsers = require('./controller/UsersController');
 
-app.use('/users', createUsers);
+app.use('/user', createUsers);
 app.use('/login', login);
 
 // não remova esse endpoint, e para o avaliador funcionar

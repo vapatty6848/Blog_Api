@@ -40,20 +40,20 @@ const postValidation = async (req, res, next) => {
 const loginValidation = async (req, res, next) => {
   const { email, password } = req.body;
 
+  if (email === '') {
+    return res.status(errStatus).json({ message: '"email" is not allowed to be empty' });
+  }
   if (!email) {
     return res.status(errStatus).json({ message: '"email" is required' });
   }
-  if (email.length <= emailMinLength) {
-    return res.status(errStatus).json({ message: '"email" is not allowed to be empty' });
+  if (password === '') {
+    return res.status(errStatus).json({ message: '"password" is not allowed to be empty' });
   }
   if (!password) {
     return res.status(errStatus).json({ message: '"password" is required' });
   }
-  if (password.length <= passMinLength) {
-    return res.status(errStatus).json({ message: '"password" is not allowed to be empty' });
-  }
-  const emailValido = await Users.findAll({ where: { email } });
-  if (!emailValido) {
+  /* const emailValido = await Users.findAll({ where: { email } }); */
+  if (!await Users.findAll({ where: { email } })) {
     return res.status(errStatus).json({ message: 'Campos inválidos' });
   }
   next();
@@ -75,15 +75,15 @@ const userIdValidation = async (req, res, next) => {
   const { id } = req.params;
   const token = req.headers.authorization;
 
+  const userId = await Users.findByPk(id);
+  if (!userId) {
+    return res.status(errNotFound).json({ message: 'Usuário não existe' });
+  }
   if (!token) {
     return res.status(errToken).json({ message: 'Token não encontrado' });
   }
   if (!jwt.verify(token, segredo)) {
     return res.status(errToken).json({ message: 'Token expirado ou inválido' });
-  }
-  const userId = await Users.findByPk(id);
-  if (!userId) {
-    return res.status(errNotFound).json({ message: 'Usuário não existe' });
   }
 
   next();
