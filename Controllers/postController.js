@@ -35,4 +35,28 @@ router.get('/:id', verifyAuthorization, async (req, res) => {
   res.status(200).json(post);
 });
 
+router.put('/:id', verifyAuthorization, validateTitleEntries,
+  validateContentEntries, async (req, res) => {
+    const { dataValues: { email } } = req.user;
+    const { title, content } = req.body;
+    const { id } = req.params;
+
+    const postToUpdate = await BlogPosts.findOne({ where: { id },
+      include: { model: Users, as: 'user' },
+    });
+    console.log('update', postToUpdate);
+
+    if (email !== postToUpdate.dataValues.user.dataValues.email) {
+      return res.status(401).json({ message: 'Usuário não autorizado' });
+    }
+
+    await BlogPosts.update({ title, content }, { where: { id } });
+    const postAreadyUpdated = await BlogPosts.findOne({ where: { id } });
+    res.status(200).json({
+      title: postAreadyUpdated.title,
+      content: postAreadyUpdated.content,
+      userId: postAreadyUpdated.userId,
+    });
+  });
+
 module.exports = router;
