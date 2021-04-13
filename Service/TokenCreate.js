@@ -23,7 +23,6 @@ const allUsersverification = async (req, res, next) => {
       return next(createError('Token expirado ou inválido', 401));
     }
     req.myUser = decoded;
-    console.log('myUser', req.myUser);
   });
 
   next();

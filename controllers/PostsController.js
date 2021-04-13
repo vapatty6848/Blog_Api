@@ -11,7 +11,7 @@ postsRouter.post('/', tk.allUsersverification, postServ.createNewPost, async (re
   const { id: userId } = req.myUser;
   const createDate = new Date();
   await BlogPost.create({ title, content, userId, published: createDate, updated: createDate });
-  res.status(201).json({ title, content, userId });
+  return res.status(201).json({ title, content, userId });
 });
 
 postsRouter.get('/:id', tk.allUsersverification, postServ.getPostById, async (req, res) => {
@@ -28,9 +28,11 @@ postsRouter.get('/', tk.allUsersverification, async (req, res) => {
   res.status(200).json(posts);
 });
 
-postsRouter.put('/:id', tk.allUsersverification, postServ.editPostById, postServ.createNewPost, async (req, res) => {
-  const [editedPost] = req.editedPost;
-  res.status(200).json(editedPost);
+postsRouter.put('/:id', tk.allUsersverification, postServ.createNewPost, postServ.editPostById, async (req, res) => {
+  const { id } = req.myUser;
+  const { title, content } = req.body;
+  const idNumber = parseInt(id, 10);
+  res.status(200).json({ title, content, userId: idNumber });
 });
 
 module.exports = postsRouter;

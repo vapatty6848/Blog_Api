@@ -20,7 +20,7 @@ const getPostById = async (req, res, next) => {
     include: { model: User,
       as: 'user',
       attribute: { exclude: ['password'] } },
-    attribude: { exclude: ['userId'] } });
+  });
   console.log('post', post);
   if (post.length === 0) return next(createError('Post não existe', 404));
   req.post = post;
@@ -28,17 +28,17 @@ const getPostById = async (req, res, next) => {
 };
 
 const editPostById = async (req, res, next) => {
-  const { id } = req.params;
+  const { id } = req.params; // id do post
   const { title, content } = req.body;
-  const editedPost = await BlogPost.update({ title, content }, {
-    where: { id },
-    include: { model: User,
-      as: 'user',
-      attributes: { exclude: ['password'] } },
-  });
-  console.log('editedPost', editedPost);
+  const { id: userId } = req.myUser; // id do user
+  const postInfo = await BlogPost.findOne({ where: { id } });
+  console.log('postInfo', postInfo);
+  if (postInfo.dataValues.userId !== userId) return next(createError('Usuário não autorizado', 401));
+
+  const editedPost = await BlogPost.update({ title, content }, { where: { id } });
+  console.log('editedPost', editedPost[0]);
   if (editedPost.length === 0) return next(createError('Post não existe', 404));
-  req.editedPost = editedPost;
+  req.editedPost = [editedPost];
   next();
 };
 
