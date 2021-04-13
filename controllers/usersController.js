@@ -3,6 +3,7 @@ const { isAName, isAnEmail, emailAlreadyExists, isAPassword } = require('../midd
 const { User } = require('../models');
 const { statusCode, statusMsg } = require('../utils/dictionary');
 const tokenCreation = require('../middlewares/tokenCreation');
+const validateAuthoriztion = require('../middlewares/validateAuthorzation');
 
 const userRouter = Router();
 
@@ -19,14 +20,17 @@ userRouter.post('/', isAName, isAnEmail, isAPassword, async (req, res) => {
   return res.status(statusCode.SUCCESS_CREATED).send({ token });
 });
 
-userRouter.get('/', async (_req, res) => {
+userRouter.get('/', validateAuthoriztion, async (_req, res) => {
   const users = await User.findAll();
   return res.status(statusCode.SUCCESS).send(users);
 });
 
-userRouter.get('/:id', async (req, res) => {
+userRouter.get('/:id', validateAuthoriztion, async (req, res) => {
   const { id } = req.params;
   const user = await User.findByPk(id);
+  if (!user || user === '') {
+    return res.status(statusCode.NOT_FOUND).send({ message: statusMsg.USER_NOT_EXISTS });
+  }
   return res.status(statusCode.SUCCESS).send(user);
 });
 
