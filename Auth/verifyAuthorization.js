@@ -10,8 +10,8 @@ module.exports = async (req, res, next) => {
 
   try {
     const user = jwt.verify(token, mySecretKey);
-    const userEmail = await Users.findOne({ where: { email: user.email } });
-    req.user = userEmail;
+    const userInfo = await Users.findOne({ where: { email: user.email } });
+    req.user = userInfo;
     next();
   } catch (e) {
     return res.status(401).json({ message: 'Token expirado ou inválido' });

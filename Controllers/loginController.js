@@ -9,10 +9,9 @@ router.post('/', validateLoginNotEmpty, validateLoginEmailEntries, validateLogin
 
   try {
     const user = await Users.findOne({ where: { email } });
-    console.log('user password', user.dataValues.password);
     if (user.dataValues.password !== password) return res.status(400).json({ message: 'Campos inválidos' });
-    const { displayName, image } = user.dataValues;
-    const token = createToken({ displayName, email, image });
+    const { displayName, image, id } = user.dataValues;
+    const token = createToken({ displayName, email, image, id });
 
     return res.status(200).json({ token });
   } catch (e) {
