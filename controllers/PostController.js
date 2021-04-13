@@ -1,9 +1,36 @@
+const Sequelize = require('sequelize');
+
+const { Op } = Sequelize;
 const { Router } = require('express');
 const validateJWT = require('../utils/validateJWT');
 const { st } = require('../utils/dictionary');
 const { BlogPost, User } = require('../models');
 
 const router = Router();
+
+router.get('/search', validateJWT, async (req, res) => {
+  const { q } = req.query;
+
+  if (!q) {
+    const allPosts = await BlogPost.findAll({
+      attributes: ['id', 'published', 'updated', 'title', 'content'],
+      include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
+    });
+    return res.status(200).json(allPosts);
+  }
+
+  const posts = await BlogPost.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: `%${q}%` } },
+        { content: { [Op.like]: `%${q}%` } },
+      ],
+    },
+    attributes: ['id', 'published', 'updated', 'title', 'content'],
+    include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
+  });
+  return res.status(200).json(posts || []);
+});
 
 router.get('/', validateJWT, async (req, res) => {
   const posts = await BlogPost.findAll({
