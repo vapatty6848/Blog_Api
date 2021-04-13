@@ -1,6 +1,7 @@
 const express = require('express');
 const rescue = require('express-rescue');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const UserServices = require('./services/UserServices');
 const UsersController = require('./controllers/UsersController');
@@ -9,6 +10,7 @@ require('dotenv').config();
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (request, response) => {

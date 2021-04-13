@@ -9,7 +9,7 @@ const findByEmail = async (email) => {
   return user;
 };
 
-const createUser = async (req, res, next) => {
+const createUser = async (req, res) => {
   const { displayName, email, password, image } = req.body;
 
   const thisEmailExists = email && await findByEmail(email);
@@ -24,9 +24,10 @@ const createUser = async (req, res, next) => {
     default: break;
   }
 
-  await User.create({ displayName, email, password, image });
+  const user = await User.create({ displayName, email, password, image });
 
-  next();
+  const token = jwt.sign({ user }, secret);
+  return res.status(201).json({ token });
 };
 
 const loginUser = async (req, res) => {
@@ -41,10 +42,11 @@ const loginUser = async (req, res) => {
   }
 
   const user = await User.findOne({ where: { email, password } });
+  console.log(user);
   if (!user) return res.status(400).json({ message: 'Campos inválidos' });
 
   const token = jwt.sign({ user }, secret);
-  return res.status(201).json({ token });
+  return res.status(200).json({ token });
 };
 
 module.exports = {

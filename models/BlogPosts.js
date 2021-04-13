@@ -1,8 +1,17 @@
 const BlogPosts = (sequelize, DataTypes) => {
   const blogPost = sequelize.define('BlogPosts', {
     id: { type: DataTypes.INTEGER, primaryKey: true },
-    published: DataTypes.DATE,
-    updated: DataTypes.DATE,
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      field: 'published',
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      onUpdate: DataTypes.NOW,
+      field: 'updated',
+    },
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     user_id: {
