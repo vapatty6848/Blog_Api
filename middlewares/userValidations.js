@@ -35,13 +35,14 @@ const isAnEmail = async (req, res, next) => {
 
 const isAPassword = async (req, res, next) => {
   const { password } = req.body;
+  
+  if (!password || password === null) {
+    return res.status(statusCode.BAD_REQUEST)
+      .send({ message: statusMsg.PASSWORD_REQUIRED });
+  }
   if (password.length < 6) {
     return res.status(statusCode.BAD_REQUEST)
       .send({ message: statusMsg.PASSWORD_LENGTH });
-  }
-  if (password === null) {
-    return res.status(statusCode.BAD_REQUEST)
-      .send({ message: statusMsg.PASSWORD_REQUIRED });
   }
   next();
 };
