@@ -21,11 +21,15 @@ router.get('/', verifyAuthorization, async (req, res) => {
     .catch((e) => res.status(500).json({ message: e.message }));
 });
 
-router.get('/:id', verifyAuthorization, async (req, res) =>{
+router.get('/:id', verifyAuthorization, async (req, res) => {
   const { id } = req.params;
   const userById = await Users.findByPk(id);
   console.log(userById);
   if (userById) return res.status(200).json(userById);
   return res.status(404).json({ message: 'Usuário não existe' });
 });
+
+// router.delete('/me', verifyAuthorization, async (req, res) => {
+
+// })
 module.exports = router;
