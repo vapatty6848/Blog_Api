@@ -14,6 +14,11 @@ const isAName = (req, res, next) => {
 const isAnEmail = async (req, res, next) => {
   const { email } = req.body;
 
+  if (email === '') {
+    return res.status(statusCode.BAD_REQUEST)
+      .send({ message: statusMsg.EMAIL_EMPTY });
+  }
+
   if (!email) {
     return res.status(statusCode.BAD_REQUEST)
       .send({ message: statusMsg.EMAIL_REQUIRED });
@@ -32,10 +37,16 @@ const emailAlreadyExists = async (email) => await User.findOne({ where: { email 
 const isAPassword = (req, res, next) => {
   const { password } = req.body;
 
+  if (password === '') {
+    return res.status(statusCode.BAD_REQUEST)
+      .send({ message: statusMsg.PASSWORD_EMPTY });
+  }
+
   if (!password || password === null) {
     return res.status(statusCode.BAD_REQUEST)
       .send({ message: statusMsg.PASSWORD_REQUIRED });
   }
+
   if (password.length < 6) {
     return res.status(statusCode.BAD_REQUEST)
       .send({ message: statusMsg.PASSWORD_LENGTH });
