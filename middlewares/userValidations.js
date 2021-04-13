@@ -1,7 +1,7 @@
 const { statusCode, statusMsg } = require('../utils/dictionary');
 const { User } = require('../models');
 
-const isAName = async (req, res, next) => {
+const isAName = (req, res, next) => {
   const { displayName } = req.body;
 
   if (!displayName || displayName.length < 8) {
@@ -33,9 +33,9 @@ const isAnEmail = async (req, res, next) => {
   next();
 };
 
-const isAPassword = async (req, res, next) => {
+const isAPassword = (req, res, next) => {
   const { password } = req.body;
-  
+
   if (!password || password === null) {
     return res.status(statusCode.BAD_REQUEST)
       .send({ message: statusMsg.PASSWORD_REQUIRED });

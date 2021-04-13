@@ -18,7 +18,16 @@ const statusMsg = {
   PASSWORD_REQUIRED: '"password" is required',
 };
 
+const jwtSecret = 'ofFrenchCuisineIsButterAndButter';
+
+const jwtHeaders = {
+  algorithm: 'HS256',
+  expiresIn: '5d',
+};
+
 module.exports = {
   statusCode,
   statusMsg,
+  jwtSecret,
+  jwtHeaders,
 };
