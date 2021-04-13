@@ -21,7 +21,7 @@ router.post('/login', validateLogin, generateToken);
 router.post('/post', validateToken, validatePost, postController.createPost);
 router.get('/post', validateToken, postController.getPostsAll);
 router.get('/post/:id', validateToken, postController.getPostId);
-router.put('/post/:id', validateToken, validateUser, validatePost, postController.updatePost);
+// router.put('/post/:id', validateToken, validateUser, validatePost, postController.updatePost);
 router.delete('/post/:id', validateToken, validateUser, postController.deletePost);
 
 module.exports = router;
