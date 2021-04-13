@@ -1,4 +1,4 @@
-const { User } = require('../database/models');
+const { User } = require('../models');
 
 const { CONFLICT, BAD_REQUEST } = require('../errors/status');
 
