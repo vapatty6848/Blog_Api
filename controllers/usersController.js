@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const { Router } = require('express');
 const { isAName, isAnEmail, emailAlreadyExists, isAPassword } = require('../middlewares/userValidations');
 const { User } = require('../models');
@@ -34,8 +35,14 @@ userRouter.get('/:id', validateAuthoriztion, async (req, res) => {
   return res.status(statusCode.SUCCESS).send(user);
 });
 
-// userRouter.delete('/me', async (req, res) => {
+userRouter.delete('/me', validateAuthoriztion, async (req, res) => {
+  const { authorization } = req.headers;
 
-// });
+  const UserPayload = jwt.decode(authorization);
+
+  await User.destroy({ where: { email: UserPayload.email } });
+
+  return res.status(statusCode.NO_CONTENT).send();
+});
 
 module.exports = userRouter;
