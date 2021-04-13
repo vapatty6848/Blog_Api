@@ -44,7 +44,7 @@ const loginUser = async (req, res) => {
   if (!user) return res.status(400).json({ message: 'Campos inválidos' });
 
   const token = jwt.sign({ user }, secret);
-  return res.status(200).json({ token });
+  return res.status(201).json({ token });
 };
 
 module.exports = {
