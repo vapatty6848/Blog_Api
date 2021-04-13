@@ -1,13 +1,18 @@
 const express = require('express');
 const { BlogPost, User } = require('../models');
+const { validatePost } = require('../middlewares/PostMiddleware');
+const { getTokenUser } = require('../utils/TokenUtils');
+const validateToken = require('../middlewares/validateToken');
 
 const router = express.Router();
 
-router.post('/', async (req, res, next) => {
+router.post('/', validatePost, validateToken, async (req, res, next) => {
   try {
-    const { title, content, userId, published, updated } = req.body;
-    const posts = await BlogPost.create({ title, content, userId, published, updated });
-    if (posts) return res.status(200).json(posts);
+    const { title, content } = req.body;
+    const { authorization: token } = req.headers;
+    const { id: userId } = getTokenUser(token);
+    const { dataValues: { id, ...post } } = await BlogPost.create({ title, content, userId });
+    if (post) return res.status(201).json(post);
   } catch (err) {
     next(err);
   }

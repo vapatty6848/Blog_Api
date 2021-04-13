@@ -20,26 +20,30 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        foreignKey: true,
         defaultValue: 1,
         references: {
           model: 'Users',
           key: 'id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       published: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: Sequelize.fn('now')
       },
       updated: {
+        // field: 'updated',
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: Sequelize.fn('now')
       },
     })
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
   return queryInterface.dropTable('BlogPosts');
   }
 };

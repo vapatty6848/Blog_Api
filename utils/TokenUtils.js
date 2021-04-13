@@ -18,7 +18,7 @@ function tokenGenerator(user) {
 
 function getTokenUser(token) {
   const decode = jwt.verify(token, SECRET, jwtConfig);
-  return decode.userData.email;
+  return decode.userData;
 }
 
 module.exports = {

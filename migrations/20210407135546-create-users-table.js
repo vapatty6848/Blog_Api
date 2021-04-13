@@ -24,12 +24,11 @@ module.exports = {
       },
       image: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
     })
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
   return queryInterface.dropTable('Users');
   }
 };

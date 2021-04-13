@@ -39,7 +39,7 @@ router.get('/:id', validateToken, async (req, res, next) => {
 router.delete('/me', validateToken, async (req, res, next) => {
   try {
     const { authorization: token } = req.headers;
-    const email = getTokenUser(token);
+    const { email } = getTokenUser(token);
     await User.destroy({ where: { email } });
     res.status(204).end();
   } catch (err) {
