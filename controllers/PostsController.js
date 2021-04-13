@@ -3,6 +3,7 @@ const { User } = require('../models');
 
 const SUCCESS = 200;
 const CREATED = 201;
+const NO_CONTENT = 204;
 const NOT_FOUND = 404;
 
 // Desafio 6 - Cadastrar Post
@@ -40,8 +41,26 @@ const getPostId = async (req, res) => {
   return res.status(SUCCESS).json(postId);
 };
 
+// Desafio 9 - Atualizar post pelo id
+const updatePost = async (req, res) => {
+  const { title, content } = req.body;
+  const { id } = req.params;
+  const postId = await BlogPosts.update({ title, content }, id);
+  console.log(postId);
+  return res.status(SUCCESS).json(postId);
+};
+
+// Desafio 11 - Excluir post pelo id
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  await BlogPosts.destroy({ where: { id } });
+  return res.status(NO_CONTENT).send();
+};
+
 module.exports = {
   createPost,
   getPostsAll,
   getPostId,
+  updatePost,
+  deletePost,
 };

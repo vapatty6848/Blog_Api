@@ -1,10 +1,12 @@
 const { verifyToken } = require('./Auth');
 const { User } = require('../models');
+const { BlogPosts } = require('../models');
 
 const SUCCESS = 200;
 const BAD_REQUEST = 400;
-const CONFLICT = 409;
 const UNAUTHORIZED = 401;
+const NOT_FOUND = 404;
+const CONFLICT = 409;
 
 const isBlank = (field) => !field || field === '';
 
@@ -106,9 +108,31 @@ const validatePost = async (req, res, next) => {
   next();
 };
 
+const validateUser = async (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user.id;
+  const postId = await BlogPosts.findAll({
+    where: { id },
+    include: [{
+      model: User,
+      as: 'user',
+      attributes: { exclude: ['password'] } }],
+    attributes: { exclude: ['userId'] },
+  });
+  if (postId.length === 0) {
+    return res.status(NOT_FOUND).send({ message: 'Post não existe' });
+  }
+  const idOwner = postId[0].dataValues.user.dataValues.id;
+  if (idOwner !== userId) {
+    return res.status(UNAUTHORIZED).send({ message: 'Usuário não autorizado' });
+  }
+  next();
+};
+
 module.exports = {
   validateCreateUser,
   validateLogin,
   validateToken,
   validatePost,
+  validateUser,
 };

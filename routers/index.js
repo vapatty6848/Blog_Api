@@ -5,7 +5,7 @@ const router = express.Router();
 const userController = require('../controllers/UsersController');
 const postController = require('../controllers/PostsController');
 
-const { validateCreateUser, validateLogin, validateToken, validatePost } = require('../services/Validation');
+const { validateCreateUser, validateLogin, validateToken, validatePost, validateUser } = require('../services/Validation');
 const { generateToken } = require('../middleware/generateToken');
 
 // Rotas de User
@@ -18,8 +18,10 @@ router.post('/user', validateCreateUser, userController.createUser, generateToke
 router.post('/login', validateLogin, generateToken);
 
 // Rotas de BlogPost
+router.post('/post', validateToken, validatePost, postController.createPost);
 router.get('/post', validateToken, postController.getPostsAll);
 router.get('/post/:id', validateToken, postController.getPostId);
-router.post('/post', validateToken, validatePost, postController.createPost);
+router.put('/post/:id', validateToken, validateUser, validatePost, postController.updatePost);
+router.delete('/post/:id', validateToken, validateUser, postController.deletePost);
 
 module.exports = router;
