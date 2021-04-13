@@ -17,9 +17,8 @@ userRouter.get('/', tk.allUsersverification, userServ.findAll, async (req, res) 
 
 userRouter.post('/', userServ.nameVerification, userServ.passwordVerification, userServ.emailVerification, async (req, res) => {
   const { displayName, email, password, image } = req.body;
-  const test = await User.create({ displayName, email, password, image });
-  console.log("\n\ntest", test, test.id);
-  const token = tk.createToken({ id: test.id, displayName, email, image });
+  const newUser = await User.create({ displayName, email, password, image });
+  const token = tk.createToken({ id: newUser.id, displayName, email, image });
   res.status(201).json({ token });
 });
 

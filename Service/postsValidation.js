@@ -28,9 +28,9 @@ const getPostById = async (req, res, next) => {
 };
 
 const editPostById = async (req, res, next) => {
-  const { id } = req.params; // id do post
+  const { id } = req.params;
   const { title, content } = req.body;
-  const { id: userId } = req.myUser; // id do user
+  const { id: userId } = req.myUser;
   const postInfo = await BlogPost.findOne({ where: { id } });
   console.log('postInfo', postInfo);
   if (postInfo.dataValues.userId !== userId) return next(createError('Usuário não autorizado', 401));
