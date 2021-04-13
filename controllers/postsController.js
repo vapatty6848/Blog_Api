@@ -1,4 +1,5 @@
 const express = require('express');
+const { Op } = require('sequelize');
 const { BlogPost, User } = require('../models');
 const { validatePost } = require('../middlewares/PostMiddleware');
 const { getTokenUser } = require('../utils/TokenUtils');
@@ -32,12 +33,22 @@ router.get('/', validateToken, async (req, res, next) => {
 
 router.get('/:id', validateToken, async (req, res, next) => {
   try {
-    const post = await BlogPost.findByPk(req.params.id, {
+    const { q } = req.query;
+    if (req.params.id !== 'search') {
+      const post = await BlogPost.findByPk(req.params.id, {
+        include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        attributes: { exclude: ['userId'] },
+      });
+      if (!post) return res.status(404).send({ message: 'Post não existe' });
+      return res.status(200).json(post);
+    }
+    const query = (q.length !== 0) ? { [Op.or]: [{ title: q }, { content: q }] } : {};
+    const posts = await BlogPost.findAll({
+      where: query,
       include: { model: User, as: 'user', attributes: { exclude: ['password'] } },
       attributes: { exclude: ['userId'] },
     });
-    if (!post) return res.status(404).send({ message: 'Post não existe' });
-    return res.status(200).json(post);
+    return res.status(200).json(posts);
   } catch (err) {
     next(err);
   }
