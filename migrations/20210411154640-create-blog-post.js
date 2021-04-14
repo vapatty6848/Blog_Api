@@ -11,14 +11,26 @@ module.exports = {
       title: {
         type: Sequelize.STRING
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+      content: {
+        type: Sequelize.STRING
       },
-      updatedAt: {
+      published: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
+      },
+      updated: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        references: { model: 'Users', key: 'id' },
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {

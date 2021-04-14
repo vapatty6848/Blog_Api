@@ -4,7 +4,7 @@ const secret = 'ShalalalalaShalalaInTheMorning';
 
 const jwtConfig = {
   expiresIn: '7d',
-  algorith: 'HS256',
+  algorithm: 'HS256',
 };
 
 const generateToken = ({ id, displayName }) => {
