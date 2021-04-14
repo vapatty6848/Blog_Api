@@ -1,8 +1,11 @@
 const { Router } = require('express');
 const UserServices = require('../services/UserServices');
+const Utils = require('../utils');
 
 const router = Router();
 
 router.post('/', UserServices.createUser, UserServices.loginUser);
+
+router.get('/', Utils.verifyToken, UserServices.getUsers);
 
 module.exports = router;

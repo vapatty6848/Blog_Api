@@ -6,6 +6,7 @@ const secret = process.env.SECRET || 'secretToken';
 
 const findByEmail = async (email) => {
   const user = await User.findOne({ where: { email } });
+  console.log(`USER: ${user}`);
   return user;
 };
 
@@ -49,8 +50,14 @@ const loginUser = async (req, res) => {
   return res.status(200).json({ token });
 };
 
+const getUsers = async (req, res) => {
+  const users = await User.findAll();
+  return res.status(200).json(users);
+};
+
 module.exports = {
   createUser,
   findByEmail,
   loginUser,
+  getUsers,
 };
