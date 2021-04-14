@@ -26,20 +26,21 @@ module.exports = {
       },
       userId: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+        references: { model: 'Users', key: 'id' },
+      },
+      published: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: new Date(),
       },
       updated: {
-        // allowNull: false,
-        type: Sequelize.DATE
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: new Date(),
       },
-      createdAt: {
-        // allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        // allowNull: false,
-        type: Sequelize.DATE
-      }
     });
   },
   down: async (queryInterface, Sequelize) => {

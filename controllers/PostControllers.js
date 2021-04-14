@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const { Users } = require('../models');
+const { BlogPosts } = require('../models');
 const verifyAuthorization = require('../middlewares/verifyAuthorization');
 const validateToken = require('../auth/validateToken');
 
@@ -18,6 +19,14 @@ routes.post('/', verifyAuthorization, async (req, res) => {
   const userId = user.dataValues.id;
 
   return res.status(201).json({ title, content, userId });
+});
+
+routes.get('/', verifyAuthorization, async (req, res) => {
+  const posts = await BlogPosts.findAll({
+    include: { model: Users, as: 'user' },
+  });
+
+  return res.status(200).json(posts);
 });
 
 module.exports = { routes };
