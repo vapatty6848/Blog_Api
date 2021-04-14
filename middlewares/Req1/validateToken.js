@@ -14,6 +14,7 @@ const usersAuthorized = async (req, res, next) => {
   const { authorization: token } = req.headers;
   if (!token) return res.status(401).json({ message: 'Token não encontrado' });
   const payload = await validateToken(token);
+  console.log('payload', payload);
   if (!payload) return res.status(401).json({ message: 'Token expirado ou inválido' });
   req.user = payload;
   next();
