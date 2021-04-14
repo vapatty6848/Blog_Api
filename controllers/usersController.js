@@ -4,7 +4,7 @@ const { isAName, isAnEmail, emailAlreadyExists, isAPassword } = require('../midd
 const { User } = require('../models');
 const { statusCode, statusMsg } = require('../utils/dictionary');
 const tokenCreation = require('../middlewares/tokenCreation');
-const validateAuthoriztion = require('../middlewares/validateAuthorzation');
+const validateAuthorization = require('../middlewares/validateAuthorization');
 
 const userRouter = Router();
 
@@ -21,12 +21,12 @@ userRouter.post('/', isAName, isAnEmail, isAPassword, async (req, res) => {
   return res.status(statusCode.SUCCESS_CREATED).send({ token });
 });
 
-userRouter.get('/', validateAuthoriztion, async (_req, res) => {
+userRouter.get('/', validateAuthorization, async (_req, res) => {
   const users = await User.findAll();
   return res.status(statusCode.SUCCESS).send(users);
 });
 
-userRouter.get('/:id', validateAuthoriztion, async (req, res) => {
+userRouter.get('/:id', validateAuthorization, async (req, res) => {
   const { id } = req.params;
   const user = await User.findByPk(id);
   if (!user || user === '') {
@@ -35,7 +35,7 @@ userRouter.get('/:id', validateAuthoriztion, async (req, res) => {
   return res.status(statusCode.SUCCESS).send(user);
 });
 
-userRouter.delete('/me', validateAuthoriztion, async (req, res) => {
+userRouter.delete('/me', validateAuthorization, async (req, res) => {
   const { authorization } = req.headers;
 
   const UserPayload = jwt.decode(authorization);
