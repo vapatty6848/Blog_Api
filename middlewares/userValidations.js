@@ -32,7 +32,7 @@ const isAnEmail = async (req, res, next) => {
   next();
 };
 
-const emailAlreadyExists = async (email) => await User.findOne({ where: { email } });
+const emailAlreadyExists = async (email) => User.findOne({ where: { email } });
 
 const isAPassword = (req, res, next) => {
   const { password } = req.body;
