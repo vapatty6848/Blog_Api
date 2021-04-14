@@ -23,7 +23,6 @@ const registerUser = (req, res, next) => {
 
 const verifylogin = (req, res, next) => {
   const { email, password } = req.body;
-  console.log(req.body, 'bodyyyy');
 
   if (email === '') return res.status(400).json({ message: '"email" is not allowed to be empty' });
 
