@@ -29,4 +29,15 @@ routes.get('/', verifyAuthorization, async (req, res) => {
   return res.status(200).json(users);
 });
 
+routes.get('/:id', verifyAuthorization, async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  const user = await Users.findOne({ where: { id } });
+
+  if (!user) return res.status(404).json({ message: 'Usuário não existe' });
+
+  return res.status(200).json(user);
+});
+
 module.exports = { routes };
