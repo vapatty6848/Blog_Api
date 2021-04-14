@@ -7,9 +7,12 @@ module.exports = {
   async execute({ email }) {
     const userByEmail = await User.findOne({ where: { email } });
 
+    const data = userByEmail.dataValues;
+
     if (userByEmail) {
-      const token = sign({}, authConfig.jwt.secret, {
+      const token = sign({ data }, authConfig.jwt.secret, {
         expiresIn: authConfig.jwt.expiresIn,
+        algorithm: 'HS256',
       });
 
       return token;

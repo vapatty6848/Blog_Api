@@ -1,22 +1,31 @@
 const jwt = require('jsonwebtoken');
+const { User } = require('../database/models');
+const jwtToken = require('../config/auth');
 
-const { UNAUTHORIZED } = require('../errors/status');
-const authConfig = require('../config/auth.js');
+const UNAUTHORIZED = 401;
 
 module.exports = async (req, res, next) => {
-  const { authorization } = req.headers;
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+  }
 
   try {
-    if (!authorization) return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+    const decoded = jwt.verify(token, jwtToken.jwt.secret);
+    const { email } = decoded.data;
 
-    const decoded = jwt.verify(authorization, authConfig.jwt.secret);
+    const user = await User.findOne({ where: { email } });
 
-    const { id } = decoded;
+    if (user === null) {
+      return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+    }
 
-    req.user = { id };
+    req.userId = user.dataValues.id;
 
-    return next();
-  } catch {
+    next();
+  } catch (err) {
+    console.log(err);
     return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
   }
 };
