@@ -18,7 +18,7 @@ UserRouter.get('/', (_req, res) => {
 
 UserRouter.post('/', registerUser, async (req, res) => {
   const resultFind = await User.findOne({ where: { email: req.body.email } });
-  if (resultFind)res.status(400).json({ message: 'Usuário já existe' });
+  if (resultFind)res.status(409).json({ message: 'Usuário já existe' });
   const { displayName, email, password, image } = req.body;
   User.create({ displayName, email, password, image })
     .then((user) => createJWTPayload(user))
