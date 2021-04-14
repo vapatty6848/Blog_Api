@@ -1,7 +1,7 @@
 const { sign } = require('jsonwebtoken');
-const authConfig = require('../config/auth');
+const authConfig = require('../../config/auth');
 
-const { User } = require('../database/models');
+const { User } = require('../../database/models');
 
 module.exports = {
   async execute({ email }) {

@@ -1,4 +1,4 @@
-const CreateLoginService = require('../services/CreateLoginService');
+const CreateLoginService = require('../services/login/CreateLoginService');
 
 const { BAD_REQUEST } = require('../errors/status');
 

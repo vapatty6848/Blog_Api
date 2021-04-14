@@ -1,7 +1,7 @@
-const CreateUserService = require('../services/CreateUserService');
-const GetAllUsersService = require('../services/GetAllUsersService');
-const GetUserByIdService = require('../services/GetUserByIdService');
-const DeleteUserService = require('../services/DeleteUserService');
+const CreateUserService = require('../services/user/CreateUserService');
+const GetAllUsersService = require('../services/user/GetAllUsersService');
+const GetUserByIdService = require('../services/user/GetUserByIdService');
+const DeleteUserService = require('../services/user/DeleteUserService');
 
 const { NOT_FOUND } = require('../errors/status');
 
