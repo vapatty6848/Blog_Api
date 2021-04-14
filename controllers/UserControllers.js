@@ -5,6 +5,7 @@ const { Users } = require('../models');
 const verifyEmail = require('../middlewares/verifyEmail');
 const verifyName = require('../middlewares/verifyName');
 const verifyPassword = require('../middlewares/verifyPassword');
+const verifyAuthorization = require('../middlewares/verifyAuthorization');
 const createToken = require('../auth/createToken');
 
 routes.post('/', verifyEmail, verifyName, verifyPassword, async (req, res) => {
@@ -22,7 +23,7 @@ routes.post('/', verifyEmail, verifyName, verifyPassword, async (req, res) => {
   return res.status(201).json({ token });
 });
 
-routes.get('/', async (req, res) => {
+routes.get('/', verifyAuthorization, async (req, res) => {
   const users = await Users.findAll({});
 
   return res.status(200).json(users);
