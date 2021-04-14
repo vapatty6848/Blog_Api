@@ -29,4 +29,17 @@ routes.get('/', verifyAuthorization, async (req, res) => {
   return res.status(200).json(posts);
 });
 
+routes.get('/:id', verifyAuthorization, async (req, res) => {
+  const { id } = req.params;
+
+  const post = await BlogPosts.findOne({
+    where: { id },
+    include: { model: Users, as: 'user' },
+  });
+
+  if (!post) return res.status(404).json({ message: 'Post não existe' });
+
+  return res.status(200).json(post);
+});
+
 module.exports = { routes };

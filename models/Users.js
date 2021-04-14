@@ -8,7 +8,7 @@ const Users = (sequelize, DataTypes) => {
   }, { timestamps: false });
 
   users.associate = (model) => {
-    users.hasOne(model.BlogPosts, { foreignKey: 'userId', as: 'blogPost' });
+    users.hasOne(model.BlogPosts, { foreignKey: 'userId', as: 'blogPosts' });
   };
 
   return users;
