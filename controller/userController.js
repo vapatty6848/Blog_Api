@@ -19,7 +19,7 @@ userRouter.get('/', (_req, res) => {
 userRouter.post('/', registerUser, async (req, res) => {
   const resultFind = await User.findOne({ where: { email: req.body.email } });
 
-  if (resultFind)res.status(409).json({ message: 'Usuário já existe' });
+  if (resultFind) return res.status(409).json({ message: 'Usuário já existe' });
 
   const { displayName, email, password, image } = req.body;
 
