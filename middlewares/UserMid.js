@@ -23,14 +23,15 @@ const registerUser = (req, res, next) => {
 
 const verifylogin = (req, res, next) => {
   const { email, password } = req.body;
+  console.log(req.body, 'bodyyyy');
+
+  if (email === '') return res.status(400).json({ message: '"email" is not allowed to be empty' });
 
   if (!email) return res.status(400).json({ message: '"email" is required' });
 
-  if (email && email.length === 0) return res.status(400).json({ message: '"email" is not allowed to be empty' });
+  if (password === '') return res.status(400).json({ message: '"password" is not allowed to be empty' });
 
   if (!password) return res.status(400).json({ message: '"password" is required' });
-
-  if (password && password.length < 0) return res.status(400).json({ message: '"password" is not allowed to be empty' });
 
   next();
 };
