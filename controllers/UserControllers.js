@@ -7,6 +7,7 @@ const verifyName = require('../middlewares/verifyName');
 const verifyPassword = require('../middlewares/verifyPassword');
 const verifyAuthorization = require('../middlewares/verifyAuthorization');
 const createToken = require('../auth/createToken');
+const validateToken = require('../auth/validateToken');
 
 routes.post('/', verifyEmail, verifyName, verifyPassword, async (req, res) => {
   const { displayName, email, password, image } = req.body;
@@ -31,13 +32,24 @@ routes.get('/', verifyAuthorization, async (req, res) => {
 
 routes.get('/:id', verifyAuthorization, async (req, res) => {
   const { id } = req.params;
-  console.log(id);
 
   const user = await Users.findOne({ where: { id } });
 
   if (!user) return res.status(404).json({ message: 'Usuário não existe' });
 
   return res.status(200).json(user);
+});
+
+routes.delete('/me', verifyAuthorization, async (req, res) => {
+  const { authorization: token } = req.headers;
+
+  const payload = validateToken(token);
+
+  const { email } = payload;
+
+  await Users.destroy({ where: { email } });
+
+  return res.status(204).json();
 });
 
 module.exports = { routes };
