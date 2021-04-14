@@ -16,10 +16,10 @@ const registerUser = (req, res, next) => {
 
 const verifylogin = (req, res, next) => {
   const { email, password } = req.body;
+  if (password === '') return res.status(BAD_REQ).json({ message: '"password" is not allowed to be empty' });
+  if (email === '') return res.status(BAD_REQ).json({ message: '"email" is not allowed to be empty' });
   if (!email) return res.status(BAD_REQ).json({ message: '"email" is required' });
   if (!password) return res.status(BAD_REQ).json({ message: '"password" is required' });
-  if (email.length === 0) return res.status(BAD_REQ).json({ message: '"email" is not allowed to be empty' });
-  if (password.length === 0) return res.status(BAD_REQ).json({ message: '"password" is not allowed to be empty' });
   next();
 };
 module.exports = {
