@@ -25,5 +25,5 @@ LoginRouter.post('/', verifylogin, async (req, res) => {
     });
 });
 
-// ...
+// .........
 module.exports = LoginRouter;
