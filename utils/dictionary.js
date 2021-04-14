@@ -16,6 +16,7 @@ const statusMsg = {
   EMAIL_EMPTY: '"email" is not allowed to be empty',
   USER_EXISTS: 'Usuário já existe',
   USER_NOT_EXISTS: 'Usuário não existe',
+  USER_UNAUTHORIZED: 'Usuário não autorizado',
   PASSWORD_LENGTH: '"password" length must be 6 characters long',
   PASSWORD_REQUIRED: '"password" is required',
   PASSWORD_EMPTY: '"password" is not allowed to be empty',

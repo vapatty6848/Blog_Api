@@ -36,10 +36,33 @@ postRouter.get('/:id', validateAuthorization, async (req, res) => {
     include: [{ model: User, as: 'user' }],
     attributes: { exclude: ['userId'] },
   });
+  console.log('oneBlogPost:', oneBlogPost);
   if (!oneBlogPost || oneBlogPost === ' ') {
     return res.status(statusCode.NOT_FOUND).send({ message: statusMsg.POST_NOT_FOUND });
   }
   return res.status(statusCode.SUCCESS).send(oneBlogPost);
+});
+
+postRouter.delete('/:id', validateAuthorization, async (req, res) => {
+  const { id } = req.params;
+  const { authorization } = req.headers;
+
+  const { email } = jwt.decode(authorization);
+  const UserDB = await emailAlreadyExists(email);
+  const userId = UserDB.dataValues.id;
+
+  const postExists = await BlogPost.findByPk(id);
+
+  if (!postExists || postExists === ' ') {
+    return res.status(statusCode.NOT_FOUND)
+      .send({ message: statusMsg.POST_NOT_FOUND });
+  }
+
+  if (postExists.userId === userId) {
+    await BlogPost.destroy({ where: { id } });
+    return res.status(statusCode.NO_CONTENT).send();
+  }
+  return res.status(statusCode.UNAUTHORIZED).send({ message: statusMsg.USER_UNAUTHORIZED });
 });
 
 module.exports = postRouter;
