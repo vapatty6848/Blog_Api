@@ -9,32 +9,47 @@ const createPosts = async (title, content, userId) => {
   return BlogPosts.create({ title, content, userId });
 };
 
-const findAllPosts = async () => BlogPosts.findAll();
+const findAllPosts = async () => BlogPosts.findAll({
+  attributes: { exclude: 'userId' },
+  include: { model: User, as: 'user' },
+});
 
 const findById = async (id) => {
-  const postById = await BlogPosts.findOne({ where: { id } });
+  const postById = await BlogPosts.findOne(
+    { raw: true, where: { id } },
+  );
   if (!postById) throw new AppError('404', 'Post não existe');
 
-  const { dataValues: post } = postById;
-  const { dataValues: user } = await userService.findById(postById.userId);
+  const user = await userService.findById(postById.userId);
 
-  delete post.userId;
+  delete postById.userId;
   delete user.password;
-  return { ...post, user };
+  return { ...postById, user };
 };
 
-const deletePost = async (id, email) => {
-  const userById = await User.findOne({ where: { email } });
-  const postById = await BlogPosts.findOne({ where: { id } });
-
+const deletePost = async (id, userById) => {
+  const postById = await BlogPosts.findOne(
+    { raw: true, where: { id } },
+  );
   if (!postById) throw new AppError('404', 'Post não existe');
 
-  const { dataValues: user } = userById;
-  const { dataValues: post } = postById;
-
-  if (user.id !== post.userId) throw new AppError(401, 'Usuário não autorizado');
+  if (userById !== postById.userId) throw new AppError(401, 'Usuário não autorizado');
 
   await BlogPosts.destroy({ where: { id } });
+};
+
+const editPost = async (title, content, id, userId) => {
+  const postById = await BlogPosts.findOne({ where: { id } });
+
+  postValidation(title, content);
+  if (userId !== postById.userId) throw new AppError(401, 'Usuário não autorizado');
+
+  postById.title = title;
+  postById.content = content;
+
+  await postById.save();
+
+  return postById;
 };
 
 module.exports = {
@@ -42,4 +57,5 @@ module.exports = {
   findAllPosts,
   findById,
   deletePost,
+  editPost,
 };

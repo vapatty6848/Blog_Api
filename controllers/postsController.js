@@ -42,12 +42,28 @@ const deletePost = async (req, res, next) => {
   try {
     const {
       params: { id },
-      user: { email },
+      user: { userId },
     } = req;
 
-    await services.deletePost(id, email);
+    await services.deletePost(id, userId);
 
     return res.status(204).end();
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const editPost = async (req, res, next) => {
+  try {
+    const {
+      body: { title, content },
+      params: { id },
+      user: { userId },
+    } = req;
+
+    const editById = await services.editPost(title, content, id, userId);
+
+    return res.status(200).json(editById);
   } catch (err) {
     return next(err);
   }
@@ -58,4 +74,5 @@ module.exports = {
   findAllPosts,
   findById,
   deletePost,
+  editPost,
 };
