@@ -47,24 +47,19 @@ router.delete('/me', validateToken, async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
-  const { displayName, email, password, image } = req.body;
+// router.put('/:id', async (req, res, next) => {
+//   try {
+//     const { displayName, email, password, image } = req.body;
+//     const { id } = req.params;
 
-  await User.update(
-    { displayName, email, password, image },
-    {
-      where: {
-        id: req.params.id,
-      },
-    },
-  )
-    .then((users) => {
-      res.status(200).send({ message: 'Usuário atualizado com sucesso.', users });
-    })
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
-    });
-});
+//     const user = await User.update(
+//       { displayName, email, password, image },
+//       { where: { id } },
+//     );
+//     if (user) return res.status(200).send({ message: 'Usuário atualizado com sucesso.' });
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
 module.exports = router;
