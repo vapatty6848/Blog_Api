@@ -1,11 +1,11 @@
 const express = require('express');
 const { User } = require('../models');
 const { secret, jwtConfig, createJWTPayload, jwtSign } = require('../auth/ValidateToken');
-// const { registerUser } = require('../middlewares/UserMid');
+const { verifylogin } = require('../middlewares/UserMid');
 
 const LoginRouter = express.Router();
 
-LoginRouter.post('/', async (req, res) => {
+LoginRouter.post('/', verifylogin, async (req, res) => {
   User.findOne(
     {
       where:
@@ -15,10 +15,10 @@ LoginRouter.post('/', async (req, res) => {
       },
     },
   ).then((user) => {
-    if (user === null) res.status(400).json({ message: 'Usuário não existe' });
+    if (user === null) res.status(400).json({ message: 'Campos inválidos' });
     return createJWTPayload(user);
   }).then((payload) => jwtSign(payload, secret, jwtConfig))
-    .then((result) => res.status(201).json({ token: result }))
+    .then((result) => res.status(200).json({ token: result }))
     .catch((e) => {
       console.log(e.message);
       res.status(500).send({ message: 'Algo deu errado' });
