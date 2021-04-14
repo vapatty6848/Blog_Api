@@ -23,15 +23,14 @@ const registerUser = (req, res, next) => {
 
 const verifylogin = (req, res, next) => {
   const { email, password } = req.body;
-  const regexEmail = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/;
 
-  if (!email) return res.status(400).json({ message: 'Campos inválidos' });
+  if (!email) return res.status(400).json({ message: '"email" is required' });
 
-  if (!regexEmail.test(email)) return res.status(400).json({ message: 'Campos inválidos' });
+  if (email && email.length === 0) return res.status(400).json({ message: '"email" is not allowed to be empty' });
 
-  if (!password) return res.status(400).json({ message: 'Campos inválidos' });
+  if (!password) return res.status(400).json({ message: '"password" is required' });
 
-  if (password.length < 6) return res.status(400).json({ message: 'Campos inválidos' });
+  if (password && password.length < 0) return res.status(400).json({ message: '"password" is not allowed to be empty' });
 
   next();
 };
