@@ -2,7 +2,8 @@ const express = require('express');
 
 const { User } = require('../models');
 const userServ = require('../Service/UserValidations');
-const tk = require('../Service/TokenCreate');
+const tken = require('../Service/TokenCreate');
+const tk = require('../Service/TokenValidad');
 
 const userRouter = express.Router();
 
@@ -18,7 +19,7 @@ userRouter.get('/', tk.allUsersverification, userServ.findAll, async (req, res) 
 userRouter.post('/', userServ.nameVerification, userServ.passwordVerification, userServ.emailVerification, async (req, res) => {
   const { displayName, email, password, image } = req.body;
   const newUser = await User.create({ displayName, email, password, image });
-  const token = tk.createToken({ id: newUser.id, displayName, email, image });
+  const token = tken.createToken({ id: newUser.id, displayName, email, image });
   res.status(201).json({ token });
 });
 

@@ -3,7 +3,8 @@ const { Op } = require('sequelize');
 
 const { BlogPost, User } = require('../models');
 const postServ = require('../Service/postsValidation');
-const tk = require('../Service/TokenCreate');
+// const tken = require('../Service/TokenCreate');
+const tk = require('../Service/TokenValidad');
 
 const postsRouter = express.Router();
 

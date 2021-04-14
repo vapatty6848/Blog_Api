@@ -1,4 +1,3 @@
-
 const { User, BlogPost } = require('../models');
 
 const createError = (message, status) => ({ message, status });
