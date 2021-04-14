@@ -22,6 +22,9 @@ const statusMsg = {
   FIELD_INVALID: 'Campos inválidos',
   TOKEN_EMPTY: 'Token não encontrado',
   TOKEN_INVALID: 'Token expirado ou inválido',
+  CONTENT_REQUIRED: '"content" is required',
+  TITLE_REQUIRED: '"title" is required',
+  POST_NOT_FOUND: 'Post não existe',
 };
 
 const jwtSecret = 'ofFrenchCuisineIsButterAndButter';
