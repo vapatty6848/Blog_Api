@@ -16,6 +16,7 @@ module.exports = async (req, res, next) => {
     const { email } = decoded.data;
 
     const user = await User.findOne({ where: { email } });
+    // console.log(user);
 
     if (user === null) {
       return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
@@ -25,7 +26,6 @@ module.exports = async (req, res, next) => {
 
     next();
   } catch (err) {
-    console.log(err);
     return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
   }
 };

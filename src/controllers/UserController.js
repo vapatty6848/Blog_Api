@@ -23,7 +23,9 @@ module.exports = {
   async getUserById(req, res) {
     const user = await GetUserByIdService.execute(req.params);
 
-    if (!user) res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
+    if (!user) {
+      return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
+    }
 
     return res.status(OK).json(user);
   },
