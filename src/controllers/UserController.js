@@ -1,5 +1,8 @@
 const CreateUserService = require('../services/CreateUserService');
 const GetAllUsersService = require('../services/GetAllUsersService');
+const GetUserByIdService = require('../services/GetUserByIdService');
+
+const { NOT_FOUND } = require('../errors/status');
 
 const OK = 200;
 const CREATED = 201;
@@ -15,5 +18,13 @@ module.exports = {
     const users = await GetAllUsersService.execute();
 
     return res.status(OK).json(users);
+  },
+
+  async getUserById(req, res) {
+    const user = await GetUserByIdService.execute(req.params);
+
+    if (!user) res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
+
+    return res.status(OK).json(user);
   },
 };
