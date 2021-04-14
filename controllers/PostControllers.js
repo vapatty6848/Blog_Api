@@ -42,12 +42,6 @@ routes.get('/:id', verifyAuthorization, async (req, res) => {
   return res.status(200).json(post);
 });
 
-const checkPayload = (title, content, res) => {
-  if (!title) return res.status(400).json({ message: '"title" is required' });
-
-  if (!content) return res.status(400).json({ message: '"content" is required' });
-};
-
 const getPost = (id) => BlogPosts.findOne({
   where: { id },
   include: { model: Users, as: 'user' },
@@ -68,7 +62,9 @@ routes.put('/:id', verifyAuthorization, async (req, res) => {
   const { authorization: token } = req.headers;
   const { title, content } = req.body;
 
-  checkPayload(title, content, res);
+  if (!title) return res.status(400).json({ message: '"title" is required' });
+
+  if (!content) return res.status(400).json({ message: '"content" is required' });
 
   const post = await getPost(id);
 
