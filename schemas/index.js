@@ -16,7 +16,13 @@ const sessionSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const postSchema = Joi.object({
+  title: Joi.string().min(1).required(),
+  content: Joi.string().min(1).required(),
+});
+
 module.exports = {
   userSchema,
   sessionSchema,
+  postSchema,
 };
