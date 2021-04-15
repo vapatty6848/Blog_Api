@@ -27,10 +27,12 @@ module.exports = {
       published: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: new Date(),
       },
       updated: {
         type: Sequelize.DATE,
         allowNull: false,
+        defaultValue: new Date(),
       },
     });
     return PostsTable
