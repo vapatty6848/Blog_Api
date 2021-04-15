@@ -1,5 +1,6 @@
 // const jwt = require('jsonwebtoken');
 const BAD_REQ = 400;
+const UNAUTHORIZED = 401;
 // const CONFLICT = 409;
 // const FORBIDDEN = 403;
 // const secret = 'shhhh...é segredo';
@@ -22,7 +23,16 @@ const verifylogin = (req, res, next) => {
   if (!password) return res.status(BAD_REQ).json({ message: '"password" is required' });
   next();
 };
+
+const verifyToken = (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+  if (authorization.length < 16) return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
+  next();
+};
+
 module.exports = {
   registerUser,
   verifylogin,
+  verifyToken,
 };

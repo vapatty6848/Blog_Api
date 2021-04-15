@@ -1,14 +1,14 @@
 const express = require('express');
 const { User } = require('../models');
 const { secret, jwtConfig, createJWTPayload, jwtSign } = require('../auth/ValidateToken');
-const { registerUser } = require('../middlewares/UserMid');
+const { registerUser, verifyToken } = require('../middlewares/UserMid');
 
 const UserRouter = express.Router();
 
-UserRouter.get('/', (_req, res) => {
+UserRouter.get('/', verifyToken, (_req, res) => {
   User.findAll()
     .then((users) => {
-      res.status(201).json(users);
+      res.status(200).json(users);
     })
     .catch((e) => {
       console.log(e.message);
