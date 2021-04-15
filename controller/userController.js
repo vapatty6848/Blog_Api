@@ -16,6 +16,23 @@ userRouter.get('/', verifyToken, (_req, res) => {
     });
 });
 
+userRouter.get('/:id', verifyToken, (req, res) => {
+  const { id } = req.params;
+
+  User.findOne({ where: { id } })
+    .then((users) => {
+      if (users) {
+        res.status(200).json(users);
+      } else {
+        res.status(404).json({ message: 'Usuário não existe' });
+      }
+    })
+    .catch((e) => {
+      console.log(e.message);
+      res.status(500).json({ message: 'Algo deu errado' });
+    });
+});
+
 userRouter.post('/', registerUser, async (req, res) => {
   const resultFind = await User.findOne({ where: { email: req.body.email } });
 
