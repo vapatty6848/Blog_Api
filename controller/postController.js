@@ -38,4 +38,16 @@ postControll.get('/', validToken, async (req, res) => {
   return res.status(200).json(posts);
 });
 
+postControll.put('/:id', validToken, validPost, async (req, res) => {
+  const { title, content } = req.body;
+  const { id: userId } = req.payload.data;
+  const { id } = req.params;
+  const editPost = await BlogPosts.findOne({ where: { id } });
+  if (editPost.userId !== userId) return res.status(401).json({ message: 'Usuário não autorizado' });
+  editPost.title = title;
+  editPost.content = content;
+  await editPost.save();
+  return res.status(200).json({ title, content, userId });
+});
+
 module.exports = { postControll };
