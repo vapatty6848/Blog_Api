@@ -1,5 +1,11 @@
 const jwt = require('jsonwebtoken');
 const { nameHasValidLength, emailIsValid, passwordHasValidLength } = require('./userValidations');
+require('dotenv').config();
+
+const secret = process.env.SECRET || 'secretToken';
+
+const NOT_FOUND = 404;
+const UNAUTHORIZED = 401;
 
 // const { findByEmail } = require('../services/UserServices');
 const { User } = require('../models');
@@ -9,13 +15,6 @@ const findByEmail = async (email) => {
   console.log(`USER: ${user}`);
   return user;
 };
-
-require('dotenv').config();
-
-const secret = process.env.SECRET || 'secretToken';
-
-const NOT_FOUND = 404;
-const UNAUTHORIZED = 401;
 
 const throwThisError = (code, msg) => {
   const err = new Error(msg);

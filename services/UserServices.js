@@ -6,7 +6,6 @@ const secret = process.env.SECRET || 'secretToken';
 
 const findByEmail = async (email) => {
   const user = await User.findOne({ where: { email } });
-  console.log(`USER: ${user}`);
   return user;
 };
 
@@ -43,7 +42,6 @@ const loginUser = async (req, res) => {
   }
 
   const user = await User.findOne({ where: { email, password } });
-  console.log(user);
   if (!user) return res.status(400).json({ message: 'Campos inválidos' });
 
   const token = jwt.sign({ user }, secret);
@@ -55,9 +53,23 @@ const getUsers = async (req, res) => {
   return res.status(200).json(users);
 };
 
+const getUserById = async (req, res) => {
+  const { id } = req.params;
+
+  const user = await User.findOne({
+    where: { id },
+    attributes: ['id', 'displayName', 'email', 'image'],
+  });
+
+  if (!user) return res.status(404).json({ message: 'Usuário não existe' });
+
+  res.status(200).json(user);
+};
+
 module.exports = {
   createUser,
   findByEmail,
   loginUser,
   getUsers,
+  getUserById,
 };
