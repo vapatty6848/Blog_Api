@@ -11,35 +11,50 @@ PostRouter.post('/', verifyAuthorization, PostsServices.validatePost, async (req
   const date = Math.floor(Date.now() / 1000);
   const { id } = req.payload.id;
   await BlogPost.create({ title, content, userId: id, published: date, updated: date });
-  res.status(200).json({ title, content, user: req.payload.id });
+  return res.status(201).json({ title, content, userId: id });
 });
 
 PostRouter.get('/', verifyAuthorization, async (req, res) => {
-  const data = await BlogPost.findAll();
-  // const data = await BlogPost
-  //  .findAll({ include: { model: User, as: 'user' } }); - CONTINUAÇÃO - JUNTAR AS DUAS TABELAS
-  res.status(200).json(data);
+  // const data = await BlogPost.findAll();
+  try {
+    const data = await BlogPost
+      .findAll();
+    const { id, title, content, published, updated } = data[0];
+    return res.status(200).json([{ id, title, content, published, updated, user: req.payload.id }]);
+  } catch (err) {
+    return res.status(200).json({ message: err.message });
+  }
 });
 
 PostRouter.get('/search', verifyAuthorization, async (req, res) => {
+  if (req.query.q === '') {
+    console.log(req.query.q, 'asdasd');
+    const data = await BlogPost
+      .findAll();
+    const { id, title, content, published, updated } = data[0];
+    return res.status(200).json([{ id, title, content, published, updated, user: req.payload.id }]);
+  }
   const query = `%${req.query.q}%`;
   const data = await BlogPost
     .findAll({ where: { [Op.or]: [{ title: { [Op.like]: query } },
       { content: { [Op.like]: query } }] } });
-  res.status(200).json(data);
+  if (data.length === 0) return res.status(200).json([]);
+  const { id, title, content, published, updated } = data[0];
+  return res.status(200).json([{ id, title, content, published, updated, user: req.payload.id }]);
 });
 
 PostRouter.get('/:id', verifyAuthorization, async (req, res) => {
   try {
     const data = await BlogPost.findByPk(req.params.id);
     if (!data) throw new Error('Post não existe');
-    res.status(200).json(data);
+    const { id, title, content, published, updated } = data;
+    return res.status(200).json([{ id, title, content, published, updated, user: req.payload.id }]);
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    return res.status(404).json({ message: err.message });
   }
 });
 
-PostRouter.patch('/:id',
+PostRouter.put('/:id',
   verifyAuthorization,
   PostsServices.validatePost,
   PostsServices.validatePostOwner,
@@ -51,9 +66,10 @@ PostRouter.patch('/:id',
         title, content, updated: date },
       { where: { id: req.params.id } });
       const data = await BlogPost.findByPk(req.params.id);
-      res.status(200).json({ title: data.title, content: data.content, userId: data.userId });
+      return res.status(200)
+        .json({ title: data.title, content: data.content, userId: data.userId });
     } catch (err) {
-      res.status(404).json({ message: err.message });
+      return res.status(404).json({ message: err.message });
     }
   });
 
@@ -62,6 +78,6 @@ PostRouter.delete('/:id',
   PostsServices.validatePostOwner,
   async (req, res) => {
     await BlogPost.destroy({ where: { id: req.params.id } });
-    res.status(204).send();
+    return res.status(204).send();
   });
 module.exports = PostRouter;

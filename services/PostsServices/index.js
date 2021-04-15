@@ -2,13 +2,14 @@ const { BlogPost } = require('../../models');
 // const validateToken = require('../Auth/validateToken');
 
 const validatePost = async (req, res, next) => {
+  const ERROR = 400;
   try {
     const { title, content } = req.body;
     if (!title) throw new Error('"title" is required');
-    if (!content) throw new Error('"title" is required');
+    if (!content) throw new Error('"content" is required');
     next();
   } catch (err) {
-    res.status(400).send({ message: err.message });
+    return res.status(ERROR).json({ message: err.message });
   }
 };
 
@@ -20,8 +21,7 @@ const validatePostOwner = async (req, res, next) => {
     if (getPost.userId !== user.id) throw new Error('Usuário não autorizado');
     next();
   } catch (err) {
-    console.log(err);
-    res.status(err.message === 'Post não existe' ? 404 : 401)
+    return res.status(err.message === 'Post não existe' ? 404 : 401)
       .send({ message: err.message.code ? err.message.er : err.message });
   }
 };
