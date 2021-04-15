@@ -26,6 +26,12 @@ userController.post('/', validateUsers, async (req, res, next) => {
   }
 });
 
+userController.delete('/me', validateAuth, async (req, res) => {
+  const { id } = res.locals.user;
+  await UserService.deleteUserById(id);
+  res.status(204).json({ message: 'deleted' });
+});
+
 userController.get('/:id', validateAuth, async (req, res, next) => {
   const { id: paramsId } = req.params;
   try {

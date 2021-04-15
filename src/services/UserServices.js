@@ -56,7 +56,7 @@ async function createUser(data) {
 }
 
 async function deleteUserById(id) {
-  return UserRepository.deleteById(id);
+  await UserRepository.deleteById(id);
 }
 
 module.exports = {
