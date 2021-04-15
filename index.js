@@ -20,9 +20,7 @@ app.get('/', (request, response) => {
 });
 
 app.use('/user', rescue(UsersController));
-
 app.use('/post', rescue(PostsController));
-
 app.use('/login', rescue(UserServices.loginUser));
 
 app.use((err, req, res, _) => {

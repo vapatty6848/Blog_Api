@@ -16,13 +16,15 @@ const createPost = async (req, res) => {
   return res.status(201).json(post);
 };
 
+const userModel = {
+  model: User,
+  as: 'user',
+  attributes: ['id', 'displayName', 'email', 'image'],
+};
+
 const getPosts = async (req, res) => {
   const posts = await BlogPosts.findAll({
-    include: {
-      model: User,
-      as: 'user',
-      attributes: ['id', 'displayName', 'email', 'image'],
-    },
+    include: userModel,
   });
   return res.status(200).json(posts);
 };
@@ -32,11 +34,7 @@ const getPostById = async (req, res) => {
 
   const post = await BlogPosts.findOne({
     where: { id },
-    include: {
-      model: User,
-      as: 'user',
-      attributes: ['id', 'displayName', 'email', 'image'],
-    },
+    include: userModel,
   });
 
   if (!post) return res.status(404).json({ message: 'Post não existe' });
@@ -86,4 +84,5 @@ module.exports = {
   getPostById,
   updatePostById,
   deletePost,
+  userModel,
 };
