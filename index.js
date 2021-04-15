@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const UserServices = require('./services/UserServices');
+const PostsController = require('./controllers/PostsController');
 const UsersController = require('./controllers/UsersController');
 
 require('dotenv').config();
@@ -19,6 +20,8 @@ app.get('/', (request, response) => {
 });
 
 app.use('/user', rescue(UsersController));
+
+app.use('/post', rescue(PostsController));
 
 app.use('/login', rescue(UserServices.loginUser));
 
