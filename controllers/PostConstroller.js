@@ -61,4 +61,12 @@ postController.delete('/:id', validateAuth, async (req, res) => {
   return res.status(401).send({ message: 'Usuário não autorizado' });
 });
 
+// postController.put('/:id', validateAuth, async (req, res) => {
+//   const { id } = req.params;
+//   const { title, content } = req.body;
+//   const userId = req.userIdFromMiddleware.id;
+//   await BlogPost.update({ title, content }, { where: { id } });
+//   return res.status(200).json({ title, content, userId });
+// });
+
 module.exports = postController;
