@@ -13,7 +13,7 @@ userRouter.get('/', verifyToken, (_req, res) => {
     })
     .catch((e) => {
       console.log(e.message);
-      res.status(500).json({ message: 'Algo deu errado' });
+      return res.status(500).json({ message: 'Algo deu errado' });
     });
 });
 
@@ -27,7 +27,7 @@ userRouter.get('/:id', verifyToken, (req, res) => {
     })
     .catch((e) => {
       console.log(e.message);
-      res.status(500).json({ message: 'Algo deu errado' });
+      return res.status(500).json({ message: 'Algo deu errado' });
     });
 });
 
@@ -44,7 +44,7 @@ userRouter.post('/', registerUser, async (req, res) => {
     .then((result) => res.status(201).json({ token: result }))
     .catch((e) => {
       console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
+      return res.status(500).send({ message: 'Algo deu errado' });
     });
 });
 
@@ -66,7 +66,7 @@ userRouter.delete('/me', verifyToken, (req, res) => {
   })
     .catch((e) => {
       console.log(e.message);
-      res.status(500).json({ message: 'Algo deu errado' });
+      return res.status(500).json({ message: 'Algo deu errado' });
     });
 });
 

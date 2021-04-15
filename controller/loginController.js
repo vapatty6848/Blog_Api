@@ -21,7 +21,7 @@ loginRouter.post('/', verifylogin, async (req, res) => {
     .then((result) => res.status(200).json({ token: result }))
     .catch((e) => {
       console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
+      return res.status(500).send({ message: 'Algo deu errado' });
     });
 });
 
