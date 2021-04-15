@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
-const { BlogPost, User } = require('../models/BlogPost');
+const BlogPost = require('../models/BlogPost');
+const User = require('../models/User');
 
 async function getAll() {
   const posts = await BlogPost.findAll({
@@ -41,7 +42,8 @@ async function update({ id, ...post }) {
 }
 
 async function create(data) {
-  return BlogPost.create(data);
+  const BlogPostData = BlogPost.create(data);
+  return BlogPostData;
 }
 
 async function deleteById(id) {
