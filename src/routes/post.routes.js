@@ -9,5 +9,6 @@ const userRoutes = Router();
 
 userRoutes.post('/', validatePost, validateToken, PostController.createPost);
 userRoutes.get('/', validateToken, PostController.getAllPosts);
+userRoutes.get('/:id', validateToken, PostController.getPostById);
 
 module.exports = userRoutes;
