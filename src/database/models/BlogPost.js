@@ -1,14 +1,20 @@
-const BlogPost = (sequelize, DataTypes) => {
-  const BlogPostData = sequelize.define('BlogPost', {
-    title: DataTypes.STRING,
-    content: DataTypes.STRING,
-    userId: { type: DataTypes.INTEGER, foreignKey: true },
-    published: DataTypes.DATE,
-    updated: DataTypes.DATE,
-  }, { timestamps: false, tableName: 'BlogPosts' });
+const { DataTypes } = require('sequelize');
+const sequelize = require('../index');
+const User = require('./User');
 
-  BlogPostData.belongsTo('User', { foreignKey: 'userId', as: 'user' });
-  return BlogPostData;
-};
+const BlogPostData = sequelize.define('BlogPost', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  title: DataTypes.STRING,
+  content: DataTypes.STRING,
+  userId: DataTypes.INTEGER,
+  published: DataTypes.DATE,
+  updated: DataTypes.DATE,
+}, { timestamps: true, tableName: 'BlogPosts', createdAt: 'published', updatedAt: 'updated' });
 
-module.exports = BlogPost;
+BlogPostData.belongsTo(User, { onDelete: 'CASCADE', onUpdate: 'CASCADE', as: 'user' });
+
+module.exports = BlogPostData;
