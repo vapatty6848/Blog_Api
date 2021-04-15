@@ -21,16 +21,23 @@ module.exports = {
         onUpdate: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       content: {
         type: Sequelize.STRING,
+        allowNull: false
       },
       userId: {
         type: Sequelize.INTEGER,
+        foreignKey: true,
+        allowNull: false,
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
         references: { model: 'Users', key: 'id' },
       }
     });
+
   },
 
   down: async (queryInterface, Sequelize) => {

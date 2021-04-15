@@ -12,7 +12,6 @@ const { User } = require('../models');
 
 const findByEmail = async (email) => {
   const user = await User.findOne({ where: { email } });
-  console.log(`USER: ${user}`);
   return user;
 };
 
@@ -30,9 +29,9 @@ const verifyToken = async (req, res, next) => {
   try {
     const decoded = jwt.verify(authorization, secret);
     const user = await findByEmail(decoded.user.email);
-    console.log(`USER: ${user}`);
+
     if (!user) return res.status(UNAUTHORIZED).json(NOT_FOUND, 'Token user not found');
-    req.user = { ...decoded.user, authorization };
+    req.user = { ...decoded.user };
   } catch (err) {
     console.log(err);
     return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });

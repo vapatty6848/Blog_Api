@@ -1,25 +1,18 @@
 const BlogPosts = (sequelize, DataTypes) => {
   const blogPost = sequelize.define('BlogPosts', {
     id: { type: DataTypes.INTEGER, primaryKey: true },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      field: 'published',
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      onUpdate: DataTypes.NOW,
-      field: 'updated',
-    },
+    published: DataTypes.DATE,
+    updated: DataTypes.DATE,
     title: DataTypes.STRING,
     content: DataTypes.STRING,
-    user_id: {
-      type: DataTypes.INTEGER,
-      foreignKey: true,
-    },
+    userId: { type: DataTypes.INTEGER, foreignKey: true },
   },
   { timestamps: false });
+
+  blogPost.associate = (models) => {
+    blogPost.belongsTo(models.User,
+      { foreignKey: 'userId', as: 'user' });
+  };
   return blogPost;
 };
 

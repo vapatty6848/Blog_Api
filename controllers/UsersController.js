@@ -10,4 +10,6 @@ router.get('/', Utils.verifyToken, UserServices.getUsers);
 
 router.get('/:id', Utils.verifyToken, UserServices.getUserById);
 
+router.delete('/me', Utils.verifyToken, UserServices.deleteUser);
+
 module.exports = router;
