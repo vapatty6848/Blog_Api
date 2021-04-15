@@ -3,13 +3,15 @@ const { Router } = require('express');
 const router = Router();
 const { usersAuthorized } = require('../middlewares/Req1/validateToken');
 
-const { User, BlogPost } = require('../models');
+const { User } = require('../models');
 
 const { createNewPost, listAllBlogPosts, postsId } = require('../services/blogPostsService');
 
 const verifications = require('../middlewares/BlogPosts/verifications');
 
 const putVerifications = require('../middlewares/BlogPosts/putVerifications');
+
+const { updatePost } = require('../services/blogPostsService');
 
 router.post('/', usersAuthorized, verifications, async (req, res) => {
   const { title, content } = req.body;
@@ -25,11 +27,7 @@ router.post('/', usersAuthorized, verifications, async (req, res) => {
 
 router.get('/', usersAuthorized, async (req, res) => {
   const posts = await listAllBlogPosts();
-  // const { email } = req.user;
-  // const result = await User.findAll({
-  //   where: { email },
-  // });
-  // console.log('resut', result);
+
   return res.status(200).json(posts);
 });
 
@@ -42,16 +40,16 @@ router.get('/:id', usersAuthorized, async (req, res) => {
   return res.status(200).json(post);
 });
 
-router.put('/id', usersAuthorized, putVerifications, async (req, res) => {
-  // const { id } = req.params;
+router.put('/:id', usersAuthorized, putVerifications, async (req, res) => {
+  const { content, title } = req.body;
+  const { id } = req.params;
   const { email } = req.user;
-  const { title, content } = req.body;
   const [{ dataValues: { id: userId } }] = await User.findAll({
     where: { email },
   });
-
-  await BlogPost.update(title, content, userId);
-  return res.status(200).json({ title, content, userId });
+  const update = await updatePost(id, title, userId, content);
+  if (!update) return res.status(401).json({ message: 'Usuário não autorizado' });
+  return res.status(200).json(update);
 });
 
 module.exports = router;

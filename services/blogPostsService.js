@@ -26,8 +26,12 @@ const postsId = async (id) => {
   return listOfPostsId;
 };
 
-const update = async (title, content, userId) => {
-  const updated = await BlogPosts.update({ where: { title, content, userId } });
+const updatePost = async (id, title, userId, content) => {
+  const updated = await BlogPosts.findOne({ where: { id } });
+  if (userId !== updated.userId) return false;
+  updated.title = title;
+  updated.content = content;
+  await updated.save();
   return updated;
 };
 
@@ -35,5 +39,5 @@ module.exports = {
   listAllBlogPosts,
   createNewPost,
   postsId,
-  update,
+  updatePost,
 };
