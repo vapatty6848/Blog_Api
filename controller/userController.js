@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const { User } = require('../models');
 const { registerUser, verifyToken } = require('../middlewares/UserMid');
@@ -44,6 +45,28 @@ userRouter.post('/', registerUser, async (req, res) => {
     .catch((e) => {
       console.log(e.message);
       res.status(500).send({ message: 'Algo deu errado' });
+    });
+});
+
+userRouter.delete('/me', verifyToken, (req, res) => {
+  const token = req.headers.authorization;
+  const { userData } = jwt.verify(token, secret);
+  const tokenUserEmail = userData.id;
+
+  User.destroy(
+    {
+      where:
+      {
+        id: tokenUserEmail,
+      },
+    },
+  ).then((user) => {
+    if (user === null) return res.status(404).json({ message: 'Usuário não existe' });
+    return res.status(204).end();
+  })
+    .catch((e) => {
+      console.log(e.message);
+      res.status(500).json({ message: 'Algo deu errado' });
     });
 });
 
