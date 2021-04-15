@@ -1,20 +1,31 @@
+const { Router } = require('express');
+
+const userRouter = Router();
+
 const { User } = require('../models');
 
-const createNew = async (req, res) => {
-  try {
-    const { displayName, email, password, image } = req.body;
-    const book = await User.create({
-      displayName,
-      email,
-      password,
-      image,
-    });
-    res.status(201);
-    res.json(book);
-  } catch (e) {
-    console.log(e);
-  }
-};
+const {
+  displayNameChecked,
+  validEmail,
+  validPassword,
+  existEmail,
+} = require('../services/midllewaresUser');
+
+userRouter.post('/', displayNameChecked, validEmail, validPassword, existEmail,
+  async (req, res) => {
+    try {
+      const { displayName, email, password, image } = req.body;
+      const book = await User.create({
+        displayName,
+        email,
+        password,
+        image,
+      });
+      res.status(201).json(book);
+    } catch (err) {
+      console.log(err);
+    }
+  });
 
 // const getAll = async (req, res) => {
 //   try {
@@ -65,10 +76,4 @@ const createNew = async (req, res) => {
 //   }
 // };
 
-module.exports = {
-  // deleteById,
-  // getAll,
-  // getById,
-  // updateById,
-  createNew,
-};
+module.exports = userRouter;
