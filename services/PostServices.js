@@ -44,18 +44,46 @@ const getPostById = async (req, res) => {
   res.status(200).json(post);
 };
 
-// const deleteUser = async (req, res) => {
-//   const { id } = req.user;
+const updatePostById = async (req, res, next) => {
+  const { title, content } = req.body;
+  const { id } = req.params;
 
-//   await User.destroy({ where: { id } });
+  const post = await BlogPosts.findOne({ where: { id } });
+  const isAuthor = (post.dataValues.userId === req.user.id);
 
-//   return res.status(204).send();
-// };
+  switch (true) {
+    case (!title): return res.status(400).json({ message: '"title" is required' });
+    case (!content): return res.status(400).json({ message: '"content" is required' });
+    case (!post): return res.status(404).json({ message: 'Post não existe' });
+    case (!isAuthor): return res.status(401).json({ message: 'Usuário não autorizado' });
+    default: break;
+  }
+
+  await BlogPosts.update({ title, content }, { where: { id } });
+  next();
+};
+
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+
+  const post = await BlogPosts.findOne({ where: { id } });
+  const isAuthor = (post && post.dataValues.userId === req.user.id);
+
+  switch (true) {
+    case (!post): return res.status(404).json({ message: 'Post não existe' });
+    case (!isAuthor): return res.status(401).json({ message: 'Usuário não autorizado' });
+    default: break;
+  }
+
+  await BlogPosts.destroy({ where: { id } });
+
+  return res.status(204).send();
+};
 
 module.exports = {
   createPost,
   getPosts,
   getPostById,
-  // updatePostById,
-  // deletePost,
+  updatePostById,
+  deletePost,
 };

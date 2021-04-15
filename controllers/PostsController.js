@@ -10,8 +10,8 @@ router.get('/', Utils.verifyToken, PostServices.getPosts);
 
 router.get('/:id', Utils.verifyToken, PostServices.getPostById);
 
-// router.put('/:id', Utils.verifyToken, PostServices.updatePostById);
+router.put('/:id', Utils.verifyToken, PostServices.updatePostById, PostServices.getPostById);
 
-// router.delete('/:id', Utils.verifyToken, PostServices.deletePost);
+router.delete('/:id', Utils.verifyToken, PostServices.deletePost);
 
 module.exports = router;
