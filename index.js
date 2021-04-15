@@ -6,9 +6,11 @@ app.use(bodyParser.json());
 
 const UserController = require('./controllers/userController');
 const LoginController = require('./controllers/loginController');
+const PostController = require('./controllers/PostController');
 
 app.use('/user', UserController);
 app.use('/login', LoginController);
+app.use('/post', PostController);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
 

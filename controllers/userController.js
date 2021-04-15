@@ -28,8 +28,16 @@ router.get('/:id', checkAuthorization, checkUserId, async (req, res) => {
       id,
     },
   });
-  //  console.log(userById);
   res.status(200).json(dataValues);
+});
+router.delete('/me', checkAuthorization, async (req, res) => {
+  const { email } = req.payload;
+  await Users.destroy({
+    where: {
+      email,
+    },
+  });
+  res.status(204).end();
 });
 
 module.exports = router;
