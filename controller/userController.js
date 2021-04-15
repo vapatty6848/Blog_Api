@@ -21,11 +21,8 @@ userRouter.get('/:id', verifyToken, (req, res) => {
 
   User.findOne({ where: { id } })
     .then((users) => {
-      if (users) {
-        res.status(200).json(users);
-      } else {
-        res.status(404).json({ message: 'Usuário não existe' });
-      }
+      if (users) return res.status(200).json(users);
+      return res.status(404).json({ message: 'Usuário não existe' });
     })
     .catch((e) => {
       console.log(e.message);
