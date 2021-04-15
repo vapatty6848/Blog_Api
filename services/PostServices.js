@@ -1,4 +1,4 @@
-const { BlogPosts } = require('../models');
+const { BlogPosts, User } = require('../models');
 
 const createPost = async (req, res) => {
   const { title, content } = req.body;
@@ -17,7 +17,13 @@ const createPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
-  const posts = await BlogPosts.findAll();
+  const posts = await BlogPosts.findAll({
+    include: {
+      model: User,
+      as: 'user',
+      attributes: ['id', 'displayName', 'email', 'image'],
+    },
+  });
   return res.status(200).json(posts);
 };
 
