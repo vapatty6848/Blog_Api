@@ -26,6 +26,17 @@ userController.post('/', validateUsers, async (req, res, next) => {
   }
 });
 
+userController.get('/:id', validateAuth, async (req, res, next) => {
+  const { id: paramsId } = req.params;
+  try {
+    const user = await UserService.getUserById(paramsId);
+    res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 userController.get('/', validateAuth, async (req, res, next) => {
   const { id } = res.locals.user;
   try {

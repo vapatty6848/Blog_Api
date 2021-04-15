@@ -2,8 +2,14 @@ const UserRepository = require('../database/repositories/UserRepository');
 const AppError = require('../error/AppError');
 const generateToken = require('../utils/generateToken');
 
-async function getUserById(id) {
-  return UserRepository.findById(id);
+async function getUserById(paramsId) {
+  try {
+    const user = await UserRepository.findById(paramsId);
+    if (!user) throw AppError('Usuário não existe', 404);
+    return user.dataValues;
+  } catch (err) {
+    throw AppError('Usuário não existe', 404);
+  }
 }
 
 async function getUserByEmail(email) {
@@ -26,7 +32,7 @@ async function login(userData) {
   }
 }
 
-async function getAllUsers(id) {
+async function getAllUsers() {
   try {
     const [...users] = await UserRepository.getAll();
     const mapedUsers = users.map((user) => ({
@@ -35,10 +41,8 @@ async function getAllUsers(id) {
       email: user.dataValues.email,
       id: user.dataValues.id,
     }));
-    console.log(mapedUsers, '--maped');
     return mapedUsers;
   } catch (err) {
-    console.log(err);
     throw AppError('not authorized', 401);
   }
 }
