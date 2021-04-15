@@ -3,18 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "dotenv": "8.2.0",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
     "express": "4.17.1",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "2.1.0",
     "sequelize": "6.3.4",
-    "shelljs": "0.8.4"
+    "shelljs": "0.8.4",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "prestart": "npx sequelize-cli db:create && npx sequelize-cli db:migrate $",
     "start": "node index.js",
     "drop": "npx sequelize-cli db:drop $",
     "seed": "npx sequelize-cli db:seed:all $",
+    "cm": "npx sequelize-cli migration:generate --name ",
     "test": "jest --runInBand",
+    "ex-mig": "npx sequelize-cli db:migrate",
     "test-coverage": "jest --runInBand --coverage",
     "debug": "nodemon index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json ."
@@ -26,6 +33,7 @@
     "eslint-plugin-sonarjs": "0.5.0",
     "frisby": "2.1.2",
     "jest": "26.0.1",
+    "nodemon": "^2.0.7",
     "sequelize-cli": "6.2.0",
     "supertest": "4.0.2"
   }
