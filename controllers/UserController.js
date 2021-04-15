@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const { User } = require('../models');
 const { secret, jwtConfig, createJWTPayload, jwtSign } = require('../auth/ValidateToken');
@@ -41,6 +42,29 @@ UserRouter.get('/:id', verifyToken, (req, res) => {
   ).then((user) => {
     if (user === null) return res.status(404).json({ message: 'Usuário não existe' });
     return res.status(200).json(user);
+  })
+    .catch((e) => {
+      console.log(e.message);
+      res.status(500).json({ message: 'Algo deu errado' });
+    });
+});
+
+UserRouter.delete('/me', verifyToken, (req, res) => {
+  const token = req.headers.authorization;
+  const { userData } = jwt.verify(token, secret);
+  console.log(userData, 'userDataaaaaa');
+  const tokenUserEmail = userData.id;
+  console.log(tokenUserEmail, 'resultado final');
+  User.destroy(
+    {
+      where:
+      {
+        id: tokenUserEmail,
+      },
+    },
+  ).then((user) => {
+    if (user === null) return res.status(404).json({ message: 'Usuário não existe' });
+    return res.status(204).end();
   })
     .catch((e) => {
       console.log(e.message);
