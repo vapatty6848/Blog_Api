@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const { BlogPost } = require('../models');
-const { secret, jwtConfig, createJWTPayload, jwtSign } = require('../auth/ValidateToken');
+const { secret } = require('../auth/ValidateToken');
 const { verifyToken } = require('../middlewares/TokenMid');
 const { registerPost } = require('../middlewares/PostMid');
 
