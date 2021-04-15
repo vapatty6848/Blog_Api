@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         onUpdate: "CASCADE",
-        onDelte: "CASCADE",
+        onDelete: "CASCADE",
         references: {
           model: "Users", key: "id"
         },
@@ -33,6 +33,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('blogPosts');
+    await queryInterface.dropTable('BlogPosts');
   }
 };
