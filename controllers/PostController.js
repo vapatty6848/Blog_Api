@@ -20,8 +20,11 @@ router.post('/', checkPost, checkAuthorization, async (req, res) => {
   await BlogPosts.create({ title, content, userId });
   res.status(201).json({ title, content, userId });
 });
+
 router.get('/', checkAuthorization, async (req, res) => {
-  const allPosts = await BlogPosts.findAll();
+  const allPosts = await BlogPosts.findAll({
+    include: { association: 'user', attributes: { exclude: ['password'] } },
+  });
 
   res.status(201).json(allPosts);
 });
