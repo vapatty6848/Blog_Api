@@ -1,11 +1,11 @@
 const express = require('express');
 const { User } = require('../models');
-const { registerUser } = require('../middlewares/UserMid');
+const { registerUser, verifyToken } = require('../middlewares/UserMid');
 const { secret, jwtConfig, createJWTPayload, jwtSign } = require('../auth/ValidateToken');
 
 const userRouter = express.Router();
 
-userRouter.get('/', (_req, res) => {
+userRouter.get('/', verifyToken, (_req, res) => {
   User.findAll()
     .then((users) => {
       res.status(200).json(users);
