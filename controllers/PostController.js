@@ -5,6 +5,8 @@ const { BlogPosts, Users } = require('../models');
 const router = Router();
 
 const checkPost = require('../middleware/checkPost');
+const checkPostId = require('../middleware/checkPostId');
+const CheckUserId = require('../middleware/checkOwner');
 
 const checkAuthorization = require('../middleware/checkAuthorization');
 
@@ -29,4 +31,22 @@ router.get('/', checkAuthorization, async (req, res) => {
   res.status(201).json(allPosts);
 });
 
+router.get('/:id', checkAuthorization, checkPostId, async (req, res) => {
+  const { id } = req.params;
+  const allPosts = await BlogPosts.findAll({
+    where: { id },
+    include: { association: 'user', attributes: { exclude: ['password'] } },
+  });
+
+  res.status(201).json(allPosts);
+});
+
+router.put('/:id', checkAuthorization, CheckUserId, async (req, res) => {
+  const { title, content } = req.body;
+  const { id } = req.params;
+  const user = req.payload;
+  await BlogPosts.update({ title, content }, { where: { id } });
+  const [{ dataValues }] = await Users.findAll({ where: { email: user.email } });
+  res.status(200).json({ title, content, userId: dataValues.id });
+});
 module.exports = router;
