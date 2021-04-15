@@ -13,11 +13,11 @@ const validateRegister = async (req, res, next) => {
     const emailsDatabase = await User.findAll({ attributes: ['email'] });
     const emailExists = emailsDatabase.some((el) => el.email === email);
     if (emailExists === true) {
-      res.status(409).send({ message: 'Usuário já existe' });
+      return res.status(409).send({ message: 'Usuário já existe' });
     }
     next();
   } catch (err) {
-    res.status(CANNOT).send({ message: err.message });
+    return res.status(CANNOT).send({ message: err.message });
   }
 };
 

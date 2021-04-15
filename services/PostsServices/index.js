@@ -1,4 +1,4 @@
-const { BlogPost } = require('../../models');
+const { BlogPost, User } = require('../../models');
 // const validateToken = require('../Auth/validateToken');
 
 const validatePost = async (req, res, next) => {
@@ -26,4 +26,6 @@ const validatePostOwner = async (req, res, next) => {
   }
 };
 
-module.exports = { validatePost, validatePostOwner };
+const searchPostOwner = async (userId) => User.findByPk(userId, { attributes: ['id', 'displayName', 'email', 'image'] });
+
+module.exports = { validatePost, validatePostOwner, searchPostOwner };

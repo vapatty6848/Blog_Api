@@ -15,12 +15,14 @@ PostRouter.post('/', verifyAuthorization, PostsServices.validatePost, async (req
 });
 
 PostRouter.get('/', verifyAuthorization, async (req, res) => {
-  // const data = await BlogPost.findAll();
   try {
-    const data = await BlogPost
-      .findAll();
-    const { id, title, content, published, updated } = data[0];
-    return res.status(200).json([{ id, title, content, published, updated, user: req.payload.id }]);
+    const data = await BlogPost.findAll();
+    await data.forEach(async (el, index) => {
+      const user = await PostsServices.searchPostOwner(el.userId);
+      data[index].user = user;
+    });
+    console.log(data);
+    return res.status(200).json(data);
   } catch (err) {
     return res.status(200).json({ message: err.message });
   }
