@@ -5,7 +5,7 @@ const { registerUser, verifyToken } = require('../middlewares/UserMid');
 
 const UserRouter = express.Router();
 
-UserRouter.get('/', verifyToken, (_req, res) => {
+UserRouter.get('/', verifyToken, async (_req, res) => {
   User.findAll()
     .then((users) => {
       res.status(200).json(users);
@@ -27,6 +27,24 @@ UserRouter.post('/', registerUser, async (req, res) => {
     .catch((e) => {
       console.log(e.message);
       res.status(500).send({ message: 'Algo deu errado' });
+    });
+});
+
+UserRouter.get('/:id', verifyToken, (req, res) => {
+  User.findOne(
+    {
+      where:
+      {
+        id: req.params.id,
+      },
+    },
+  ).then((user) => {
+    if (user === null) return res.status(404).json({ message: 'Usuário não existe' });
+    return res.status(200).json(user);
+  })
+    .catch((e) => {
+      console.log(e.message);
+      res.status(500).json({ message: 'Algo deu errado' });
     });
 });
 
