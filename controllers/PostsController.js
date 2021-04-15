@@ -6,7 +6,7 @@ const router = Router();
 
 router.post('/', Utils.verifyToken, PostServices.createPost);
 
-// router.get('/', Utils.verifyToken, PostServices.getPosts);
+router.get('/', Utils.verifyToken, PostServices.getPosts);
 
 // router.get('/:id', Utils.verifyToken, PostServices.getPostById);
 

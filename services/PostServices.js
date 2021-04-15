@@ -16,28 +16,10 @@ const createPost = async (req, res) => {
   return res.status(201).json(post);
 };
 
-// const loginUser = async (req, res) => {
-//   const { email, password } = req.body;
-
-//   switch (true) {
-//     case (email === ''): return res.status(400).json({ message: '"email" is not allowed to be empty' });
-//     case (password === ''): return res.status(400).json({ message: '"password" is not allowed to be empty' });
-//     case (!email): return res.status(400).json({ message: '"email" is required' });
-//     case (!password): return res.status(400).json({ message: '"password" is required' });
-//     default: break;
-//   }
-
-//   const user = await User.findOne({ where: { email, password } });
-//   if (!user) return res.status(400).json({ message: 'Campos inválidos' });
-
-//   const token = jwt.sign({ user }, secret);
-//   return res.status(200).json({ token });
-// };
-
-// const getUsers = async (req, res) => {
-//   const users = await User.findAll();
-//   return res.status(200).json(users);
-// };
+const getPosts = async (req, res) => {
+  const posts = await BlogPosts.findAll();
+  return res.status(200).json(posts);
+};
 
 // const getUserById = async (req, res) => {
 //   const { id } = req.params;
@@ -62,7 +44,7 @@ const createPost = async (req, res) => {
 
 module.exports = {
   createPost,
-  // getPosts,
+  getPosts,
   // getPostsById,
   // updatePostById,
   // deletePost,
