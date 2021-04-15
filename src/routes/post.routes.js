@@ -8,5 +8,6 @@ const PostController = require('../controllers/PostController');
 const userRoutes = Router();
 
 userRoutes.post('/', validatePost, validateToken, PostController.createPost);
+userRoutes.get('/', validateToken, PostController.getAllPosts);
 
 module.exports = userRoutes;
