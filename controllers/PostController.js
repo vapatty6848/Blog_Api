@@ -2,9 +2,8 @@ const PostRouter = require('express').Router();
 const { Op } = require('sequelize');
 // const createToken = require('../Auth/createToken');
 const { PostsServices } = require('../services');
-const { BlogPost } = require('../models');
+const { BlogPost, User } = require('../models');
 const verifyAuthorization = require('../middleware/verifyAuthorization');
-// const User = require('../models');
 
 PostRouter.post('/', verifyAuthorization, PostsServices.validatePost, async (req, res) => {
   const { title, content } = req.body;
@@ -15,13 +14,9 @@ PostRouter.post('/', verifyAuthorization, PostsServices.validatePost, async (req
 });
 
 PostRouter.get('/', verifyAuthorization, async (req, res) => {
+  // const data = await BlogPost.findAll();
   try {
-    const data = await BlogPost.findAll();
-    await data.forEach(async (el, index) => {
-      const user = await PostsServices.searchPostOwner(el.userId);
-      data[index].user = user;
-    });
-    console.log(data);
+    const data = await BlogPost.findAll({ include: [{ model: User, as: 'user', attributes: ['id', 'displayName', 'email', 'image'] }] });
     return res.status(200).json(data);
   } catch (err) {
     return res.status(200).json({ message: err.message });
@@ -32,25 +27,23 @@ PostRouter.get('/search', verifyAuthorization, async (req, res) => {
   if (req.query.q === '') {
     console.log(req.query.q, 'asdasd');
     const data = await BlogPost
-      .findAll();
-    const { id, title, content, published, updated } = data[0];
-    return res.status(200).json([{ id, title, content, published, updated, user: req.payload.id }]);
+      .findAll({ include: [{ model: User, as: 'user', attributes: ['id', 'displayName', 'email', 'image'] }] });
+    return res.status(200).json(data);
   }
   const query = `%${req.query.q}%`;
   const data = await BlogPost
     .findAll({ where: { [Op.or]: [{ title: { [Op.like]: query } },
-      { content: { [Op.like]: query } }] } });
+      { content: { [Op.like]: query } }] },
+    include: [{ model: User, as: 'user', attributes: ['id', 'displayName', 'email', 'image'] }] });
   if (data.length === 0) return res.status(200).json([]);
-  const { id, title, content, published, updated } = data[0];
-  return res.status(200).json([{ id, title, content, published, updated, user: req.payload.id }]);
+  return res.status(200).json(data);
 });
 
 PostRouter.get('/:id', verifyAuthorization, async (req, res) => {
   try {
-    const data = await BlogPost.findByPk(req.params.id);
+    const data = await BlogPost.findByPk(req.params.id, { include: [{ model: User, as: 'user', attributes: ['id', 'displayName', 'email', 'image'] }] });
     if (!data) throw new Error('Post não existe');
-    const { id, title, content, published, updated } = data;
-    return res.status(200).json([{ id, title, content, published, updated, user: req.payload.id }]);
+    return res.status(200).json(data);
   } catch (err) {
     return res.status(404).json({ message: err.message });
   }
