@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const a = require('./src/controllers/UserController');
 const LoginController = require('./src/controllers/LoginController');
+const BlogPostController = require('./src/controllers/BlogPostController');
 
 require('dotenv').config();
 
@@ -18,6 +19,8 @@ app.get('/', (_request, res) => {
 app.use('/user', a.userController);
 
 app.use('/login', LoginController);
+
+app.use('/post', BlogPostController);
 
 app.use('*', (req, res) => {
   res.status(404).json({ message: 'notfound' });
