@@ -27,18 +27,22 @@ const getPosts = async (req, res) => {
   return res.status(200).json(posts);
 };
 
-// const getUserById = async (req, res) => {
-//   const { id } = req.params;
+const getPostById = async (req, res) => {
+  const { id } = req.params;
 
-//   const user = await User.findOne({
-//     where: { id },
-//     attributes: ['id', 'displayName', 'email', 'image'],
-//   });
+  const post = await BlogPosts.findOne({
+    where: { id },
+    include: {
+      model: User,
+      as: 'user',
+      attributes: ['id', 'displayName', 'email', 'image'],
+    },
+  });
 
-//   if (!user) return res.status(404).json({ message: 'Usuário não existe' });
+  if (!post) return res.status(404).json({ message: 'Post não existe' });
 
-//   res.status(200).json(user);
-// };
+  res.status(200).json(post);
+};
 
 // const deleteUser = async (req, res) => {
 //   const { id } = req.user;
@@ -51,7 +55,7 @@ const getPosts = async (req, res) => {
 module.exports = {
   createPost,
   getPosts,
-  // getPostsById,
+  getPostById,
   // updatePostById,
   // deletePost,
 };

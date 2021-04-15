@@ -8,7 +8,7 @@ router.post('/', Utils.verifyToken, PostServices.createPost);
 
 router.get('/', Utils.verifyToken, PostServices.getPosts);
 
-// router.get('/:id', Utils.verifyToken, PostServices.getPostById);
+router.get('/:id', Utils.verifyToken, PostServices.getPostById);
 
 // router.put('/:id', Utils.verifyToken, PostServices.updatePostById);
 
