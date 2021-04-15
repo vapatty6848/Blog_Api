@@ -15,7 +15,7 @@ LoginRouter.post('/', verifylogin, async (req, res) => {
       },
     },
   ).then((user) => {
-    if (user === null) res.status(400).json({ message: 'Campos inválidos' });
+    if (user === null) return res.status(400).json({ message: 'Campos inválidos' });
     return createJWTPayload(user);
   }).then((payload) => jwtSign(payload, secret, jwtConfig))
     .then((result) => res.status(200).json({ token: result }))
