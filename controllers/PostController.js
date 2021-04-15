@@ -28,17 +28,16 @@ router.get('/', checkAuthorization, async (req, res) => {
     include: { association: 'user', attributes: { exclude: ['password'] } },
   });
 
-  res.status(201).json(allPosts);
+  res.status(200).json(allPosts);
 });
 
 router.get('/:id', checkAuthorization, checkPostId, async (req, res) => {
   const { id } = req.params;
-  const allPosts = await BlogPosts.findAll({
+  const [{ dataValues }] = await BlogPosts.findAll({
     where: { id },
     include: { association: 'user', attributes: { exclude: ['password'] } },
   });
-
-  res.status(201).json(allPosts);
+  res.status(200).json(dataValues);
 });
 
 router.put('/:id', checkAuthorization, CheckUserId, async (req, res) => {

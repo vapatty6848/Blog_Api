@@ -7,7 +7,7 @@ const checkPostId = async (req, res, next) => {
       id,
     },
   });
-  if (userid.length === 0) return res.status(401).json({ message: 'Post não existe' });
+  if (userid.length === 0) return res.status(404).json({ message: 'Post não existe' });
   next();
 };
 
