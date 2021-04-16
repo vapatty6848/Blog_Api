@@ -14,4 +14,5 @@ module.exports = {
   requiredTitle: '"title" is required',
   requiredContent: '"content" is required',
   postNotfound: 'Post não existe',
+  notAuthorizedUser: 'Usuário não autorizado',
 };

@@ -34,4 +34,17 @@ PostController.get('/:id', async (req, res) => {
   return res.status(200).json(post[0]);
 });
 
+PostController.put('/:id',
+  postValidations.validateTitleAndContent,
+  postValidations.validateSameUser,
+  async (req, res) => {
+    const { body: { title, content }, params: { id }, validUser } = req;
+    const now = new Date();
+    await BlogPost.update(
+      { title, content, updated: now },
+      { where: { id } },
+    );
+    return res.status(200).json({ title, content, userId: validUser.id });
+  });
+
 module.exports = PostController;
