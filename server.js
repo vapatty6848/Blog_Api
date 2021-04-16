@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const LoginRouter = require('./routes/LoginRoute');
-const CreateUserRouter = require('./routes/CreateUser');
+const UserRouter = require('./routes/UserRoute');
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.get('/', (request, response) => {
 });
 
 app.use(bodyParser.json());
-app.use('/user', CreateUserRouter);
+app.use('/user', UserRouter);
 app.use('/login', LoginRouter);
 
 module.exports = app;
