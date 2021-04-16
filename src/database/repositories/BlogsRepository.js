@@ -10,6 +10,14 @@ async function getAll() {
   return posts;
 }
 
+async function getAllById(id) {
+  const posts = await BlogPost.findAll({
+    include: { as: 'user', model: User, attributes: ['id', 'displayName', 'email', 'image'] },
+    where: { userId: id },
+  });
+  return posts;
+}
+
 async function findById(id) {
   const post = await BlogPost.findByPk(id, {
     include: { as: 'user', model: User, attributes: ['id', 'displayName', 'email', 'image'] },
@@ -51,5 +59,5 @@ async function deleteById(id) {
 }
 
 module.exports = {
-  getAll, findById, searchByQuerie, update, deleteById, create,
+  getAll, findById, searchByQuerie, update, deleteById, create, getAllById,
 };
