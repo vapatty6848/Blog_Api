@@ -23,7 +23,7 @@ userRouter.get('/', verifyToken, async (_req, res) => {
 userRouter.get('/:id', verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = User.findOne({ where: { id } });
+    const user = await User.findOne({ where: { id } });
     if (user) return res.status(200).json(user);
     return res.status(404).json({ message: 'Usuário não existe' });
   } catch (error) {
