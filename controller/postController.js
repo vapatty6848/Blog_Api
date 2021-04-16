@@ -40,4 +40,24 @@ postRouter.get('/:id', verifyToken, async (req, res) => {
   }
 });
 
+postRouter.delete('/:id', verifyToken, async (req, res) => {
+  try {
+    const { userData } = req;
+    const tokenUserId = userData.id; // id do user
+    console.log(tokenUserId, 'token idddd')
+
+    const { id: idPost } = req.params; // id do post
+
+    const findIdPost = await BlogPost.findOne({ where: { id: idPost } });
+    if (findIdPost === null) return res.status(404).json({ message: 'Post não existe' });
+
+    const deletedPost = await BlogPost.destroy({ where: { id: idPost, userId: tokenUserId } });
+    if (deletedPost === 0 || !deletedPost) return res.status(401).json({ message: 'Usuário não autorizado' });
+
+    return res.status(204).end();
+  } catch (error) {
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
+});
+
 module.exports = postRouter;
