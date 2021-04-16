@@ -27,4 +27,18 @@ PostRouter.get('/', verifyToken, async (req, res) => {
     return res.status(500).json({ message: 'Algo deu errado' });
   }
 });
+
+PostRouter.get('/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const post = await BlogPost.findOne({
+      where: { id },
+      include: [{ model: User, as: 'user' }],
+    });
+    if (post) return res.status(200).json(post);
+    return res.status(404).json({ message: 'Post não existe' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
+});
 module.exports = PostRouter;
