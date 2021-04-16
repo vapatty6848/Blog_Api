@@ -17,6 +17,18 @@ BlogPostController.post('/', validateAuth, validateBlogs, async (req, res, next)
   }
 });
 
+BlogPostController.get('/:id', validateAuth, async (req, res, next) => {
+  const { id: userId } = res.locals.user;
+  const { id } = req.params;
+  try {
+    const userPost = await BlogsService.getPostById(id, userId);
+    res.status(200).json(userPost);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 BlogPostController.get('/', validateAuth, async (_req, res, next) => {
   const { id: userId } = res.locals.user;
   try {
