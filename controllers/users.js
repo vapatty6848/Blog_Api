@@ -2,7 +2,7 @@ const { Router } = require('express');
 
 const userRouter = Router();
 
-const { User } = require('../models');
+const { Users } = require('../models');
 
 const {
   displayNameChecked,
@@ -11,17 +11,18 @@ const {
   existEmail,
 } = require('../services/midllewaresUser');
 
-userRouter.post('/', displayNameChecked, validEmail, validPassword, existEmail,
+userRouter.post('/', displayNameChecked, validEmail, existEmail, validPassword,
   async (req, res) => {
     try {
-      const { displayName, email, password, image } = req.body;
-      const book = await User.create({
-        displayName,
-        email,
-        password,
-        image,
-      });
-      res.status(201).json(book);
+      // const { displayName, email, password, image } = req.body;
+      // const newUser = await Users.create({
+      //   displayName,
+      //   email,
+      //   password,
+      //   image,
+      // });
+      // const dbemail = User.findOne({ where: { email } });
+      return res.status(201).json({ token: 'newUser' });
     } catch (err) {
       console.log(err);
     }

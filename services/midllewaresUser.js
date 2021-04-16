@@ -18,9 +18,6 @@ const validEmail = (req, res, next) => {
   try {
     const { email } = req.body;
     const isEmailValid = email.match(/^[a-zA-Z0-9_.+-]+@[a-zA-Z]+\.[a-zA-Z.]+$/);
-    if (!email) {
-      return res.status(400).json({ message: '"email" is required' });
-    }
     if (!isEmailValid) {
       return res.status(400).json({ message: msgInvalidEmail });
     }
@@ -36,7 +33,7 @@ const validPassword = (req, res, next) => {
     if (!password) {
       return res.status(400).json({ message: '"password" is required' });
     }
-    if (password.length < 6) {
+    if (password.length !== 6) {
       return res.status(400).json({ message: msgInvalidPassword });
     }
   } catch (err) {
@@ -48,8 +45,8 @@ const validPassword = (req, res, next) => {
 const existEmail = (req, res, next) => {
   try {
     const { email } = req.body;
-    if (email) {
-      return res.status(409).json({ message: 'Usuário já existe' });
+    if (!email) {
+      return res.status(400).json({ message: '"email" is required' });
     }
   } catch (err) {
     console.log(err);
