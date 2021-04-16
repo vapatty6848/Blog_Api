@@ -1,6 +1,9 @@
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+
 const BAD_REQ = 400;
 const UNAUTHORIZED = 401;
+
+const secret = 'Thor is the strongest Avenger';
 // const FORBIDDEN = 403;
 // const secret = 'shhhh...é segredo';
 
@@ -40,7 +43,12 @@ const verifyToken = (req, res, next) => {
 
   if (!authorization) return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
 
-  if (authorization.length < 16) return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
+  try {
+    const { userData } = jwt.verify(authorization, secret);
+    req.userData = userData;
+  } catch (error) {
+    return res.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
+  }
 
   next();
 };

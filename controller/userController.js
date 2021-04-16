@@ -2,20 +2,22 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const { User } = require('../models');
 const { registerUser, verifyToken } = require('../middlewares/UserMid');
-const { secret, jwtConfig, createJWTPayload, jwtSign } = require('../auth/ValidateToken');
+const {
+  secret,
+  jwtConfig,
+  createJWTPayload,
+  jwtSign,
+} = require('../auth/ValidateToken');
 
 const userRouter = express.Router();
 
-userRouter.get('/', verifyToken, (_req, res) => {
+userRouter.get('/', verifyToken, (_req, res) =>
   User.findAll()
-    .then((users) => {
-      res.status(200).json(users);
-    })
+    .then((users) => res.status(200).json(users))
     .catch((e) => {
       console.log(e.message);
       return res.status(500).json({ message: 'Algo deu errado' });
-    });
-});
+    }));
 
 userRouter.get('/:id', verifyToken, (req, res) => {
   const { id } = req.params;
@@ -49,21 +51,18 @@ userRouter.post('/', registerUser, async (req, res) => {
 });
 
 userRouter.delete('/me', verifyToken, (req, res) => {
-  const token = req.headers.authorization;
-  const { userData } = jwt.verify(token, secret);
+  const { userData } = req;
   const tokenUserEmail = userData.id;
 
-  User.destroy(
-    {
-      where:
-      {
-        id: tokenUserEmail,
-      },
+  User.destroy({
+    where: {
+      id: tokenUserEmail,
     },
-  ).then((user) => {
-    if (user === null) return res.status(404).json({ message: 'Usuário não existe' });
-    return res.status(204).end();
   })
+    .then((user) => {
+      if (user === null) return res.status(404).json({ message: 'Usuário não existe' });
+      return res.status(204).end();
+    })
     .catch((e) => {
       console.log(e.message);
       return res.status(500).json({ message: 'Algo deu errado' });
