@@ -6,7 +6,7 @@ const { secret, jwtConfig, createJWTPayload, jwtSign } = require('../auth/Valida
 const loginRouter = express.Router();
 
 loginRouter.post('/', verifylogin, async (req, res) => {
-  User.findOne(
+  await User.findOne(
     {
       where:
       {

@@ -9,7 +9,7 @@ postRouter.post('/', registerPost, verifyToken, async (req, res) => {
   const userId = userData.id;
   const { title, content } = req.body;
 
-  BlogPost.create({ title, content, userId })
+  await BlogPost.create({ title, content, userId })
     .then((result) => res.status(201).json(result))
     .catch((e) => {
       console.log(e.message);

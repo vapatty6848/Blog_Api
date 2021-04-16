@@ -17,6 +17,12 @@ const createJWTPayload = (user) => ({
   userData: user,
 });
 
+// const jwtSignClone = (payload) => (
+//   jwt.sign(payload, secret, jwtConfig)
+// );
+
+// const jwtVerifyClone = (token) => jwt.verify(token, secret);
+
 module.exports = {
   secret,
   jwtConfig,

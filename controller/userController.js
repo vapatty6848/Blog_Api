@@ -10,18 +10,20 @@ const {
 
 const userRouter = express.Router();
 
-userRouter.get('/', verifyToken, (_req, res) =>
-  User.findAll()
+userRouter.get('/', verifyToken, async (_req, res) => {
+  console.log('teste');
+  await User.findAll()
     .then((users) => res.status(200).json(users))
     .catch((e) => {
       console.log(e.message);
       return res.status(500).json({ message: 'Algo deu errado' });
-    }));
+    });
+});
 
-userRouter.get('/:id', verifyToken, (req, res) => {
+userRouter.get('/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
 
-  User.findOne({ where: { id } })
+  await User.findOne({ where: { id } })
     .then((users) => {
       if (users) return res.status(200).json(users);
       return res.status(404).json({ message: 'Usuário não existe' });
@@ -39,7 +41,7 @@ userRouter.post('/', registerUser, async (req, res) => {
 
   const { displayName, email, password, image } = req.body;
 
-  User.create({ displayName, email, password, image })
+  await User.create({ displayName, email, password, image })
     .then((user) => createJWTPayload(user))
     .then((payload) => jwtSign(payload, secret, jwtConfig))
     .then((result) => res.status(201).json({ token: result }))
@@ -49,11 +51,11 @@ userRouter.post('/', registerUser, async (req, res) => {
     });
 });
 
-userRouter.delete('/me', verifyToken, (req, res) => {
+userRouter.delete('/me', verifyToken, async (req, res) => {
   const { userData } = req;
   const tokenUserEmail = userData.id;
 
-  User.destroy({
+  await User.destroy({
     where: {
       id: tokenUserEmail,
     },
