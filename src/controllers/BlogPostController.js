@@ -17,4 +17,15 @@ BlogPostController.post('/', validateAuth, validateBlogs, async (req, res, next)
   }
 });
 
+BlogPostController.get('/', validateAuth, async (_req, res, next) => {
+  const { id: userId } = res.locals.user;
+  try {
+    const userPosts = await BlogsService.getAllPostsByUser(userId);
+    res.status(200).json(userPosts);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 module.exports = BlogPostController;
