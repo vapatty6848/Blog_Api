@@ -11,63 +11,51 @@ const {
 const userRouter = express.Router();
 
 userRouter.get('/', verifyToken, async (_req, res) => {
-  console.log('teste');
-  await User.findAll()
-    .then((users) => res.status(200).json(users))
-    .catch((e) => {
-      console.log(e.message);
-      return res.status(500).json({ message: 'Algo deu errado' });
-    });
+  try {
+    const users = await User.findAll();
+    return res.status(200).json(users);
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
 });
 
 userRouter.get('/:id', verifyToken, async (req, res) => {
-  const { id } = req.params;
-
-  await User.findOne({ where: { id } })
-    .then((users) => {
-      if (users) return res.status(200).json(users);
-      return res.status(404).json({ message: 'Usuário não existe' });
-    })
-    .catch((e) => {
-      console.log(e.message);
-      return res.status(500).json({ message: 'Algo deu errado' });
-    });
+  try {
+    const { id } = req.params;
+    const user = User.findOne({ where: { id } });
+    if (user) return res.status(200).json(user);
+    return res.status(404).json({ message: 'Usuário não existe' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
 });
 
 userRouter.post('/', registerUser, async (req, res) => {
-  const resultFind = await User.findOne({ where: { email: req.body.email } });
+  try {
+    const resultFind = await User.findOne({ where: { email: req.body.email } });
+    if (resultFind) return res.status(409).json({ message: 'Usuário já existe' });
+    const { displayName, email, password, image } = req.body;
 
-  if (resultFind) return res.status(409).json({ message: 'Usuário já existe' });
-
-  const { displayName, email, password, image } = req.body;
-
-  await User.create({ displayName, email, password, image })
-    .then((user) => createJWTPayload(user))
-    .then((payload) => jwtSign(payload, secret, jwtConfig))
-    .then((result) => res.status(201).json({ token: result }))
-    .catch((e) => {
-      console.log(e.message);
-      return res.status(500).send({ message: 'Algo deu errado' });
-    });
+    const newUser = await User.create({ displayName, email, password, image });
+    const createPay = createJWTPayload(newUser);
+    const tokenCreated = jwtSign(createPay, secret, jwtConfig);
+    return res.status(201).json({ token: tokenCreated });
+  } catch (error) {
+    return res.status(500).send({ message: 'Algo deu errado' });
+  }
 });
 
 userRouter.delete('/me', verifyToken, async (req, res) => {
-  const { userData } = req;
-  const tokenUserEmail = userData.id;
-
-  await User.destroy({
-    where: {
-      id: tokenUserEmail,
-    },
-  })
-    .then((user) => {
-      if (user === null) return res.status(404).json({ message: 'Usuário não existe' });
-      return res.status(204).end();
-    })
-    .catch((e) => {
-      console.log(e.message);
-      return res.status(500).json({ message: 'Algo deu errado' });
-    });
+  try {
+    const { userData } = req;
+    const tokenUserEmail = userData.id;
+    const deletedUser = await User.destroy({ where: { id: tokenUserEmail } });
+    if (deletedUser === null) return res.status(404).json({ message: 'Usuário não existe' });
+    return res.status(204).end();
+  } catch (error) {
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
 });
 
 module.exports = userRouter;
