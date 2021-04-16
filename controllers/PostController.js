@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 
 const { BlogPosts, Users } = require('../models');
 
@@ -7,7 +8,7 @@ const router = Router();
 const checkPost = require('../middleware/checkPost');
 const checkPostId = require('../middleware/checkPostId');
 const CheckUserId = require('../middleware/checkOwner');
-
+const checkSearch = require('../middleware/checkSearch');
 const checkAuthorization = require('../middleware/checkAuthorization');
 
 router.post('/', checkPost, checkAuthorization, async (req, res) => {
@@ -31,6 +32,23 @@ router.get('/', checkAuthorization, async (req, res) => {
   res.status(200).json(allPosts);
 });
 
+router.get('/search', checkAuthorization, checkSearch, async (req, res) => {
+  const { q } = req.query;
+
+  try {
+    const [{ dataValues }] = await BlogPosts.findAll({
+      where: {
+        [Op.or]: [{ title: { [Op.like]: `%${q}%` } }, { content: { [Op.like]: `%${q}%` } }],
+      },
+      include: { association: 'user', attributes: { exclude: ['password'] } },
+    });
+
+    return res.status(200).json(dataValues);
+  } catch (e) {
+    return res.status(200).json([]);
+  }
+});
+
 router.get('/:id', checkAuthorization, checkPostId, async (req, res) => {
   const { id } = req.params;
   const [{ dataValues }] = await BlogPosts.findAll({
@@ -49,10 +67,4 @@ router.put('/:id', checkAuthorization, CheckUserId, async (req, res) => {
   res.status(200).json({ title, content, userId: dataValues.id });
 });
 
-/* router.get('/search?q=:searchTerm', async (req, res) => {
-  const { searchTerm } = req.query;
-  console.log('ESTOU AKI', searchTerm);
-
-  res.status(200).json('ok');
-}); */
 module.exports = router;
