@@ -7,7 +7,7 @@ const PORT = 3000;
 const app = express();
 const userValidations = require('./middlewares/userValidations');
 const loginValidations = require('./middlewares/loginValidations');
-const postValidations = require('./middlewares/postValidations');
+// const postValidations = require('./middlewares/postValidations');
 
 app.use(express.json());
 
@@ -18,7 +18,6 @@ app.use('/login',
   LoginController);
 app.use('/post',
   userValidations.validateTokenLogin,
-  postValidations.validateTitleAndContent,
   PostController);
 
 app.listen(PORT, () => console.log(`Ouvindo na porta ${PORT}!`));
