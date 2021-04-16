@@ -61,4 +61,17 @@ userRouter.get('/:id', tokenValid, existsId,
     }
   });
 
+userRouter.delete('/me', tokenValid,
+  async (req, res) => {
+    try {
+      const { authorization } = req.headers;
+      const verifyToken = jwt.verify(authorization, secret);
+      const { email } = verifyToken;
+      await Users.destroy({ where: { email } });
+      return res.status(204).end();
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
 module.exports = userRouter;
