@@ -8,7 +8,7 @@ const checkUserId = async (req, res, next) => {
     },
   });
   if (!checkId) {
-    res.status(404).json({ message: 'Usuário não existe' });
+    return res.status(404).json({ message: 'Usuário não existe' });
   }
   next();
 };
