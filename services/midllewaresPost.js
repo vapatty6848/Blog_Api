@@ -1,4 +1,4 @@
-// const { blogPosts } = require('../models');
+const { blogPosts } = require('../models');
 
 const titleExists = (req, res, next) => {
   try {
@@ -24,7 +24,21 @@ const contentExists = (req, res, next) => {
   next();
 };
 
+const blogpostExists = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const idDb = await blogPosts.findOne({ where: { id } });
+    if (!idDb) {
+      return res.status(404).json({ message: 'Post não existe' });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  next();
+};
+
 module.exports = {
   titleExists,
   contentExists,
+  blogpostExists,
 };
