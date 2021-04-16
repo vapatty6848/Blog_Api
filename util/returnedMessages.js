@@ -13,4 +13,5 @@ module.exports = {
   userNotFound: 'Usuário não existe',
   requiredTitle: '"title" is required',
   requiredContent: '"content" is required',
+  postNotfound: 'Post não existe',
 };
