@@ -1,29 +1,26 @@
 const express = require('express');
 const { User } = require('../models');
-const { secret, jwtConfig, createJWTPayload, jwtSign } = require('../auth/ValidateToken');
 const { verifylogin } = require('../middlewares/UserMid');
+const { secret, jwtConfig, createJWTPayload, jwtSign } = require('../auth/ValidateToken');
 
 const LoginRouter = express.Router();
-
 LoginRouter.post('/', verifylogin, async (req, res) => {
-  User.findOne(
-    {
-      where:
+  try {
+    const onlyUser = await User.findOne(
       {
-        email: req.body.email,
-        password: req.body.password,
+        where:
+        {
+          email: req.body.email,
+          password: req.body.password,
+        },
       },
-    },
-  ).then((user) => {
-    if (user === null) return res.status(400).json({ message: 'Campos inválidos' });
-    return createJWTPayload(user);
-  }).then((payload) => jwtSign(payload, secret, jwtConfig))
-    .then((result) => res.status(200).json({ token: result }))
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
-    });
+    );
+    if (onlyUser === null) return res.status(400).json({ message: 'Campos inválidos' });
+    const payload = createJWTPayload(onlyUser);
+    const createdToken = jwtSign(payload, secret, jwtConfig);
+    return res.status(200).json({ token: createdToken });
+  } catch (error) {
+    return res.status(500).send({ message: 'Algo deu errado' });
+  }
 });
-
-// ....
 module.exports = LoginRouter;
