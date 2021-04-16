@@ -1,4 +1,5 @@
 const BlogsRepository = require('../database/repositories/BlogsRepository');
+const AppError = require('../error/AppError');
 
 const createBlog = async (blogData) => {
   const BlogPostData = await BlogsRepository.create(blogData);
@@ -27,6 +28,16 @@ const getAllPostsByUser = async (userId) => {
   return blogPosts;
 };
 
+const getPostById = async (postId, userId) => {
+  try {
+    const blogPost = await BlogsRepository.findById(postId, userId);
+    if (!blogPost) throw AppError('Post não existe', 404);
+    return blogPost;
+  } catch {
+    throw AppError('Post não existe', 404);
+  }
+};
+
 module.exports = {
-  createBlog, getAllPostsByUser,
+  createBlog, getAllPostsByUser, getPostById,
 };
