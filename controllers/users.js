@@ -17,6 +17,10 @@ const {
   existEmail,
 } = require('../services/midllewaresUser');
 
+const {
+  tokenValid,
+} = require('../services/authToken');
+
 userRouter.post('/', displayNameChecked, validEmail, existEmail, validPassword,
   async (req, res) => {
     try {
@@ -32,6 +36,16 @@ userRouter.post('/', displayNameChecked, validEmail, existEmail, validPassword,
     } catch (err) {
       console.log(err);
       return res.status(409).json({ message: 'Usuário já existe' });
+    }
+  });
+
+userRouter.get('/', tokenValid,
+  async (req, res) => {
+    try {
+      const dbUsers = await Users.findAll();
+      return res.status(200).json(dbUsers);
+    } catch (err) {
+      console.log(err);
     }
   });
 
