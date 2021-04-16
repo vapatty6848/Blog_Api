@@ -2,7 +2,7 @@ const { Router } = require('express');
 
 const userRouter = Router();
 
-const { Users } = require('../models');
+// const { Users } = require('../models');
 
 const {
   displayNameChecked,
