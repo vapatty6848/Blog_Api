@@ -1,6 +1,7 @@
 const msgInValidDisplayName = '"displayName" length must be at least 8 characters long';
 const msgInvalidEmail = '"email" must be a valid email';
 const msgInvalidPassword = '"password" length must be 6 characters long';
+const { Users } = require('../models');
 
 const displayNameChecked = (req, res, next) => {
   try {
@@ -54,9 +55,24 @@ const existEmail = (req, res, next) => {
   next();
 };
 
+const existsId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const idDb = await Users.findOne({ where: { id } });
+
+    if (!idDb) {
+      return res.status(404).json({ message: 'Usuário não existe' });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  next();
+};
+
 module.exports = {
   displayNameChecked,
   validEmail,
   validPassword,
   existEmail,
+  existsId,
 };

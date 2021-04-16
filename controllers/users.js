@@ -15,6 +15,7 @@ const {
   validEmail,
   validPassword,
   existEmail,
+  existsId,
 } = require('../services/midllewaresUser');
 
 const {
@@ -44,6 +45,17 @@ userRouter.get('/', tokenValid,
     try {
       const dbUsers = await Users.findAll();
       return res.status(200).json(dbUsers);
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+userRouter.get('/:id', tokenValid, existsId,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const dbId = await Users.findOne({ where: { id } });
+      return res.status(200).json(dbId);
     } catch (err) {
       console.log(err);
     }
