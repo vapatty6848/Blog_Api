@@ -2,7 +2,6 @@ const { Users } = require('../models');
 
 const checkLogin = async (req, res, next) => {
   const dataUser = req.body;
-  console.log(dataUser);
   if (dataUser.password === '') return res.status(400).json({ message: '"password" is not allowed to be empty' });
   if (dataUser.email === '') return res.status(400).json({ message: '"email" is not allowed to be empty' });
   if (!dataUser.email) return res.status(400).json({ message: '"email" is required' });

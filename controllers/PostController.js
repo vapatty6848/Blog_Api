@@ -48,4 +48,11 @@ router.put('/:id', checkAuthorization, CheckUserId, async (req, res) => {
   const [{ dataValues }] = await Users.findAll({ where: { email: user.email } });
   res.status(200).json({ title, content, userId: dataValues.id });
 });
+
+/* router.get('/search?q=:searchTerm', async (req, res) => {
+  const { searchTerm } = req.query;
+  console.log('ESTOU AKI', searchTerm);
+
+  res.status(200).json('ok');
+}); */
 module.exports = router;
