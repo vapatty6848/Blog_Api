@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const express = require('express');
 const { User } = require('../models');
 const { registerUser, verifyToken } = require('../middlewares/UserMid');
