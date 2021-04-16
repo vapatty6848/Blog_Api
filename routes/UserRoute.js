@@ -5,11 +5,13 @@ const getUsersController = require('../controller/GetUserController');
 const verifyToken = require('../middlewares/VerifyToken');
 const getUserByIdController = require('../controller/GetUserByIdController');
 const getUserByIdValidation = require('../middlewares/GetUserByIdValidate');
-// const validateToken = require('../middlewares/GetUserValidate');
+const deleteMyUserController = require('../controller/DeleteMyUserController');
+
 const UserRouter = Router();
 
 UserRouter.post('/', validateCreateUSer, CreateUserController);
 UserRouter.get('/', verifyToken, getUsersController);
 UserRouter.get('/:id', verifyToken, getUserByIdValidation, getUserByIdController);
+UserRouter.delete('/me', verifyToken, deleteMyUserController);
 
 module.exports = UserRouter;
