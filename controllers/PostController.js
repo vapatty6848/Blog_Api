@@ -67,4 +67,12 @@ router.put('/:id', checkAuthorization, CheckUserId, async (req, res) => {
   res.status(200).json({ title, content, userId: dataValues.id });
 });
 
+router.delete('/:id', checkAuthorization, checkPostId, async (req, res) => {
+  const { id } = req.params;
+  await BlogPosts.destroy({
+    where: { id },
+  });
+  res.status(200).end();
+});
+
 module.exports = router;
