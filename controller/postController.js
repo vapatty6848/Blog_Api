@@ -1,11 +1,13 @@
 const express = require('express');
 const { BlogPost } = require('../models');
-const { registerPost, verifyToken } = require('../middlewares/PostMid');
+const { registerPost } = require('../middlewares/PostMid');
+const { verifyToken } = require('../middlewares/UserMid');
 
 const postRouter = express.Router();
 
 postRouter.post('/', registerPost, verifyToken, async (req, res) => {
   const { userData } = req;
+  console.log(userData, 'user dataaaaa');
   const userId = userData.id;
   const { title, content } = req.body;
 
