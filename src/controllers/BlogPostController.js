@@ -17,6 +17,18 @@ BlogPostController.post('/', validateAuth, validateBlogs, async (req, res, next)
   }
 });
 
+BlogPostController.put('/:id', validateAuth, validateBlogs, async (req, res, next) => {
+  const { id: userId } = res.locals.user;
+  const { id } = req.params;
+  const { title, content } = req.body;
+  try {
+    const blog = await BlogsService.editPost(id, { userId, title, content });
+    res.status(200).json(blog);
+  } catch (err) {
+    next(err);
+  }
+});
+
 BlogPostController.get('/:id', validateAuth, async (req, res, next) => {
   const { id: userId } = res.locals.user;
   const { id } = req.params;
