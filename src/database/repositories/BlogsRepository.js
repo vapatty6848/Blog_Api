@@ -21,7 +21,7 @@ async function getAllById(id) {
 async function findById(id, userId) {
   const post = await BlogPost.findByPk(id, {
     include: { as: 'user', model: User, attributes: ['id', 'displayName', 'email', 'image'] },
-    where: { userId },
+    where: { userId, id },
   });
 
   return post;
