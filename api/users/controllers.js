@@ -1,28 +1,51 @@
-const { Users } = require('../../models');
-const generateToken = require('../utils/generateToken');
+const { middleware } = require('bodymen');
+const express = require('express');
+const services = require('./services');
+const schema = require('../../schemas/user-schema');
+const checkToken = require('../middlewares/checkToken');
 
-const create = async ({ body }, res, _next) => {
-  const { displayName, email, password, image } = body;
-  const users = await Users.findAll({ where: { email: body.email } });
+const usersController = express();
+const bodyCheck = middleware;
+const { displayName, email, password, image } = schema;
 
-  if (users.length > 0) {
-    const message = 'Usuário já existe';
-    return res.status(409).json({ message });
-  }
-
-  const user = await Users.create({ email, displayName, image, password });
-  const { id } = user;
-  if (id) {
-    const token = generateToken({ id: user.id });
-    return res.status(201).json({ token });
-  }
-
-  return res.status(400).json({ message: 'Error' });
+const create = async (req, res) => {
+  const response = await services.create(req);
+  const { status, payload } = response;
+  return res.status(status).json(payload);
 };
 
-const getAll = async (req, res, _next) => {
-  const users = await Users.findAll();
-  res.status(200).json(users);
+const getAll = async (req, res) => {
+  const response = await services.getAll();
+  const { status, payload } = response;
+  return res.status(status).json(payload);
 };
 
-module.exports = { create, getAll };
+const getOne = async (req, res) => {
+  const response = await services.getOne(req);
+  const { status, payload } = response;
+  return res.status(status).json(payload);
+};
+
+const remove = async (req, res) => {
+  const response = await services.remove(req);
+  const { status } = response;
+  return res.status(status).send();
+};
+
+usersController.post('/',
+  bodyCheck({ displayName, email, image, password }),
+  create);
+
+usersController.get('/:id',
+  checkToken,
+  getOne);
+
+usersController.get('/',
+  checkToken,
+  getAll);
+
+usersController.delete('/me',
+  checkToken,
+  remove);
+
+module.exports = usersController;

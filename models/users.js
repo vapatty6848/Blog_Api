@@ -1,10 +1,15 @@
 // const bcrypt = require('bcrypt');
+// const { v4 } = require('uuid');
+// const models = require('./');
 
-// const generateHash = async (user) => {
+// const uuidv4 = v4;
+
+// const adjustsBeforeCreate = async (user) => {
 //   try {
 //     if (!user.id) {
 //       const hashedPass = await bcrypt.hash(user.password, 9);
 //       user.password = hashedPass;
+//       user.id = uuidv4();
 //     }
 //   } catch (err) {
 //     // errorHandler(err)
@@ -21,9 +26,14 @@ const Users = (sequelize, DataTypes) => {
   },
   {
     hooks: {
-      // beforeCreate: generateHash(user),
+      // beforeCreate: adjustsBeforeCreate,
     },
   });
+
+  UsersModel.associate = (models) => {
+    UsersModel.hasMany(models.BlogPosts,
+      { foreignKey: 'id', as: 'user' });
+  };
 
   return UsersModel;
 };
