@@ -1,10 +1,11 @@
 const { Router } = require('express');
 
-const { user, session } = require('./routes/index');
+const { user, session, posts } = require('./routes/index');
 
 const router = Router();
 
-router.use('/', session);
 router.use('/user', user);
+router.use('/post', posts);
+router.use('/', session);
 
 module.exports = router;
