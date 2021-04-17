@@ -40,7 +40,18 @@ const edit = async (req, res, next) => {
   }
 };
 
+const destroyPost = async (req, res, next) => {
+  try {
+    const { userId, params: { id } } = req;
+    await posts.destroyPost(id, userId);
+    return res.status(StatusCodes.NO_CONTENT).end();
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
+  destroyPost,
   create,
   getAll,
   getById,

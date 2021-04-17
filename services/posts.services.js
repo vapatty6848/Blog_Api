@@ -36,7 +36,15 @@ const edit = async (title, content, id, userId) => {
   return post;
 };
 
+const destroyPost = async (id, userById) => {
+  const post = await BlogPost.findOne({ raw: true, where: { id } });
+  if (!post) throw new CustomErr(StatusCodes.NOT_FOUND, 'Post não existe');
+  if (userById !== post.userId) throw new CustomErr(StatusCodes.UNAUTHORIZED, 'Usuário não autorizado');
+  await BlogPost.destroy({ where: { id } });
+};
+
 module.exports = {
+  destroyPost,
   createPost,
   getAll,
   getById,
