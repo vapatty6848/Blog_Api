@@ -9,7 +9,9 @@ const authLogin = async (email, password) => {
   loginValidator(email, password);
   const user = await User.findOne({ where: { email } });
   if (!user) throw new CustomErr(StatusCodes.BAD_REQUEST, 'Campos inválidos');
-  return generateToken(user.dataValues);
+
+  const { id } = user.dataValues;
+  return generateToken(email, id);
 };
 
 module.exports = {

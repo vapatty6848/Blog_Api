@@ -16,7 +16,7 @@ const getAllUsers = async (_req, res, next) => {
   try {
     const users = await user.getAll();
 
-    return res.status(200).json(users);
+    return res.status(StatusCodes.OK).json(users);
   } catch (err) {
     return next(err);
   }
@@ -26,7 +26,17 @@ const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await user.getById(id);
-    return res.status(200).json(data);
+    return res.status(StatusCodes.OK).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const destroyUser = async (req, res, next) => {
+  try {
+    const { email } = req;
+    await user.destroyUser(email);
+    return res.status(204).end();
   } catch (err) {
     return next(err);
   }
@@ -36,4 +46,5 @@ module.exports = {
   createUser,
   getAllUsers,
   getById,
+  destroyUser,
 };
