@@ -6,6 +6,7 @@ const { auth } = require('../middlewares');
 const posts = Router();
 
 posts.delete('/:id', auth, Posts.destroyPost);
+posts.get('/search', auth, Posts.search);
 posts.get('/:id', auth, Posts.getById);
 posts.get('/', auth, Posts.getAll);
 posts.post('/', auth, Posts.create);

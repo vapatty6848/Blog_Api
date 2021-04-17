@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { StatusCodes } = require('http-status-codes');
 
 const CustomErr = require('../utils/customErr');
@@ -43,10 +44,29 @@ const destroyPost = async (id, userById) => {
   await BlogPost.destroy({ where: { id } });
 };
 
+const search = async (query) => (
+  BlogPost.findAll({
+    where: {
+      [Op.or]: [
+        { title: {
+          [Op.substring]: `%${query}%` },
+        },
+        { content: {
+          [Op.substring]: `%${query}%` },
+        },
+      ],
+    },
+    include: {
+      model: User, as: 'user', attributes: { exclude: ['password'] },
+    },
+  })
+);
+
 module.exports = {
   destroyPost,
   createPost,
   getAll,
   getById,
   edit,
+  search,
 };

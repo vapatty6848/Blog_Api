@@ -34,7 +34,7 @@ const edit = async (req, res, next) => {
   try {
     const { userId, body: { title, content }, params: { id } } = req;
     const data = await posts.edit(title, content, id, userId);
-    return res.status(200).json(data);
+    return res.status(StatusCodes.OK).json(data);
   } catch (err) {
     return next(err);
   }
@@ -50,10 +50,21 @@ const destroyPost = async (req, res, next) => {
   }
 };
 
+const search = async (req, res, next) => {
+  try {
+    const { q: query } = req.query;
+    const data = await posts.search(query);
+    return res.status(StatusCodes.OK).json(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   destroyPost,
   create,
   getAll,
   getById,
   edit,
+  search,
 };
