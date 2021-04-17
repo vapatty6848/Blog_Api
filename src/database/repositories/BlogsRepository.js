@@ -29,11 +29,14 @@ async function findById(id, userId) {
 
 async function searchByQuerie(searchTerm) {
   const post = await BlogPost.findAll({
-    where: [
-      { title: { [Op.like]: `%${searchTerm}%` } },
+    where: {
+      [Op.or]: [
 
-      { content: { [Op.like]: `%${searchTerm}%` } },
-    ],
+        { title: { [Op.like]: `%${searchTerm}%` } },
+
+        { content: { [Op.like]: `%${searchTerm}%` } },
+      ],
+    },
     include: { as: 'user', model: User, attributes: ['id', 'displayName', 'email', 'image'] },
   });
 
