@@ -26,8 +26,19 @@ const getById = async (id) => {
   return { ...post, user: userData };
 };
 
+const edit = async (title, content, id, userId) => {
+  const post = await BlogPost.findOne({ where: { id } });
+  postValidator(title, content);
+  if (userId !== post.userId) throw new CustomErr(StatusCodes.UNAUTHORIZED, 'Usuário não autorizado');
+  post.title = title;
+  post.content = content;
+  await post.save();
+  return post;
+};
+
 module.exports = {
   createPost,
   getAll,
   getById,
+  edit,
 };

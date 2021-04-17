@@ -30,8 +30,19 @@ const getById = async (req, res, next) => {
   }
 };
 
+const edit = async (req, res, next) => {
+  try {
+    const { userId, body: { title, content }, params: { id } } = req;
+    const data = await posts.edit(title, content, id, userId);
+    return res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  edit,
 };

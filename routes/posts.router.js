@@ -8,5 +8,6 @@ const posts = Router();
 posts.get('/:id', auth, Posts.getById);
 posts.get('/', auth, Posts.getAll);
 posts.post('/', auth, Posts.create);
+posts.put('/:id', auth, Posts.edit);
 
 module.exports = posts;
