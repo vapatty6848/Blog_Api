@@ -39,4 +39,14 @@ router.get('/', postsValidation.getAllPosts, async (req, res) => {
   return res.status(statusOK).json(posts);
 });
 
+router.get('/:id', postsValidation.getById, async (req, res) => {
+  const { id } = req.params;
+
+  const findById = await BlogPosts.findByPk(id, {
+    include: { model: Users, as: 'user' },
+  });
+
+  res.status(statusOK).json(findById);
+});
+
 module.exports = router;

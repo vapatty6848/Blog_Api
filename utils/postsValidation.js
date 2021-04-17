@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken');
-/* const { BlogPosts } = require('../models'); */
+const { BlogPosts } = require('../models');
 
 const secret = 'cabeça';
 
 const errNotHave = 400;
 const errToken = 401;
+const errNotFound = 404;
 
 const createPost = async (req, res, next) => {
   const { title, content } = req.body;
@@ -45,7 +46,29 @@ const getAllPosts = async (req, res, next) => {
   }
 };
 
+const getById = async (req, res, next) => {
+  const token = req.headers.authorization;
+  const { id } = req.params;
+
+  const findById = await BlogPosts.findByPk(id);
+  if (!findById) {
+    return res.status(errNotFound).json({ message: 'Post não existe' });
+  }
+  if (!token) {
+    return res.status(errToken).json({ message: 'Token não encontrado' });
+  }
+  try {
+    jwt.verify(token, secret);
+    next();
+  } catch (error) {
+    if (error) {
+      return res.status(errToken).json({ message: 'Token expirado ou inválido' });
+    }
+  }
+};
+
 module.exports = {
   createPost,
   getAllPosts,
+  getById,
 };
