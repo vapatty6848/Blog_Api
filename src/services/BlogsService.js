@@ -22,6 +22,21 @@ const createBlog = async (blogData) => {
 //   }
 // ]
 
+const editPost = async (postId, postData) => {
+  try {
+    const { userId } = { ...postData };
+    const register = await BlogsRepository.findById(postId, userId);
+    if (userId !== register.dataValues.userId) throw AppError('Usuário não autorizado', 401);
+    await BlogsRepository.update(postId, postData);
+
+    console.log(register, '-/-/-/');
+    return postData;
+  } catch (err) {
+    console.log(err);
+    throw AppError('Usuário não autorizado', 401);
+  }
+};
+
 const getAllPostsByUser = async (userId) => {
   const [...blogPosts] = await BlogsRepository.getAllById(userId);
   console.log(blogPosts);
@@ -39,5 +54,5 @@ const getPostById = async (postId, userId) => {
 };
 
 module.exports = {
-  createBlog, getAllPostsByUser, getPostById,
+  createBlog, getAllPostsByUser, getPostById, editPost,
 };
