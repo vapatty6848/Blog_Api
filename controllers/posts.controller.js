@@ -11,6 +11,16 @@ const create = async (req, res, next) => {
   }
 };
 
+const getAll = async (_req, res, next) => {
+  try {
+    const data = await posts.getAll();
+    return res.status(StatusCodes.OK).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   create,
+  getAll,
 };

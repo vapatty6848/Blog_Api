@@ -1,4 +1,4 @@
-const { BlogPost } = require('../models');
+const { BlogPost, User } = require('../models');
 const postValidator = require('../validations/posts.validation');
 
 const createPost = async (title, content, userId) => {
@@ -8,6 +8,12 @@ const createPost = async (title, content, userId) => {
   return data;
 };
 
+const getAll = async () => BlogPost.findAll({
+  attributes: { exclude: 'userId' },
+  include: { model: User, as: 'user' },
+});
+
 module.exports = {
   createPost,
+  getAll,
 };
