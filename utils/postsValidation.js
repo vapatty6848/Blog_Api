@@ -29,6 +29,23 @@ const createPost = async (req, res, next) => {
   }
 };
 
+const getAllPosts = async (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    return res.status(errToken).json({ message: 'Token não encontrado' });
+  }
+  try {
+    jwt.verify(token, secret);
+    next();
+  } catch (error) {
+    if (error) {
+      return res.status(errToken).json({ message: 'Token expirado ou inválido' });
+    }
+  }
+};
+
 module.exports = {
   createPost,
+  getAllPosts,
 };

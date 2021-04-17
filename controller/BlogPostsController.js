@@ -9,6 +9,7 @@ const secret = 'cabeça';
 const postsValidation = require('../utils/postsValidation');
 
 const statusCreate = 201;
+const statusOK = 200;
 
 router.post('/', postsValidation.createPost, async (req, res) => {
   const { title, content } = req.body;
@@ -28,6 +29,13 @@ router.post('/', postsValidation.createPost, async (req, res) => {
     userId: dataValues.id,
   };
   return res.status(statusCreate).send(returned);
+});
+
+router.get('/', postsValidation.getAllPosts, async (req, res) => {
+  const posts = await BlogPosts.findAll();
+  const userId = await posts.getUser();
+
+  return res.status(statusOK).json(posts.dataValues.id, posts);
 });
 
 module.exports = router;
