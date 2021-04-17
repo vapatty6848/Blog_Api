@@ -47,9 +47,13 @@ router.get('/:id', userValidate.userIdValidation, async (req, res) => {
 });
 
 router.delete('/me', userValidate.tokenValidation, async (req, res) => {
-  /* const token = req.headers.authorization; */
+  const token = req.headers.authorization;
 
-  // procurar uma forma de usar o token para excluir...
+  const { data } = jwt.verify(token, secret);
+  /* console.log(data.email); */
+  const { dataValues } = await Users.findOne({ where: { email: data.email } });
+  console.log(dataValues.id);
+  await Users.destroy({ where: { id: dataValues.id } });
   res.status(statusDel).end();
 });
 
