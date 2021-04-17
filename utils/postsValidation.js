@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { BlogPosts } = require('../models');
+/* const { BlogPosts } = require('../models'); */
 
 const secret = 'cabeça';
 

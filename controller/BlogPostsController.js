@@ -32,10 +32,11 @@ router.post('/', postsValidation.createPost, async (req, res) => {
 });
 
 router.get('/', postsValidation.getAllPosts, async (req, res) => {
-  const posts = await BlogPosts.findAll();
-  const userId = await posts.getUser();
+  const posts = await BlogPosts.findAll({
+    include: { model: Users, as: 'user' },
+  });
 
-  return res.status(statusOK).json(posts.dataValues.id, posts);
+  return res.status(statusOK).json(posts);
 });
 
 module.exports = router;
