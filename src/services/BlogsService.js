@@ -41,6 +41,17 @@ const getAllPostsByUser = async (userId) => {
   return blogPosts;
 };
 
+const deleteById = async (id, userId) => {
+  try {
+    const post = await BlogsRepository.findById(id, userId);
+    if (post.dataValues.userId !== userId) throw AppError('Usuário não autorizado', 401);
+    await BlogsRepository.deleteById(id);
+  } catch (err) {
+    if (err.status === 401) throw err;
+    throw AppError('Post não existe', 404);
+  }
+};
+
 const findByText = async (text) => {
   try {
     const blogPost = await BlogsRepository.searchByQuerie(text);
@@ -62,5 +73,5 @@ const getPostById = async (postId, userId) => {
 };
 
 module.exports = {
-  createBlog, getAllPostsByUser, getPostById, editPost, findByText,
+  createBlog, getAllPostsByUser, getPostById, editPost, findByText, deleteById,
 };
