@@ -4,12 +4,15 @@ const postsController = Router();
 
 const validateCreatePostMiddleware = require('../middlewares/validateCreatePostMiddleware');
 const validateGetPostsMiddleware = require('../middlewares/validateGetPostsMiddleware');
+const validateGetPostByIdMiddleware = require('../middlewares/validateGetPostByIdMiddleware');
 
 const decodeToken = require('../utils/decodeToken');
 
 const { User, BlogPost } = require('../models');
 
 postsController.get('/post', validateGetPostsMiddleware, async (_req, _res) => {});
+
+postsController.get('/post/:id', validateGetPostByIdMiddleware, async (_req, _res) => {});
 
 postsController.post('/post', validateCreatePostMiddleware, async (req, res) => {
   try {
