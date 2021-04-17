@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { User } = require('./models');
+require('dotenv/config');
+
+const { handleError } = require('./middlewares');
+const routes = require('./routes.js');
 
 const app = express();
 
@@ -10,10 +13,11 @@ app.use(bodyParser.json());
 app.get('/', (request, response) => {
   response.send();
 });
+// ======================================================
 
-app.post('/user', async (req, res) => {
-  const { body } = req;
-  await User.create(body);
-});
+app.use(routes);
+app.use(handleError);
 
-app.listen(3000, () => console.log('ouvindo porta 3000!'));
+const PORT = process.env.PORT || 3000;
+
+app.listen(3000, () => console.log(`Listening on port ${PORT}`));
