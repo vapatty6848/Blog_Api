@@ -85,11 +85,14 @@ const userIdValidation = async (req, res, next) => {
   if (!token) {
     return res.status(errToken).json({ message: 'Token não encontrado' });
   }
-  if (!jwt.verify(token, secret)) {
-    return res.status(errToken).json({ message: 'Token expirado ou inválido' });
+  try {
+    jwt.verify(token, secret);
+    next();
+  } catch (error) {
+    if (error) {
+      return res.status(errToken).json({ message: 'Token expirado ou inválido' });
+    }
   }
-
-  next();
 };
 
 module.exports = {
