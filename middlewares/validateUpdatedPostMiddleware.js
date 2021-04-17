@@ -2,20 +2,10 @@ const decodeToken = require('../utils/decodeToken');
 
 const {
   haveTitleField,
-  haveContentField } = require('../utils/validations');
+  haveContentField,
+  isTheUserWhoCreatedThePost } = require('../utils/validations');
 
-const { User, BlogPost } = require('../models');
-
-const isTheUserWhoCreatedThePost = async (id, token) => {
-  const foundPost = await BlogPost.findByPk(id, { raw: true, include: { model: User, as: 'user' } });
-
-  const decodedToken = await decodeToken(token);
-
-  if (foundPost['user.email'] === decodedToken.email) {
-    return true;
-  }
-  return false;
-};
+const { BlogPost } = require('../models');
 
 const validateUpdatedPost = async (req, res, _next) => {
   try {

@@ -6,6 +6,7 @@ const validateCreatePost = require('../middlewares/validateCreatePostMiddleware'
 const validateGetPosts = require('../middlewares/validateGetPostsMiddleware');
 const validateGetPostById = require('../middlewares/validateGetPostByIdMiddleware');
 const validateUpdatedPost = require('../middlewares/validateUpdatedPostMiddleware.js');
+const validateDeletePost = require('../middlewares/validateDeletePostMiddleware');
 
 const decodeToken = require('../utils/decodeToken');
 
@@ -42,5 +43,7 @@ postsController.post('/post', validateCreatePost, async (req, res) => {
 });
 
 postsController.put('/post/:id', validateUpdatedPost, async (_req, _res) => {});
+
+postsController.delete('/post/:id', validateDeletePost, async (_req, _res) => {});
 
 module.exports = postsController;

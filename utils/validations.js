@@ -1,4 +1,5 @@
-const { User } = require('../models');
+const { User, BlogPost } = require('../models');
+const decodeToken = require('./decodeToken');
 
 // name validation
 const isValidName = (name) => {
@@ -94,6 +95,25 @@ const haveTitleField = (bodyObj) => {
   return true;
 };
 
+const isTheUserWhoCreatedThePost = async (id, token) => {
+  const foundPost = await BlogPost.findByPk(id, { raw: true, include: { model: User, as: 'user' } });
+
+  const decodedToken = await decodeToken(token);
+
+  if (foundPost['user.email'] === decodedToken.email) {
+    return true;
+  }
+  return false;
+};
+
+const postExist = async (id) => {
+  const foundPost = await BlogPost.findByPk(id);
+  if (!foundPost) {
+    return false;
+  }
+  return true;
+};
+
 module.exports = {
   isValidName,
   haveEmailField,
@@ -106,4 +126,6 @@ module.exports = {
   haveTokenField,
   haveContentField,
   haveTitleField,
+  isTheUserWhoCreatedThePost,
+  postExist,
 };
