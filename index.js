@@ -11,10 +11,12 @@ app.use(bodyParser.json());
 const login = require('./controller/LoginController');
 // User
 const createUsers = require('./controller/UsersController');
+// Post
+const posts = require('./controller/BlogPostsController');
 
 app.use('/user', createUsers);
 app.use('/login', login);
-/* app.use('/post'); */
+app.use('/post', posts);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (request, response) => {

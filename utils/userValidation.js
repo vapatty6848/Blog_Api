@@ -9,8 +9,6 @@ const errToken = 401;
 const errNotFound = 404;
 const displayLength = 8;
 const passLength = 6;
-const emailMinLength = 0;
-const passMinLength = 0;
 
 const postValidation = async (req, res, next) => {
   const { displayName, email, password } = req.body;

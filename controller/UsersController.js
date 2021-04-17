@@ -50,9 +50,8 @@ router.delete('/me', userValidate.tokenValidation, async (req, res) => {
   const token = req.headers.authorization;
 
   const { data } = jwt.verify(token, secret);
-  /* console.log(data.email); */
   const { dataValues } = await Users.findOne({ where: { email: data.email } });
-  console.log(dataValues.id);
+  /* console.log(dataValues.id); */
   await Users.destroy({ where: { id: dataValues.id } });
   res.status(statusDel).end();
 });
