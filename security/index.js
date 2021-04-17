@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { StatusCodes } = require('http-status-codes');
 
+const CustomErr = require('../utils/customErr');
+
 const jwtConfig = {
   expiresIn: '7d',
   algorithm: 'HS256',
@@ -17,9 +19,8 @@ const generateToken = (email, userId) => {
   return jwt.sign({ data: user }, secret, jwtConfig);
 };
 
-const tokenErr = (message) => ({ code: StatusCodes.UNAUTHORIZED, message });
-const noToken = tokenErr('Token não encontrado');
-const invalidToken = tokenErr('Token expirado ou inválido');
+const noToken = new CustomErr(StatusCodes.UNAUTHORIZED, 'Token não encontrado');
+const invalidToken = new CustomErr(StatusCodes.UNAUTHORIZED, 'Token expirado ou inválido');
 
 const validateToken = (req, token, next) => {
   if (!token) return next(noToken);
