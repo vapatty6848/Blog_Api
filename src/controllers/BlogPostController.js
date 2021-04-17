@@ -44,6 +44,19 @@ BlogPostController.get('/:id', validateAuth, async (req, res, next) => {
   }
 });
 
+BlogPostController.delete('/:id', validateAuth, async (req, res, next) => {
+  const { id } = req.params;
+  const { id: userId } = res.locals.user;
+  try {
+    await BlogsService.deleteById(id, userId);
+    res.status(204).json({ message: 'deleted' });
+  } catch (err) {
+    console.log('delete');
+    console.log(err);
+    next(err);
+  }
+});
+
 BlogPostController.get('/', validateAuth, async (_req, res, next) => {
   const { id: userId } = res.locals.user;
   try {
