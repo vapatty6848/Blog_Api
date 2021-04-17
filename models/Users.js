@@ -9,6 +9,12 @@ const User = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
+  // createUser.associate = (models) => {
+  //   createUser.hasMany(models.Post, {
+  //     foreignKey: 'userId', as: 'Post',
+  //   });
+  // };
+
   return createUser;
 };
 

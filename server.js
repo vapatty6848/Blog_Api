@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const LoginRouter = require('./routes/LoginRoute');
 const UserRouter = require('./routes/UserRoute');
+const PostRouter = require('./routes/PostRoute');
 
 const app = express();
 
@@ -13,5 +14,6 @@ app.get('/', (request, response) => {
 app.use(bodyParser.json());
 app.use('/user', UserRouter);
 app.use('/login', LoginRouter);
+app.use('post', PostRouter);
 
 module.exports = app;
