@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { BlogPosts } = require('../models');
+const { BlogPosts, Users } = require('../models');
 
 const secret = 'cabeça';
 
@@ -66,6 +66,28 @@ const getById = async (req, res, next) => {
     }
   }
 };
+
+/* const putPost = async (req, res, next) => {
+  const token = req.headers.authorization;
+  const { title, content } = req.body;
+  if (!title) {
+    return res.status(errNotHave).json({ message: '"title" is required' });
+  }
+  if (!content) {
+    return res.status(errNotHave).json({ message: '"content" is required' });
+  }
+  if (!token) {
+    return res.status(errToken).json({ message: 'Token não encontrado' });
+  }
+  try {
+    jwt.verify(token, secret);
+    next();
+  } catch (error) {
+    if (error) {
+      return res.status(errToken).json({ message: 'Token expirado ou inválido' });
+    }
+  }
+}; */
 
 module.exports = {
   createPost,
