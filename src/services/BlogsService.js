@@ -28,8 +28,6 @@ const editPost = async (postId, postData) => {
     const register = await BlogsRepository.findById(postId, userId);
     if (userId !== register.dataValues.userId) throw AppError('Usuário não autorizado', 401);
     await BlogsRepository.update(postId, postData);
-
-    console.log(register, '-/-/-/');
     return postData;
   } catch (err) {
     console.log(err);
@@ -43,6 +41,16 @@ const getAllPostsByUser = async (userId) => {
   return blogPosts;
 };
 
+const findByText = async (text) => {
+  try {
+    const blogPost = await BlogsRepository.searchByQuerie(text);
+    console.log(blogPost);
+    return blogPost;
+  } catch (Err) {
+    console.log(Err);
+  }
+};
+
 const getPostById = async (postId, userId) => {
   try {
     const blogPost = await BlogsRepository.findById(postId, userId);
@@ -54,5 +62,5 @@ const getPostById = async (postId, userId) => {
 };
 
 module.exports = {
-  createBlog, getAllPostsByUser, getPostById, editPost,
+  createBlog, getAllPostsByUser, getPostById, editPost, findByText,
 };
