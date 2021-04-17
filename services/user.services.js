@@ -17,7 +17,14 @@ const createUser = async (displayName, email, password, image) => {
 
 const getAll = async () => User.findAll();
 
+const getById = async (id) => {
+  const user = await User.findOne({ raw: true, where: { id } });
+  if (!user) throw new CustomErr(StatusCodes.NOT_FOUND, 'Usuário não existe');
+  return user;
+};
+
 module.exports = {
   createUser,
   getAll,
+  getById,
 };
