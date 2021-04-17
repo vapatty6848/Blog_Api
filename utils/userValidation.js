@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const validEmail = require('./validEmail');
 const { Users } = require('../models');
 
+const secret = 'cabeça';
 const errStatus = 400;
 const errUserExist = 409;
 const errToken = 401;
@@ -10,7 +11,6 @@ const displayLength = 8;
 const passLength = 6;
 const emailMinLength = 0;
 const passMinLength = 0;
-const segredo = 'cabeça';
 
 const postValidation = async (req, res, next) => {
   const { displayName, email, password } = req.body;
@@ -61,13 +61,17 @@ const loginValidation = async (req, res, next) => {
 const tokenValidation = async (req, res, next) => {
   const token = req.headers.authorization;
 
-  if (!jwt.verify(token, segredo)) {
-    return res.status(errToken).json({ message: 'Token expirado ou inválido' });
-  }
   if (!token) {
     return res.status(errToken).json({ message: 'Token não encontrado' });
   }
-  next();
+  try {
+    jwt.verify(token, secret);
+    next();
+  } catch (error) {
+    if (error) {
+      return res.status(errToken).json({ message: 'Token expirado ou inválido' });
+    }
+  }
 };
 
 const userIdValidation = async (req, res, next) => {
@@ -81,7 +85,7 @@ const userIdValidation = async (req, res, next) => {
   if (!token) {
     return res.status(errToken).json({ message: 'Token não encontrado' });
   }
-  if (!jwt.verify(token, segredo)) {
+  if (!jwt.verify(token, secret)) {
     return res.status(errToken).json({ message: 'Token expirado ou inválido' });
   }
 
