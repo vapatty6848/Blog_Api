@@ -2,19 +2,20 @@ const { Router } = require('express');
 
 const postsController = Router();
 
-const validateCreatePostMiddleware = require('../middlewares/validateCreatePostMiddleware');
-const validateGetPostsMiddleware = require('../middlewares/validateGetPostsMiddleware');
-const validateGetPostByIdMiddleware = require('../middlewares/validateGetPostByIdMiddleware');
+const validateCreatePost = require('../middlewares/validateCreatePostMiddleware');
+const validateGetPosts = require('../middlewares/validateGetPostsMiddleware');
+const validateGetPostById = require('../middlewares/validateGetPostByIdMiddleware');
+const validateUpdatedPost = require('../middlewares/validateUpdatedPostMiddleware.js');
 
 const decodeToken = require('../utils/decodeToken');
 
 const { User, BlogPost } = require('../models');
 
-postsController.get('/post', validateGetPostsMiddleware, async (_req, _res) => {});
+postsController.get('/post', validateGetPosts, async (_req, _res) => {});
 
-postsController.get('/post/:id', validateGetPostByIdMiddleware, async (_req, _res) => {});
+postsController.get('/post/:id', validateGetPostById, async (_req, _res) => {});
 
-postsController.post('/post', validateCreatePostMiddleware, async (req, res) => {
+postsController.post('/post', validateCreatePost, async (req, res) => {
   try {
     const decodedToken = await decodeToken(req.headers.authorization);
     const foundUser = await User.findOne({ raw: true }, {
@@ -39,5 +40,7 @@ postsController.post('/post', validateCreatePostMiddleware, async (req, res) => 
     console.log(error);
   }
 });
+
+postsController.put('/post/:id', validateUpdatedPost, async (_req, _res) => {});
 
 module.exports = postsController;
