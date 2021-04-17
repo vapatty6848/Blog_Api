@@ -52,8 +52,7 @@ const loginValidation = async (req, res, next) => {
   if (!password) {
     return res.status(errStatus).json({ message: '"password" is required' });
   }
-  /* const emailValido = await Users.findAll({ where: { email } }); */
-  if (!await Users.findAll({ where: { email } })) {
+  if (!validEmail(email)) {
     return res.status(errStatus).json({ message: 'Campos inválidos' });
   }
   next();

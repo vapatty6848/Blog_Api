@@ -14,7 +14,7 @@ const createUsers = require('./controller/UsersController');
 
 app.use('/user', createUsers);
 app.use('/login', login);
-app.use('/post');
+/* app.use('/post'); */
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (request, response) => {
