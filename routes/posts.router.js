@@ -5,6 +5,7 @@ const { auth } = require('../middlewares');
 
 const posts = Router();
 
+posts.get('/:id', auth, Posts.getById);
 posts.get('/', auth, Posts.getAll);
 posts.post('/', auth, Posts.create);
 

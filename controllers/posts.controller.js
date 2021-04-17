@@ -20,7 +20,18 @@ const getAll = async (_req, res, next) => {
   }
 };
 
+const getById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = await posts.getById(id);
+    return res.status(StatusCodes.OK).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
 module.exports = {
   create,
   getAll,
+  getById,
 };
