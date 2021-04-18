@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { User, BlogPost } = require('../models');
 const decodeToken = require('./decodeToken');
 
@@ -114,6 +115,28 @@ const postExist = async (id) => {
   return true;
 };
 
+// await BlogPost.findAll({});
+const isEmptyParams = (query) => {
+  if (query === null || undefined) {
+    return true;
+  }
+  return false;
+};
+
+const findPostByParam = async (query) => {
+  const findPosts = await BlogPost.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: `%${query}%` } },
+        { content: { [Op.like]: `%${query}%` } },
+      ],
+    },
+    include: { model: User, as: 'user' },
+  });
+
+  return findPosts;
+};
+
 module.exports = {
   isValidName,
   haveEmailField,
@@ -128,4 +151,6 @@ module.exports = {
   haveTitleField,
   isTheUserWhoCreatedThePost,
   postExist,
+  isEmptyParams,
+  findPostByParam,
 };

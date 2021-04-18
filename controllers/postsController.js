@@ -7,12 +7,15 @@ const validateGetPosts = require('../middlewares/validateGetPostsMiddleware');
 const validateGetPostById = require('../middlewares/validateGetPostByIdMiddleware');
 const validateUpdatedPost = require('../middlewares/validateUpdatedPostMiddleware.js');
 const validateDeletePost = require('../middlewares/validateDeletePostMiddleware');
+const validateGetPostByParams = require('../middlewares/validateGetPostByParamsMiddleware');
 
 const decodeToken = require('../utils/decodeToken');
 
 const { User, BlogPost } = require('../models');
 
 postsController.get('/post', validateGetPosts, async (_req, _res) => {});
+
+postsController.get('/post/search', validateGetPostByParams, async (_req, _res) => {});
 
 postsController.get('/post/:id', validateGetPostById, async (_req, _res) => {});
 
