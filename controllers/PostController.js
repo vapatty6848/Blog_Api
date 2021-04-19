@@ -72,7 +72,7 @@ router.delete('/:id', checkAuthorization, checkPostId, async (req, res) => {
   await BlogPosts.destroy({
     where: { id },
   });
-  res.status(200).end();
+  res.status(204).end();
 });
 
 module.exports = router;
