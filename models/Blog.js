@@ -3,7 +3,7 @@ const Blog = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     userId: DataTypes.INTEGER,
-    publish: DataTypes.DATE,
+    published: DataTypes.DATE,
     updated: DataTypes.DATE,
   }, { timestamps: false });
 

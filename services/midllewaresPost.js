@@ -1,4 +1,4 @@
-const { blogPosts } = require('../models');
+const { BlogPosts } = require('../models');
 
 const titleExists = (req, res, next) => {
   try {
@@ -27,7 +27,7 @@ const contentExists = (req, res, next) => {
 const blogpostExists = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const idDb = await blogPosts.findOne({ where: { id } });
+    const idDb = await BlogPosts.findByPk(id);
     if (!idDb) {
       return res.status(404).json({ message: 'Post não existe' });
     }
