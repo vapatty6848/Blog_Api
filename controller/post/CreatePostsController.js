@@ -1,9 +1,9 @@
-const { Post } = require('../models');
+const { BlogPost } = require('../../models');
 
 const CreatePostController = async (req, res) => {
   const { title, content } = req.body;
 
-  const post = await Post.create({ title, content });
+  const post = await BlogPost.create({ title, content, userId: 21 });
 
   res.status(201).json(post);
 };

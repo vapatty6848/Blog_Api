@@ -1,11 +1,18 @@
 const { Router } = require('express');
+const {
+  CreateUserController,
+  getUsersController,
+  getUserByIdController,
+  deleteMyUserController,
+} = require('../controller/user');
+
 const validateCreateUSer = require('../middlewares/validateCreateUser');
-const CreateUserController = require('../controller/CreateUserController');
-const getUsersController = require('../controller/GetUserController');
 const verifyToken = require('../middlewares/VerifyToken');
-const getUserByIdController = require('../controller/GetUserByIdController');
 const getUserByIdValidation = require('../middlewares/GetUserByIdValidate');
-const deleteMyUserController = require('../controller/DeleteMyUserController');
+// const CreateUserController = require('../controller/user/CreateUserController');
+// const getUsersController = require('../controller/user/GetUserController');
+// const getUserByIdController = require('../controller/user/GetUserByIdController');
+// const deleteMyUserController = require('../controller/user/DeleteMyUserController');
 
 const UserRouter = Router();
 

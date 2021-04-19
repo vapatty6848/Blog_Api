@@ -1,5 +1,5 @@
 // const jwt = require('jsonwebtoken');
-const { Post } = require('../models');
+const { Post } = require('../../models');
 // const { secret } = require('../services/JwtToken');
 
 const deletePostController = async (req, res) => {

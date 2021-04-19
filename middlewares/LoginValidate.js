@@ -14,7 +14,8 @@ const validateUser = async (req, res, next) => {
   const user = await User.findOne({ where: { email } });
   const result = await validateCredentials(req.body, user);
   if (!result) return res.status(400).json({ message: 'Campos inválidos' });
-
+  delete user.dataValues.password; // deleta a senha do objeto
+  req.payload = user.dataValues;
   next();
 };
 
