@@ -36,14 +36,14 @@ router.get('/search', checkAuthorization, checkSearch, async (req, res) => {
   const { q } = req.query;
 
   try {
-    const [{ dataValues }] = await BlogPosts.findAll({
+    const blogs = await BlogPosts.findAll({
       where: {
         [Op.or]: [{ title: { [Op.like]: `%${q}%` } }, { content: { [Op.like]: `%${q}%` } }],
       },
       include: { association: 'user', attributes: { exclude: ['password'] } },
     });
 
-    return res.status(200).json(dataValues);
+    return res.status(200).json(blogs);
   } catch (e) {
     return res.status(200).json([]);
   }
