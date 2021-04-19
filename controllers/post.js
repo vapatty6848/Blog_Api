@@ -77,4 +77,16 @@ postRouter.get('/:id', tokenValid, blogpostExists,
 //     }
 //   });
 
+// postRouter.delete('/:id', tokenValid, blogpostExists,
+//   async (req, res) => {
+//     try {
+//       const { id } = req.params;
+//       await BlogPosts.destroy(id);
+//       return res.status(200).end();
+//     } catch (err) {
+//       console.log(err);
+//       return res.status(500).json({ message: 'Erro muito estranho (o.o)' });
+//     }
+//   });
+
 module.exports = postRouter;
