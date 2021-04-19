@@ -1,12 +1,12 @@
 const { Router } = require('express');
 const {
   CreatePostController,
-  getPostById,
-  getPosts,
-  editPostController,
-  deletePostController,
+  // getPostById,
+  // getPosts,
+  // editPostController,
+  // deletePostController,
 } = require('../controller/post');
-const getPostByIdValidation = require('../middlewares/GetPostByIdValidate');
+// const getPostByIdValidation = require('../middlewares/GetPostByIdValidate');
 const verifyToken = require('../middlewares/VerifyToken');
 const validatePostFields = require('../middlewares/CreatePostValidate');
 
