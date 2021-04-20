@@ -25,8 +25,8 @@ postRouter.post('/', titleExists, contentExists, tokenValid,
       const { email } = verifyToken;
       const user = await Users.findOne({ where: { email } });
       const userId = user.id;
-      await BlogPosts.create({ title, content });
-      return res.status(201).json({ title, content, userId });
+      const post = await BlogPosts.create({ title, content, userId });
+      return res.status(201).json(post);
     } catch (err) {
       console.log(err);
       return res.status(500).json({ message: 'Erro muito estranho (o.o)' });
@@ -60,23 +60,22 @@ postRouter.get('/:id', tokenValid, blogpostExists,
     }
   });
 
-// postRouter.put('/:id', tokenValid, blogpostExists, titleExists, contentExists,
-//   async (req, res) => {
-//     try {
-//       const { id } = req.params;
-//       const { title, content } = req.body;
-//       const { authorization } = req.headers;
-//       const verifyToken = jwt.verify(authorization, secret);
-//       const { email } = verifyToken;
-//       const userId = await Users.findOne({ where: { email } });
-//       const dbId = await BlogPosts.update({ where: { id } });
-
-//       return res.status(200).json({ title, content, userId });
-//     } catch (err) {
-//       console.log(err);
-//       return res.status(500).json({ message: 'Erro muito estranho (o.o)' });
-//     }
-//   });
+postRouter.put('/:id', tokenValid, blogpostExists, titleExists, contentExists, sameUser,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { title, content } = req.body;
+      const { authorization } = req.headers;
+      const verifyToken = jwt.verify(authorization, secret);
+      const { email } = verifyToken;
+      const userId = await Users.findOne({ where: { email } });
+      await BlogPosts.update({ title, content, userId: userId.id }, { where: { id } });
+      return res.status(200).json({ title, content, userId: userId.id });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ message: 'Erro muito estranho (o.o)' });
+    }
+  });
 
 postRouter.delete('/:id', tokenValid, blogpostExists, sameUser,
   async (req, res) => {
