@@ -1,4 +1,7 @@
-const { BlogPosts } = require('../models');
+const jwt = require('jsonwebtoken');
+const { BlogPosts, Users } = require('../models');
+
+const secret = 'secret';
 
 const titleExists = (req, res, next) => {
   try {
@@ -37,8 +40,26 @@ const blogpostExists = async (req, res, next) => {
   next();
 };
 
+const sameUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const postdb = await BlogPosts.findByPk(id);
+    const { authorization } = req.headers;
+    const verifyToken = jwt.verify(authorization, secret);
+    const { email } = verifyToken;
+    const user = await Users.findOne({ where: { email } });
+    if (postdb.dataValues.UserId !== user.dataValues.id) {
+      return res.status(401).json({ message: 'Usuário não autorizado' });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  next();
+};
+
 module.exports = {
   titleExists,
   contentExists,
   blogpostExists,
+  sameUser,
 };
