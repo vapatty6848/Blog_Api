@@ -15,7 +15,16 @@ UserRouter.post('/', async (req, res) => {
     where: { email },
   });
 
-  if (uniqueEmail) res.status(409).json({ message: 'Usuário já existe' });
+  if (uniqueEmail) return res.status(409).json({ message: 'Usuário já existe' });
+
+  const user = await models.User.create({
+    displayName,
+    email,
+    password,
+    image,
+  });
+
+  return res.status(201).json(user);
 });
 
 module.exports = UserRouter;
