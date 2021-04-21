@@ -2,7 +2,7 @@ const { Router } = require('express');
 const {
   CreatePostController,
   // getPostById,
-  // getPosts,
+  getPosts,
   // editPostController,
   // deletePostController,
 } = require('../controller/post');
@@ -13,7 +13,7 @@ const validatePostFields = require('../middlewares/CreatePostValidate');
 const PostRouter = Router();
 
 PostRouter.post('/', verifyToken, validatePostFields, CreatePostController);
-// PostRouter.get('/', verifyToken, getPosts);
+PostRouter.get('/', verifyToken, getPosts);
 // PostRouter.get('/:id', verifyToken, getPostByIdValidation, getPostById);
 // PostRouter.put('/:id', verifyToken, validatePostFields, editPostController);
 // PostRouter.delete('/:id', verifyToken, getPostByIdValidation, deletePostController);
