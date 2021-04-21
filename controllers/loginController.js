@@ -7,7 +7,7 @@ const authenticateUser = async (req, res, next) => {
 
     res.status(200).json({ token });
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
