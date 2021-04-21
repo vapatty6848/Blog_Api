@@ -71,10 +71,13 @@ const editPost = async (req, res, next) => {
 
 const search = async (req, res, next) => {
   try {
-    const { q: query } = req.query;
-    const data = await services.search(query);
+    const { q } = req.query;
+    console.log('entrou no search');
+    console.log(q);
+    const data = await services.search(q);
     return res.status(200).json(data);
   } catch (err) {
+    console.log('deu error');
     next(err);
   }
 };
