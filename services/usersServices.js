@@ -17,7 +17,9 @@ const createUser = async (displayName, email, password, image) => {
 const findAllUsers = async () => User.findAll();
 
 const findById = async (id) => {
-  const userById = await User.findByPk(id);
+  const userById = await User.findOne(
+    { raw: true, where: { id } },
+  );
   if (!userById) throw new AppError('404', 'Usuário não existe');
 
   return userById;
