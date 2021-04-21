@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const AppError = require('../utils/appErrors');
 
-const secret = 'whatever';
+const secret = 'secret';
 
 const missingToken = new AppError(401, 'Token não encontrado');
 const invalidToken = new AppError(401, 'Token expirado ou inválido');
