@@ -26,14 +26,8 @@ module.exports = {
           model: 'Users', key: 'id'
         },
       },
-      published: {
-        defaultValue: new Date(),
-        type: Sequelize.DATE,
-      },
-      updated: {
-        defaultValue: new Date(),
-        type: Sequelize.DATE,
-      },
+      published: Sequelize.DATE,
+      updated: Sequelize.DATE,
     })
   },
 

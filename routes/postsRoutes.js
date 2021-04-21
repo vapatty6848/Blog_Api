@@ -7,6 +7,6 @@ const posts = Router();
 posts.get('/post/:id', authentication, findById);
 // posts.delete('/post/me', authentication, deletePost);
 posts.get('/post', authentication, findAllPosts);
-posts.post('/post', createPosts);
+posts.post('/post', authentication, createPosts);
 
 module.exports = posts;

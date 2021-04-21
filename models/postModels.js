@@ -3,10 +3,16 @@ const Post = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     userId: DataTypes.INTEGER,
-    published: DataTypes.DATE,
-    updated: DataTypes.DATE,
+    published: {
+      defaultValue: new Date(),
+      type: DataTypes.DATE,
+    },
+    updated: {
+      defaultValue: new Date(),
+      type: DataTypes.DATE,
+    },
   },
-  { timestamps: false });
+    { timestamps: false });
 
   blogPost.associate = (models) => {
     blogPost.belongsTo(models.User, { as: 'user', foreignKey: 'userId' });
