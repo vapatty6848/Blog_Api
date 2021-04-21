@@ -4,7 +4,7 @@ const {
   getPosts,
   getPostById,
   editPostController,
-  // deletePostController,
+  deletePostController,
 } = require('../controller/post');
 const getPostByIdValidation = require('../middlewares/GetPostByIdValidate');
 const verifyToken = require('../middlewares/VerifyToken');
@@ -17,8 +17,6 @@ PostRouter.post('/', verifyToken, validatePostFields, CreatePostController);
 PostRouter.get('/', verifyToken, getPosts);
 PostRouter.get('/:id', verifyToken, getPostByIdValidation, getPostById);
 PostRouter.put('/:id', verifyToken, checkUserValidation, validatePostFields, editPostController);
-// PostRouter.delete('/:id', verifyToken, getPostByIdValidation, deletePostController);
+PostRouter.delete('/:id', verifyToken, checkUserValidation, getPostByIdValidation, deletePostController);
 
 module.exports = PostRouter;
-
-// const { id: userId } = res.locals.user;

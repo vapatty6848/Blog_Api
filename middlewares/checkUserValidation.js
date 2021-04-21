@@ -11,7 +11,7 @@ const checkUserValidation = async (req, res, next) => {
       return res.status(401).json({ message: 'Usuário não autorizado' });
     }
   } catch {
-    return res.status(401).json({ message: 'Não foi possível, tente novamente mais tarde' });
+    return res.status(404).json({ message: 'Post não existe' });
   }
 };
 
