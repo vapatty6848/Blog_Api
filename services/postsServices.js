@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPosts, User } = require('../models');
 const postValidation = require('../validation/postValidation');
 const AppError = require('../utils/appErrors');
@@ -52,10 +53,33 @@ const editPost = async (title, content, id, userId) => {
   return postById;
 };
 
+const search = async (query) => (
+  BlogPosts.findAll({
+    where: {
+      [Op.or]: [
+        {
+          title: {
+            [Op.substring]: `%${query}%`,
+          },
+        },
+        {
+          content: {
+            [Op.substring]: `%${query}%`,
+          },
+        },
+      ],
+    },
+    include: {
+      model: User, as: 'user', attributes: { exclude: ['password'] },
+    },
+  })
+);
+
 module.exports = {
   createPosts,
   findAllPosts,
   findById,
   deletePost,
   editPost,
+  search,
 };

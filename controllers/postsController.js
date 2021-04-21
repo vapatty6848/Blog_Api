@@ -69,10 +69,21 @@ const editPost = async (req, res, next) => {
   }
 };
 
+const search = async (req, res, next) => {
+  try {
+    const { q: query } = req.query;
+    const data = await services.search(query);
+    return res.status(200).json(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   createPosts,
   findAllPosts,
   findById,
   deletePost,
   editPost,
+  search,
 };
