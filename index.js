@@ -2,6 +2,7 @@ const express = require('express');
 
 const userController = require('./controller/UsersController');
 const blogController = require('./controller/BlogsController');
+const login = require('./controller/LoginController');
 
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(express.json());
 
 app.use('/user', userController);
 app.use('/post', blogController);
+app.use('/login', login);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (request, response) => {
