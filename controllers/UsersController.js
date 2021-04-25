@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { User } = require('../models');
+const User = require('../service/User');
 
 const router = Router();
 
@@ -16,10 +16,12 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const { displayName, email, password, image } = req.body;
-
-  User.create({ displayName, email, password, image })
-    .then((token) => res.status(201).json({ token }))
-    .catch((e) => res.status(500).send({ message: e }));
+  try {
+    const token = await User.createUser({ displayName, email, password, image }, res);
+    return res.status(201).json({ token });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 router.put('/:id', async (req, res) => {
