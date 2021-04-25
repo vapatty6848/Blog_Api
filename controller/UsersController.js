@@ -25,9 +25,12 @@ routerUser.get('/', validingToken, async (req, res) => {
   }
 });
 
-routerUser.get('/:id', async (req, res) => {
+routerUser.get('/:id', validingToken, async (req, res) => {
   const { id } = req.params;
-  const result = await User.findByPk(id);
+  const result = await User.findOne({ where: { id } });
+  if (!result) {
+    res.status(404).json({ message: 'Usuário não existe' });
+  }
   res.status(200).json(result);
 });
 
@@ -63,14 +66,15 @@ routerUser.put('/:id',
     res.status(200).json([]);
   });
 
-routerUser.delete('/', async (req, res) => {
-  const { id } = req.params;
-  await User.destroy(
-    {
-      where: { id },
-    },
-  );
-  res.status(204).json([]);
+routerUser.delete('/me', validingToken, async (req, res) => {
+  try {
+    const { userData } = req;
+    console.log({ userData });
+    await User.destroy({ where: { id: userData.id } });
+    return res.status(204).end();
+  } catch (error) {
+    return res.status(500).json({ message: 'Erro ao apagar registro' });
+  }
 });
 
 module.exports = routerUser;
