@@ -4,15 +4,14 @@ const User = require('../service/User');
 const router = Router();
 
 router.get('/', async (req, res) => {
-
   res.status(200).json({});
 });
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
+// router.get('/:id', async (req, res) => {
+//   const { id } = req.params;
 
-  res.status(200).json({});
-});
+//   res.status(200).json({});
+// });
 
 router.post('/', async (req, res) => {
   const { displayName, email, password, image } = req.body;
@@ -24,17 +23,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const { } = req.body;
+// router.put('/:id', async (req, res) => {
+//   const { id } = req.params;
+//   const { } = req.body;
 
-  res.status(200).json({});
-});
+//   res.status(200).json({});
+// });
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
+// router.delete('/:id', async (req, res) => {
+//   const { id } = req.params;
 
-  res.status(200).json({});
-});
+//   res.status(200).json({});
+// });
 
 module.exports = router;
