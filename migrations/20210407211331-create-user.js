@@ -10,18 +10,15 @@ module.exports = {
       },
       displayName: {
         type: Sequelize.STRING,
-        validate: { min: 8 },
       },
       email: {
         allowNull: false,
         type: Sequelize.STRING,
         unique: true,
-        validate: { isEmail: true },
       },
       password: {
         allowNull: false,
         type: Sequelize.STRING,
-        validate: { min: 6 },
       },
       image: {
         type: Sequelize.STRING,

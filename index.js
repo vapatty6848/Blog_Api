@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('./controllers/UsersController');
+const Login = require('./controllers/LoginController');
 
 const bodyParser = express.json();
 
@@ -13,5 +14,7 @@ app.get('/', (request, response) => {
 });
 
 app.use('/user', User);
+
+app.use('/login', Login);
 
 app.listen(3000, () => console.log('ouvindo porta 3000!'));
