@@ -72,10 +72,12 @@ routerUser.put('/:id',
 
 routerUser.delete('/me', validingToken, async (req, res) => {
   try {
-    const { email } = req.payload.data;
+    console.log(req.payload);
+    const { email } = req.userData;
     const result = await User.destroy({ where: { email } });
     return res.status(204).json(result);
   } catch (error) {
+    console.error(error);
     return res.status(500).json(error);
   }
 });

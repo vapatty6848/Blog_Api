@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 const { BlogPost, User } = require('../models');
 const { validingPost } = require('../validation/validingPost');
 const { validingToken } = require('../validation/validingToken');
@@ -13,7 +14,7 @@ routerBlog.get('/', validingToken, async (req, res) => {
     return res.status(200).json(posts);
   } catch (error) {
     console.log(error.message);
-    return res.status(500).json({ message: 'Algo deu errado' });
+    return res.status(500).json(error);
   }
 });
 
@@ -27,7 +28,7 @@ routerBlog.get('/:id', validingToken, async (req, res) => {
     if (post) return res.status(200).json(post);
     return res.status(404).json({ message: 'Post não existe' });
   } catch (error) {
-    return res.status(500).json({ message: 'Algo deu errado' });
+    return res.status(500).json(error);
   }
 });
 
@@ -46,7 +47,7 @@ routerBlog.post('/', validingPost, validingToken, async (req, res) => {
     console.log(createdPost);
     return res.status(201).json(createdPost);
   } catch (error) {
-    return res.status(500).send({ message: error });
+    return res.status(500).send(error);
   }
 });
 
@@ -67,11 +68,11 @@ routerBlog.put('/:id', validingPost, validingToken, async (req, res) => {
     if (updatedPost === [0] || !updatedPost) return res.status(401).json({ message: 'Usuário não autorizado' });
     return res.status(200).json({ title: titlePost, content: contentPost, userId: tokenUserId });
   } catch (error) {
-    return res.status(500).json({ message: 'Algo deu errado' });
+    return res.status(500).json(error);
   }
 });
 
-routerBlog.delete('/', validingToken, async (req, res) => {
+routerBlog.delete('/:id', validingToken, async (req, res) => {
   try {
     const { userData } = req;
     const tokenUserId = userData.id; // id do user
@@ -82,8 +83,31 @@ routerBlog.delete('/', validingToken, async (req, res) => {
     if (deletedPost === 0 || !deletedPost) return res.status(401).json({ message: 'Usuário não autorizado' });
     return res.status(204).end();
   } catch (error) {
-    return res.status(500).json({ message: 'Algo deu errado' });
+    return res.status(500).json(error);
   }
+});
+
+routerBlog.get('/search', validingToken, async (req, res) => {
+  const { q } = req.query;
+
+  const posts = await BlogPost.findAll({
+    where: {
+      [Op.or]: [{
+        title: {
+          [Op.like]: `%${q}%`,
+        },
+      },
+      {
+        content: {
+          [Op.like]: `%${q}%`,
+        },
+      }],
+    },
+    attributes: { exclude: 'userId' },
+    include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+  });
+  if (!posts) return res.status(404).json({ message: 'Post não existe' });
+  return res.status(200).json(posts);
 });
 
 module.exports = routerBlog;
