@@ -33,13 +33,20 @@ routerBlog.get('/:id', validingToken, async (req, res) => {
 
 routerBlog.post('/', validingPost, validingToken, async (req, res) => {
   try {
-    const { userData } = req;
-    const userId = userData.id;
+    const userId = req.userData.id;
+    const currentDate = new Date();
     const { title, content } = req.body;
-    const createdPost = await BlogPost.create({ title, content, userId });
+    const createdPost = await BlogPost.create({
+      title,
+      content,
+      userId,
+      published: currentDate,
+      updated: currentDate,
+    });
+    console.log(createdPost);
     return res.status(201).json(createdPost);
   } catch (error) {
-    return res.status(500).send({ message: 'Algo deu errado' });
+    return res.status(500).send({ message: error });
   }
 });
 
