@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const models = require('../models');
+const auth = require('../middlewares/auth');
 
 const UserRouter = new Router();
 
@@ -22,7 +23,9 @@ UserRouter.post('/', async (req, res) => {
     image,
   });
 
-  return res.status(201).json(user);
+  const tokenResponse = await auth.createToken(user);
+
+  return res.status(201).json(tokenResponse);
 });
 
 module.exports = UserRouter;
