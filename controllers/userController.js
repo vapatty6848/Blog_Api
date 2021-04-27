@@ -11,9 +11,7 @@ UserRouter.post('/', async (req, res) => {
     image,
   } = req.body;
 
-  const uniqueEmail = await models.User.findOne({
-    where: { email },
-  });
+  const uniqueEmail = await models.User.findOne({ where: { email } });
 
   if (uniqueEmail) return res.status(409).json({ message: 'Usuário já existe' });
 
