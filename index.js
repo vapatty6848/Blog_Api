@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const userRouter = require('./controllers/userController');
 const loginRouter = require('./controllers/loginController');
 const postsRouter = require('./controllers/postsController');
@@ -12,7 +11,7 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use('/user', userRouter);
 app.use('/login', loginRouter);
