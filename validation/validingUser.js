@@ -15,7 +15,7 @@ const smallerToEight = (req, res, next) => {
 const validingEmail = (req, res, next) => {
   const { email } = req.body;
   if (!email) {
-    res.status(400).json({ message: '"email" is required' });
+    return res.status(400).json({ message: '"email" is required' });
   }
   if (!regexEmail.test(email)) {
     return res.status(400).json({ message: '"email" must be a valid email' });

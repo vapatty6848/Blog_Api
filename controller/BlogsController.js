@@ -87,27 +87,27 @@ routerBlog.delete('/:id', validingToken, async (req, res) => {
   }
 });
 
-routerBlog.get('/search', validingToken, async (req, res) => {
+routerBlog.get('search?q=:searchTerm', validingToken, async (req, res) => {
   const { q } = req.query;
 
-  const posts = await BlogPost.findAll({
+  const result = await BlogPost.findAll({
     where: {
       [Op.or]: [{
         title: {
-          [Op.like]: `%${q}%`,
+          [Op.substring]: q,
         },
       },
       {
         content: {
-          [Op.like]: `%${q}%`,
+          [Op.substring]: q,
         },
       }],
     },
-    attributes: { exclude: 'userId' },
-    include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+    // attributes: { exclude: 'userId' },
+    // include: { model: User, as: 'user', attributes: { exclude: 'password' } },
   });
-  if (!posts) return res.status(404).json({ message: 'Post não existe' });
-  return res.status(200).json(posts);
+  if (!result) return res.status(404).json({ message: 'Post não existe' });
+  return res.status(200).json(result);
 });
 
 module.exports = routerBlog;

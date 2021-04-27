@@ -30,7 +30,7 @@ routerUser.get('/:id', validingToken, async (req, res) => {
     const { id } = req.params;
     const result = await User.findOne({ where: { id } });
     if (!result) {
-      res.status(404).json({ message: 'Usuário não existe' });
+      return res.status(404).json({ message: 'Usuário não existe' });
     }
     res.status(200).json(result);
   } catch (error) {
