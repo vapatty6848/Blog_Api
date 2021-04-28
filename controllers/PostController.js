@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { BlogPost, User } = require('../models');
 const postValidations = require('../middlewares/postValidations');
+// const { Op}
 
 const PostController = Router();
 PostController.post('/',
@@ -20,16 +21,14 @@ PostController.get('/', async (_req, res) => {
 
 PostController.get('/search', async (req, res) => {
   const { q } = req.query;
+  const lowerCase = q.toLowerCase();
   const allPosts = await BlogPost.findAll({ include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }] });
 
-  const foundPostByTitle = allPosts
-    .filter((post) => post.title.toLowerCase().indexOf(q) !== -1);
+  const foundPost = allPosts
+    .filter((post) => (post.title.toLowerCase().indexOf(lowerCase) !== -1)
+    || (post.content.toLowerCase().indexOf(lowerCase) !== -1));
 
-  const foundPostByContent = allPosts
-    .filter((post) => post.content.toLowerCase().indexOf(q) !== -1);
-
-  const finalAnswer = [...foundPostByTitle, ...foundPostByContent];
-  res.status(200).json(finalAnswer);
+  res.status(200).json(foundPost);
 });
 
 PostController.get('/:id',

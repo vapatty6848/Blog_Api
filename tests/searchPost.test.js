@@ -39,6 +39,7 @@ describe('10 - Sua aplicação deve ter o endpoint GET `post/search?q=:searchTer
       .then((response) => {
         const { body } = response;
         const result = JSON.parse(body);
+        console.log(result);
         expect(result[0].id).toBe(2);
         expect(result[0].title).toBe('Vamos que vamos');
         expect(result[0].content).toBe('Foguete não tem ré');
