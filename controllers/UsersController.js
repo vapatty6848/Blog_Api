@@ -14,11 +14,18 @@ router.get('/', TokenValidation, async (req, res) => {
   }
 });
 
-// router.get('/:id', async (req, res) => {
-//   const { id } = req.params;
+router.get('/:id', TokenValidation, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await User.getOne({ id, res });
 
-//   res.status(200).json({});
-// });
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+  }
+
+  res.status(200).json({});
+});
 
 router.post('/', async (req, res) => {
   try {
