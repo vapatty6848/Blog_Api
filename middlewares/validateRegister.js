@@ -30,4 +30,4 @@ const validateRegister = (req, res, next) => {
   return next();
 };
 
-module.exports = { validateRegister };
+module.exports = { validateRegister, validateEmail };
