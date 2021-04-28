@@ -1,8 +1,6 @@
 const { Router } = require('express');
 const { BlogPost, User } = require('../models');
 const postValidations = require('../middlewares/postValidations');
-const comebackResponse = require('../util/comebackResponse');
-const messages = require('../util/returnedMessages');
 
 const PostController = Router();
 PostController.post('/',
@@ -20,21 +18,38 @@ PostController.get('/', async (_req, res) => {
   res.status(200).json(allPosts);
 });
 
-PostController.get('/:id', async (req, res) => {
-  const post = await BlogPost.findAll({
-    where: { id: req.params.id },
-    attributes: { exclude: ['userId'] },
-    include: [{
-      model: User,
-      as: 'user',
-      attributes: { exclude: ['password'] },
-    }],
-  });
-  if (!post.length) return comebackResponse(res, 404, messages.postNotfound);
-  return res.status(200).json(post[0]);
+PostController.get('/search', async (req, res) => {
+  const { q } = req.query;
+  const allPosts = await BlogPost.findAll({ include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }] });
+
+  const foundPostByTitle = allPosts
+    .filter((post) => post.title.toLowerCase().indexOf(q) !== -1);
+
+  const foundPostByContent = allPosts
+    .filter((post) => post.content.toLowerCase().indexOf(q) !== -1);
+
+  const finalAnswer = [...foundPostByTitle, ...foundPostByContent];
+  res.status(200).json(finalAnswer);
 });
 
+PostController.get('/:id',
+  postValidations.validatePost,
+  async (req, res) => {
+    const { id } = req.params;
+    const post = await BlogPost.findAll({
+      where: { id },
+      attributes: { exclude: ['userId'] },
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: { exclude: ['password'] },
+      }],
+    });
+    return res.status(200).json(post[0]);
+  });
+
 PostController.put('/:id',
+  postValidations.validatePost,
   postValidations.validateTitleAndContent,
   postValidations.validateSameUser,
   async (req, res) => {
@@ -45,6 +60,15 @@ PostController.put('/:id',
       { where: { id } },
     );
     return res.status(200).json({ title, content, userId: validUser.id });
+  });
+
+PostController.delete('/:id',
+  postValidations.validatePost,
+  postValidations.validateSameUser,
+  async (req, res) => {
+    const { id } = req.params;
+    await BlogPost.destroy({ where: { id } });
+    return res.status(204).end();
   });
 
 module.exports = PostController;
