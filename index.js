@@ -1,6 +1,9 @@
 const express = require('express');
+require('dotenv').config();
 const User = require('./controllers/UsersController');
 const Login = require('./controllers/LoginController');
+
+const PORT = parseInt(process.env.PORT, 10) || 3000;
 
 const bodyParser = express.json();
 
@@ -17,4 +20,4 @@ app.use('/user', User);
 
 app.use('/login', Login);
 
-app.listen(3000, () => console.log('ouvindo porta 3000!'));
+app.listen(PORT, () => console.log(`ouvindo porta ${PORT}!`));

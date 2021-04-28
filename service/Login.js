@@ -1,15 +1,16 @@
 const { User } = require('../models');
 const tokenCreator = require('../middleware/tokenCreator');
 
-const login = async (email, password, res) => {
+const login = async ({ email, password }) => {
   try {
-    if (email === null) return res.status(400).json({ message: '"email" is required' });
-    if (password === null) return res.status(400).json({ message: '"password" is required' });
-    if (email === '') return res.status(400).json({ message: '"email" is not allowed to be empty' });
-    if (password === '') return res.status(400).json({ message: '"password" is not allowed to be empty' });
-    const foundUser = await User.findOne({ where: { email } });
-    console.log(foundUser);
-    if (foundUser.password !== password) return res.status(400).json({ message: 'Campos inválidos' });
+    if (email === undefined) return { status: 400, message: '"email" is required' };
+    if (password === undefined) return { status: 400, message: '"password" is required' };
+    if (email === '') return { status: 400, message: '"email" is not allowed to be empty' };
+    if (password === '') return { status: 400, message: '"password" is not allowed to be empty' };
+    const foundUser = await User.findAll({ where: { email } });
+    console.log('when foundUser is not found: ', foundUser);
+    if (foundUser.length === 0) return { status: 400, message: 'Campos inválidos' };
+    if (foundUser[0].password !== password) return { status: 400, message: 'Senha inválida' };
     return tokenCreator(foundUser);
   } catch (e) {
     console.log(e);

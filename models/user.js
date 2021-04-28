@@ -4,6 +4,8 @@ const createUser = (sequelize, DataTypes) => {
     email: { type: DataTypes.STRING, validate: { isEmail: true } },
     password: { type: DataTypes.STRING, validate: { len: [6, 50] } },
     image: DataTypes.STRING,
+  }, {
+    timestamps: false,
   });
 
   return User;
