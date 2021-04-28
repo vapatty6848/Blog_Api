@@ -1,6 +1,5 @@
 const comebackResponse = require('../util/comebackResponse');
 const messages = require('../util/returnedMessages');
-// const { BlogPost } = require('../models');
 const checkUser = require('../util/checkUser');
 
 const validateTitleAndContent = (req, res, next) => {
@@ -19,11 +18,11 @@ const validateSameUser = async (req, res, next) => {
   return next();
 };
 
-const validatePost = async (req, res, next) => {
+const validatePost = (status) => async (req, res, next) => {
   const { id } = req.params;
   const userId = await checkUser(id);
 
-  if (!userId) return comebackResponse(res, 401, messages.postNotfound);
+  if (!userId) return comebackResponse(res, status, messages.postNotfound);
   return next();
 };
 

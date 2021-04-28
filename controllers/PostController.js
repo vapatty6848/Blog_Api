@@ -1,7 +1,6 @@
 const { Router } = require('express');
 const { BlogPost, User } = require('../models');
 const postValidations = require('../middlewares/postValidations');
-// const { Op}
 
 const PostController = Router();
 PostController.post('/',
@@ -32,10 +31,10 @@ PostController.get('/search', async (req, res) => {
 });
 
 PostController.get('/:id',
-  postValidations.validatePost,
+  postValidations.validatePost(404),
   async (req, res) => {
     const { id } = req.params;
-    const post = await BlogPost.findAll({
+    const post = await BlogPost.findOne({
       where: { id },
       attributes: { exclude: ['userId'] },
       include: [{
@@ -44,11 +43,11 @@ PostController.get('/:id',
         attributes: { exclude: ['password'] },
       }],
     });
-    return res.status(200).json(post[0]);
+    return res.status(200).json(post);
   });
 
 PostController.put('/:id',
-  postValidations.validatePost,
+  postValidations.validatePost(401),
   postValidations.validateTitleAndContent,
   postValidations.validateSameUser,
   async (req, res) => {
@@ -62,7 +61,7 @@ PostController.put('/:id',
   });
 
 PostController.delete('/:id',
-  postValidations.validatePost,
+  postValidations.validatePost(404),
   postValidations.validateSameUser,
   async (req, res) => {
     const { id } = req.params;
