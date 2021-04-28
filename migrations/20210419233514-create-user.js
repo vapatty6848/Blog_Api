@@ -9,21 +9,21 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       displayName: {
+        allowNull: false,
         type: Sequelize.STRING,
-        allowNull: false
       },
       email: {
+        allowNull: false,
         type: Sequelize.STRING,
         unique: true,
-        allowNull: false
       },
       password: {
+        allowNull: false,
         type: Sequelize.STRING,
-        allowNull: false
       },
       image: {
+        allowNull: false,
         type: Sequelize.STRING,
-        allowNull: false
       },
     });
   },
