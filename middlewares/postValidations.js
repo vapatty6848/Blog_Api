@@ -23,7 +23,7 @@ const validatePost = async (req, res, next) => {
   const { id } = req.params;
   const userId = await checkUser(id);
 
-  if (!userId) comebackResponse(res, 401, messages.postNotfound);
+  if (!userId) return comebackResponse(res, 401, messages.postNotfound);
   return next();
 };
 
