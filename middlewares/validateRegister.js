@@ -17,14 +17,19 @@ const validateRegister = (req, res, next) => {
     passIsInvalid: '"password" length must be 6 characters long',
   };
   if (displayName.length < MIN_NAME_LENTGH) {
+    console.log(message.displayName);
     return res.status(BAD_REQUEST).json(message.displayName);
   } if (!email) {
+    console.log(message.emailIsRequired);
     return res.status(BAD_REQUEST).json(message.emailIsRequired);
   } if (!validateEmail(email)) {
+    console.log(message.emailisInvalid);
     return res.status(BAD_REQUEST).json(message.emailisInvalid);
   } if (!password) {
+    console.log(message.passIsRequired);
     return res.status(BAD_REQUEST).json(message.passIsRequired);
   } if (String(password).length < 6) {
+    console.log(message.passIsInvalid);
     return res.status(BAD_REQUEST).json(message.passIsInvalid);
   }
   return next();
