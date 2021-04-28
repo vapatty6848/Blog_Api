@@ -16,7 +16,7 @@ UserRouter.post('/', validateRegister, async (req, res) => {
   const user = await models.User.create(req.body);
   const tokenResponse = await auth.createToken(user);
 
-  return res.status(201).json(tokenResponse);
+  return res.status(201).json({ token: tokenResponse });
 });
 
 module.exports = UserRouter;
