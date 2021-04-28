@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-
-const secret = 'T1f7C0e8E1p9I8h8M';
+const { secret } = require('../auth/TokenValidation');
 
 const tokenCreator = (user) => {
   const { id, displayName, email } = user;

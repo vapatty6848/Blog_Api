@@ -1,10 +1,17 @@
 const { Router } = require('express');
 const User = require('../service/User');
+const { TokenValidation } = require('../auth/TokenValidation');
 
 const router = Router();
 
-router.get('/', async (req, res) => {
-  res.status(200).json({});
+router.get('/', TokenValidation, async (req, res) => {
+  try {
+    const response = await User.getAll(res);
+
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 // router.get('/:id', async (req, res) => {
@@ -14,8 +21,8 @@ router.get('/', async (req, res) => {
 // });
 
 router.post('/', async (req, res) => {
-  const { displayName, email, password, image } = req.body;
   try {
+    const { displayName, email, password, image } = req.body;
     const token = await User.createUser({ displayName, email, password, image }, res);
     return res.status(201).json({ token });
   } catch (e) {

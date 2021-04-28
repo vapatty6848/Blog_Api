@@ -12,6 +12,20 @@ const createUser = async (newUser, res) => {
   }
 };
 
+const getAll = async (res) => {
+  try {
+    const usersList = await User.findAll({
+      attributes: { exclude: ['password'] },
+    });
+    console.log('usersList from getAll: ', usersList);
+    return usersList;
+  } catch (e) {
+    const { status, msg } = errorFormatter(e);
+    return res.status(status).json({ message: msg });
+  }
+};
+
 module.exports = {
   createUser,
+  getAll,
 };

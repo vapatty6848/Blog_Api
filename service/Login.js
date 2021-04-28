@@ -8,7 +8,6 @@ const login = async ({ email, password }) => {
     if (email === '') return { status: 400, message: '"email" is not allowed to be empty' };
     if (password === '') return { status: 400, message: '"password" is not allowed to be empty' };
     const foundUser = await User.findAll({ where: { email } });
-    console.log('when foundUser is not found: ', foundUser);
     if (foundUser.length === 0) return { status: 400, message: 'Campos inválidos' };
     if (foundUser[0].password !== password) return { status: 400, message: 'Senha inválida' };
     return tokenCreator(foundUser);
