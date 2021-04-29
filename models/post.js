@@ -4,6 +4,9 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.STRING,
     password: DataTypes.STRING,
     image: DataTypes.STRING,
+  },
+  {
+    timestamps: false,
   });
 
   Post.associate = (models) => {
