@@ -1,5 +1,5 @@
 const createPost = (sequelize, DataTypes) => {
-  const blogPosts = sequelize.define('User', {
+  const Posts = sequelize.define('Posts', {
     id: { type: DataTypes.INTEGER, primaryKey: true },
     title: DataTypes.STRING,
     userId: DataTypes.INTEGER,
@@ -9,7 +9,11 @@ const createPost = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
-  return blogPosts;
+  Posts.associate = (models) => {
+    Posts.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+  };
+
+  return Posts;
 };
 
 module.exports = createPost;
