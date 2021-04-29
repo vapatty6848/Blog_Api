@@ -3,7 +3,9 @@ const models = require('../models');
 const auth = require('../middlewares/auth');
 const { validateRegister } = require('../middlewares/validateRegister');
 
+const NOT_FOUND = 404;
 const CONFLICT = 409;
+const SUCCESS = 200;
 const CREATED = 201;
 
 const UserRouter = new Router();
@@ -22,8 +24,16 @@ UserRouter.post('/', validateRegister, async (req, res) => {
   return res.status(CREATED).json({ token: tokenResponse });
 });
 
-// UserRouter.get('/', auth.validateToken, async (req, res) => {
+UserRouter.get('/', auth.validateToken, async (req, res) => {
+  const allUsers = await models.User.findAll({});
+  return res.status(200).json(allUsers);
+});
 
-// });
+UserRouter.get('/:id', auth.validateToken, async (req, res) => {
+  const { id } = req.params;
+  const user = await models.User.findOne({ where: { id } });
+  if (!user) return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
+  return res.status(SUCCESS).json(user);
+});
 
 module.exports = UserRouter;
