@@ -11,10 +11,10 @@ app.get('/', (request, response) => {
   response.send();
 });
 
-const routes = require('./routes');
+const { userRouter } = require('./controllers');
 
-app.use('/teste', routes);
-app.use('/user', routes);
+app.use('/teste', userRouter);
+app.use('/user', userRouter);
 
 app.listen(PORT);
 console.log(`Server rodando a porta: ${PORT}`);
