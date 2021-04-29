@@ -1,12 +1,14 @@
 const { Router } = require('express');
 const models = require('../models');
+const auth = require('../middlewares/auth');
+const { validatePost } = require('../middlewares/validadePost');
 
 const NOT_FOUND = 404;
 const CREATED = 201;
 
 const PostRouter = new Router();
 
-PostRouter.post('/', async (req, res) => {
+PostRouter.post('/', validatePost, auth.validateToken, async (req, res) => {
   const { title, content } = req.body;
   const { id } = req.payload;
   try {
