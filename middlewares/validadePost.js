@@ -9,4 +9,4 @@ const validatePost = (req, res, next) => {
   return next();
 };
 
-module.exports = validatePost;
+module.exports = { validatePost };
