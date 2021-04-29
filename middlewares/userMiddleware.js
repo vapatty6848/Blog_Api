@@ -6,7 +6,8 @@ const createUser = async (req, res) => {
     await User.create({ displayName, email, password, image });
     res
       .status(201)
-      .json({ message: 'Usuário criado' });
+      // .json({ message: 'Usuário criado' });
+      .json({ token: 'blá-blá-blá' });
   } catch (error) {
     console.log(error);
     if (error.original.code === 'ER_DUP_ENTRY') {
