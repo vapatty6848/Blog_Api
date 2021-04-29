@@ -10,10 +10,9 @@ const LoginRouter = new Router();
 
 LoginRouter.post('/', validateLogin, async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(req.body);
   const user = await models.User.findOne({ where: { email } });
   if (!user) {
-    console.log(user);
     return res.status(BAD_REQUEST).json({ message: 'Campos inválidos' });
   }
   if (password !== user.dataValues.password) {

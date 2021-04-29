@@ -22,4 +22,8 @@ UserRouter.post('/', validateRegister, async (req, res) => {
   return res.status(CREATED).json({ token: tokenResponse });
 });
 
+// UserRouter.get('/', auth.validateToken, async (req, res) => {
+
+// });
+
 module.exports = UserRouter;
