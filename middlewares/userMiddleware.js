@@ -1,13 +1,16 @@
 const { User } = require('../models');
+const generateToken = require('../auth/generateToken');
 
 const createUser = async (req, res) => {
   const { displayName, email, password, image } = req.body;
   try {
     await User.create({ displayName, email, password, image });
+    const token = generateToken(email);
     res
       .status(201)
-      // .json({ message: 'Usuário criado' });
-      .json({ token: 'blá-blá-blá' });
+      .json({ token });
+    // .json({ message: 'Usuário criado' });
+    // .json({ token: 'blá-blá-blá' });
   } catch (error) {
     console.log(error);
     if (error.original.code === 'ER_DUP_ENTRY') {

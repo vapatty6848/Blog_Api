@@ -5,7 +5,6 @@ const {
   validateEmail,
   validatePassword,
 } = require('../middlewares/requisito1Validations');
-
 const validateToken = require('../auth/validateToken');
 
 userRouter.get('/', validateToken, userMiddleware.getAll);
