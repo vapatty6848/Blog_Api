@@ -1,7 +1,7 @@
 const BAD_REQUEST = 400;
 const { validateEmail } = require('./validateRegister');
 
-const validadeLogin = (req, res, next) => {
+const validateLogin = (req, res, next) => {
   const { email, password } = req.body;
   let message;
   if (email === '') {
@@ -27,4 +27,4 @@ const validadeLogin = (req, res, next) => {
   return next();
 };
 
-module.exports = { validadeLogin };
+module.exports = { validateLogin };
