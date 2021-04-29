@@ -8,8 +8,8 @@ const {
 
 const validateToken = require('../auth/validateToken');
 
-userRouter.post('/', validateDisplayName, validateEmail, validatePassword, userMiddleware.createUser);
-
 userRouter.get('/', validateToken, userMiddleware.getAll);
+
+userRouter.post('/', validateDisplayName, validateEmail, validatePassword, userMiddleware.createUser);
 
 module.exports = userRouter;
