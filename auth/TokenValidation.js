@@ -18,6 +18,7 @@ const TokenValidation = async (req, res, next) => {
       // if (!user) {
       //   return res.status(404).json({ message: 'Usuário do token não existe' });
       // }
+
       req.tokenUser = user;
       next();
     } catch (error) {
