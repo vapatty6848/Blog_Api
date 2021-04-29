@@ -8,13 +8,13 @@ const login = async (req, res) => {
       where: { email },
     });
     if (foundUser === null) {
-      res.status(400).json({ message: 'Campos inválidos' });
+      return res.status(400).json({ message: 'Campos inválidos' });
     }
     const token = generateToken(email);
-    res.status(200).json({ token });
+    return res.status(200).json({ token });
   } catch (error) {
     console.log(error);
-    res.status(500).json('deu ruim');
+    return res.status(500).json('deu ruim');
   }
 };
 
