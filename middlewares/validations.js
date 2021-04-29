@@ -27,7 +27,7 @@ const validateEmail = (req, res, next) => {
   if (!regexEmail.test(email)) {
     return res
       .status(400)
-      .json({ message: '"email" must be a valid email'});
+      .json({ message: '"email" must be a valid email' });
   }
   next();
 };
