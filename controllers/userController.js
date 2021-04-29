@@ -7,6 +7,7 @@ const NOT_FOUND = 404;
 const CONFLICT = 409;
 const SUCCESS = 200;
 const CREATED = 201;
+const NO_CONTENT = 204;
 
 const UserRouter = new Router();
 
@@ -34,6 +35,12 @@ UserRouter.get('/:id', auth.validateToken, async (req, res) => {
   const user = await models.User.findOne({ where: { id } });
   if (!user) return res.status(NOT_FOUND).json({ message: 'Usuário não existe' });
   return res.status(SUCCESS).json(user);
+});
+
+UserRouter.delete('/me', auth.validateToken, async (req, res) => {
+  const { email } = req.payload.data;
+  const userDelete = await models.User.destroy({ where: { email } });
+  return res.status(NO_CONTENT).json(userDelete);
 });
 
 module.exports = UserRouter;
