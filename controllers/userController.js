@@ -4,11 +4,7 @@ const {
   validateDisplayName,
   validateEmail,
   validatePassword,
-} = require('../middlewares/validations');
-
-userRouter.get('/', (req, res) => {
-  res.send('Teste testado...');
-});
+} = require('../middlewares/requisito1Validations');
 
 userRouter.post('/', validateDisplayName, validateEmail, validatePassword, userMiddleware.createUser);
 
