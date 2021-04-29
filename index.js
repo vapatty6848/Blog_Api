@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 
-const { PORT } = process.env || 3000;
 const app = express();
 
 app.use(express.json());
@@ -16,5 +15,5 @@ const routes = require('./routes');
 app.use('/teste', routes);
 app.use('/user', routes);
 
-app.listen(PORT);
-console.log(`Server rodando na porta -> ${PORT}`);
+app.listen(3000);
+console.log('Server rodando na porta da trybe');
