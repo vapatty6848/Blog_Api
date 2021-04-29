@@ -10,21 +10,21 @@ module.exports = {
       },
       displayName: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       email: {
         allowNull: false,
         type: Sequelize.STRING,
-        unique: true,
+        unique: true
       },
       password: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       image: {
         allowNull: false,
-        type: Sequelize.STRING,
-      },
+        type: Sequelize.STRING
+      }
     });
   },
   down: async (queryInterface, Sequelize) => {

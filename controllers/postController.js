@@ -12,7 +12,7 @@ PostRouter.post('/', validatePost, auth.validateToken, async (req, res) => {
   const { title, content } = req.body;
   const { id } = req.payload;
   try {
-    const post = await models.createPost.create({ title, content, userId: id });
+    const post = await models.Posts.create({ title, content, userId: id });
     return res.status(CREATED).json(post);
   } catch (err) {
     return res.status(NOT_FOUND).json({ message: err.message });
