@@ -6,7 +6,7 @@ const createUser = async (req, res) => {
   try {
     await User.create({ displayName, email, password, image });
     const token = generateToken(email);
-    res
+    return res
       .status(201)
       .json({ token });
     // .json({ message: 'Usuário criado' });
@@ -18,21 +18,40 @@ const createUser = async (req, res) => {
         .status(409)
         .json({ message: 'Usuário já existe' });
     }
-    res.status(500).json({ message: 'Deu erro' });
+    return res.status(500).json({ message: 'Deu erro' });
   }
 };
 
 const getAll = async (req, res) => {
   try {
     const allUser = await User.findAll();
-    res.status(200).json(allUser);
+    return res.status(200).json(allUser);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Algo deu errado' });
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
+};
+
+const findByID = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const userByID = await User.findByPk(id);
+    if (!userByID) {
+      return res
+        .status(404)
+        .json({ message: 'Usuário não existe' });
+    }
+    return res
+      .status(200)
+      .json(userByID);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Algo de errado' });
   }
 };
 
 module.exports = {
   createUser,
   getAll,
+  findByID,
 };
