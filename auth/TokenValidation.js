@@ -22,7 +22,6 @@ const TokenValidation = async (req, res, next) => {
       req.tokenUser = user;
       next();
     } catch (error) {
-      console.log('error validating token: ', error);
       return res.status(STATUS_UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
     }
   } catch (err) {

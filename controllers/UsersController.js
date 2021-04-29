@@ -17,7 +17,8 @@ router.get('/', TokenValidation, async (req, res) => {
 router.get('/:id', TokenValidation, async (req, res) => {
   const { id } = req.params;
   try {
-    const response = await User.getOne({ id, res });
+    const response = await User.getOne({ id });
+    if (response.status) return res.status(response.status).json({ message: response.message });
 
     return res.status(200).json(response);
   } catch (e) {

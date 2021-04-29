@@ -17,7 +17,6 @@ const getAll = async (res) => {
     const usersList = await User.findAll({
       attributes: { exclude: ['password'] },
     });
-    console.log('usersList from getAll: ', usersList);
     return usersList;
   } catch (e) {
     const { status, msg } = errorFormatter(e);
@@ -25,16 +24,16 @@ const getAll = async (res) => {
   }
 };
 
-const getOne = async ({ id, res }) => {
+const getOne = async ({ id }) => {
   try {
     const foundUser = await User.findByPk(id, {
       attributes: { exclude: ['password'] },
     });
-    if (foundUser === null) return res.status(404).json({ message: 'Usuário não existe' });
+    if (foundUser === null) return { status: 404, message: 'Usuário não existe' };
     return foundUser;
   } catch (e) {
     const { status, msg } = errorFormatter(e);
-    return res.status(status).json({ message: msg });
+    return { status, message: msg };
   }
 };
 

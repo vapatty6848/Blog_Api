@@ -3,7 +3,7 @@ require('dotenv').config();
 const User = require('./controllers/UsersController');
 const Login = require('./controllers/LoginController');
 
-const PORT = parseInt(process.env.PORT, 10) || 3000;
+const PORT = 3000;
 
 const bodyParser = express.json();
 
