@@ -4,7 +4,7 @@ const SECRET = 'my&7Ip$xk6PIsDL';
 
 const generateToken = (user) => {
   const jwtConfig = {
-    expiresIn: '1h',
+    expiresIn: '7d',
     algorithm: 'HS256',
   };
   const token = jwt.sign({ data: user }, SECRET, jwtConfig);
