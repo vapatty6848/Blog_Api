@@ -38,7 +38,7 @@ UserRouter.get('/:id', auth.validateToken, async (req, res) => {
 });
 
 UserRouter.delete('/me', auth.validateToken, async (req, res) => {
-  const { email } = req.payload.data;
+  const { email } = req.payload;
   const userDelete = await models.User.destroy({ where: { email } });
   return res.status(NO_CONTENT).json(userDelete);
 });
