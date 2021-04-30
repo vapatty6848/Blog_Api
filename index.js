@@ -2,6 +2,13 @@ require('dotenv').config();
 const morgan = require('morgan');
 const express = require('express');
 const { userRouter, loginRouter } = require('./controllers');
+const {
+  validateDisplayName,
+  validateEmail,
+  validatePassword,
+} = require('./middlewares/requisito1Validations');
+const { validateEmailReq2, validatePasswordReq2 } = require('./middlewares/requisito2Validations');
+const validateToken = require('./auth/validateToken');
 
 const app = express();
 const PORT = 3000;
@@ -17,5 +24,8 @@ app.get('/', (request, response) => {
   response.send();
 });
 
-app.use('/user', userRouter);
-app.use('/login', loginRouter);
+app.post('/login', validateEmailReq2, validatePasswordReq2, loginRouter.login);
+
+app.get('/user', validateToken, userRouter.getAll);
+app.get('/user/:id', validateToken, userRouter.findByID);
+app.post('/user', validateDisplayName, validateEmail, validatePassword, userRouter.createUser);

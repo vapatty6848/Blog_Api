@@ -1,4 +1,4 @@
-const validateEmail = (req, res, next) => {
+const validateEmailReq2 = (req, res, next) => {
   const { email } = req.body;
   const regexEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   if (email === '') {
@@ -21,7 +21,7 @@ const validateEmail = (req, res, next) => {
   next();
 };
 
-const validatePassword = (req, res, next) => {
+const validatePasswordReq2 = (req, res, next) => {
   const { password } = req.body;
 
   if (password === '') {
@@ -45,6 +45,6 @@ const validatePassword = (req, res, next) => {
 };
 
 module.exports = {
-  validateEmail,
-  validatePassword,
+  validateEmailReq2,
+  validatePasswordReq2,
 };

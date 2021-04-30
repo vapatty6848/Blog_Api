@@ -1,8 +1,23 @@
-const loginRouter = require('express').Router();
-const loginMiddleware = require('../middlewares/loginMiddleware');
+const { User } = require('../models');
+const generateToken = require('../auth/generateToken');
 
-const { validateEmail, validatePassword } = require('../middlewares/requisito2Validations');
+const login = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const foundUser = await User.findOne({
+      where: { email },
+    });
+    if (foundUser === null) {
+      return res.status(400).json({ message: 'Campos inválidos' });
+    }
+    const token = generateToken(email);
+    return res.status(200).json({ token });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json('deu ruim');
+  }
+};
 
-loginRouter.post('/', validateEmail, validatePassword, loginMiddleware.login);
-
-module.exports = loginRouter;
+module.exports = {
+  login,
+};
