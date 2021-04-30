@@ -20,7 +20,7 @@ const validateToken = (req, res, next) => {
     req.user = decoded;
     next();
   });
-  next();
+  // next();
 };
 
 module.exports = validateToken;

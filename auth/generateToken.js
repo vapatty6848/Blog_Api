@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const SECRET = 'segredo';
 
-const generateToken = async (user) => {
+const generateToken = (user) => {
   const jwtConfig = {
     expiresIn: '7d',
     algorithm: 'HS256',
