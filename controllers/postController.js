@@ -46,8 +46,32 @@ const getPostByID = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+  const userID = req.user.data.id;
+  const { title, content } = req.body;
+  const { id } = req.params;
+  try {
+    const post = await BlogPost.findOne({
+      where: { id },
+    });
+    if (post.userId !== userID) {
+      return res.status(401).json({ message: 'Usuário não autorizado' });
+    }
+
+    await BlogPost.update({ title, content }, {
+      where: { id },
+    });
+
+    return res.status(200).json({ title, content, userId: userID });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
+};
+
 module.exports = {
   createPost,
   getAll,
   getPostByID,
+  update,
 };
