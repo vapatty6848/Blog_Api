@@ -9,6 +9,5 @@ const validateToken = require('../auth/validateToken');
 
 userRouter.get('/', validateToken, userMiddleware.getAll);
 userRouter.post('/', validateDisplayName, validateEmail, validatePassword, userMiddleware.createUser);
-userRouter.get('/:id', validateToken, userMiddleware.findByID);
 
 module.exports = userRouter;
