@@ -14,6 +14,22 @@ const createPost = async (req, res) => {
   }
 };
 
+const getAll = async (req, res) => {
+  try {
+    const posts = await BlogPost.findAll({
+      include: 'user',
+    });
+    if (posts === null) {
+      return res.status(404).json({ message: 'Nada a retornar' });
+    }
+    return res.status(200).json(posts);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Algo deu errado!' });
+  }
+};
+
 module.exports = {
   createPost,
+  getAll,
 };
