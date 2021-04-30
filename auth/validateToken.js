@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET = 'my&7Ip$xk6PIsDL';
+const SECRET = 'segredo';
 
 const validateToken = async (req, res, next) => {
   const token = req.headers.authorization;

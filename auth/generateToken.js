@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET = 'my&7Ip$xk6PIsDL';
+const SECRET = 'segredo';
 
 const generateToken = async (user) => {
   const jwtConfig = {
