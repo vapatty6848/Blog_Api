@@ -51,10 +51,10 @@ const findByID = async (req, res) => {
 };
 
 const deleteMe = async (req, res) => {
-  const { data } = req.user;
+  const { email } = req.user.data;
   try {
     const userDeleted = await User.destroy({
-      where: { email: data },
+      where: { email },
     });
     console.log(userDeleted);
     return res.status(204).end();
