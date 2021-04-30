@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPost } = require('../models');
 
 const createPost = async (req, res) => {
@@ -69,9 +70,39 @@ const update = async (req, res) => {
   }
 };
 
+const queryParams = async (req, res) => {
+  const searhTerm = `%${req.query.q}%`;
+  try {
+    const search = await BlogPost.findAll({
+      where: {
+        [Op.or]: [
+          {
+            title: {
+              [Op.like]: searhTerm,
+            },
+          },
+          {
+            content: {
+              [Op.like]: searhTerm,
+            },
+          },
+        ],
+      },
+    });
+    return res.status(200).json(search);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
+};
+
 module.exports = {
   createPost,
   getAll,
   getPostByID,
   update,
+  queryParams,
 };
+
+// title: { [Op.like]: searhTerm },
+//         content: { [Op.like]: searhTerm },
