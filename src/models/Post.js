@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-lines-per-function
 const Post = (sequelize, DataTypes) => {
   const PostsTable = sequelize.define(
     'Posts',
@@ -15,9 +14,6 @@ const Post = (sequelize, DataTypes) => {
         defaultValue: DataTypes.NOW,
         onUpdate: DataTypes.NOW,
       },
-    },
-    {
-      timestamps: false,
     },
   );
 
