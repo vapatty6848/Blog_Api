@@ -1,6 +1,6 @@
 const validateEmail = (req, res, next) => {
   const { email } = req.body;
-  const regexEmail = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+  const regexEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
   if (email === '') {
     return res
       .status(400)

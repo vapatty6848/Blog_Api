@@ -46,7 +46,7 @@ const findByID = async (req, res) => {
       .json(userByID);
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: 'Algo de errado' });
+    return res.status(500).json({ message: 'Algo deu errado' });
   }
 };
 
