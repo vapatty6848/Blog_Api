@@ -18,8 +18,8 @@ const validateToken = async (req, res, next) => {
         .json({ message: 'Token expirado ou inválido' });
     }
     req.user = decoded;
+    next();
   });
-  next();
 };
 
 module.exports = validateToken;
