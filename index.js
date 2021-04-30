@@ -35,3 +35,4 @@ app.delete('/user/me', validateToken, userRouter.deleteMe);
 
 app.post('/post', validateToken, postValidate.validatePost, postRouter.createPost);
 app.get('/post', validateToken, postRouter.getAll);
+app.get('/post/:id', validateToken, postRouter.getPostByID);
