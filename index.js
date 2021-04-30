@@ -6,8 +6,8 @@ const {
   validateDisplayName,
   validateEmail,
   validatePassword,
-} = require('./middlewares/requisito1Validations');
-const { validateEmailReq2, validatePasswordReq2 } = require('./middlewares/requisito2Validations');
+} = require('./middlewares/creationUserValidations');
+const { validateEmailOnLogin, validatePasswordOnLogin } = require('./middlewares/loginValidations');
 const validateToken = require('./auth/validateToken');
 
 const app = express();
@@ -24,7 +24,7 @@ app.get('/', (request, response) => {
   response.send();
 });
 
-app.post('/login', validateEmailReq2, validatePasswordReq2, loginRouter.login);
+app.post('/login', validateEmailOnLogin, validatePasswordOnLogin, loginRouter.login);
 
 app.get('/user', validateToken, userRouter.getAll);
 app.get('/user/:id', validateToken, userRouter.findByID);
