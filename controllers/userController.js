@@ -8,6 +8,7 @@ const {
 const validateToken = require('../auth/validateToken');
 
 userRouter.get('/', validateToken, userMiddleware.getAll);
+userRouter.get('/:id', validateToken, userMiddleware.findByID);
 userRouter.post('/', validateDisplayName, validateEmail, validatePassword, userMiddleware.createUser);
 
 module.exports = userRouter;

@@ -32,7 +32,26 @@ const getAll = async (req, res) => {
   }
 };
 
+const findByID = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const userByID = await User.findByPk(id);
+    if (userByID === null) {
+      return res
+        .status(404)
+        .json({ message: 'Usuário não existe' });
+    }
+    return res
+      .status(200)
+      .json(userByID);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Algo de errado' });
+  }
+};
+
 module.exports = {
   createUser,
   getAll,
+  findByID,
 };
