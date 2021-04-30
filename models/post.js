@@ -12,9 +12,7 @@ module.exports = (sequelize, DataTypes) => {
   Post.associate = (models) => {
     Post.belongsTo(models.User, {
       foreignKey: 'userId',
-      as: 'BlogPosts',
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
+      as: 'User',
     });
   };
 
