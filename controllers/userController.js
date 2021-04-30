@@ -50,8 +50,23 @@ const findByID = async (req, res) => {
   }
 };
 
+const deleteMe = async (req, res) => {
+  const { data } = req.user;
+  try {
+    const userDeleted = await User.destroy({
+      where: { email: data },
+    });
+    console.log(userDeleted);
+    return res.status(204).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
+};
+
 module.exports = {
   createUser,
   getAll,
   findByID,
+  deleteMe,
 };

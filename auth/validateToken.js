@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const SECRET = 'segredo';
 
-const validateToken = async (req, res, next) => {
+const validateToken = (req, res, next) => {
   const token = req.headers.authorization;
 
   if (!token) {
@@ -20,6 +20,7 @@ const validateToken = async (req, res, next) => {
     req.user = decoded;
     next();
   });
+  next();
 };
 
 module.exports = validateToken;

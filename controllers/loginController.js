@@ -10,7 +10,7 @@ const login = async (req, res) => {
     if (foundUser === null) {
       return res.status(400).json({ message: 'Campos inválidos' });
     }
-    const token = await generateToken(email);
+    const token = generateToken(email);
     return res.status(200).json({ token });
   } catch (error) {
     console.log(error);

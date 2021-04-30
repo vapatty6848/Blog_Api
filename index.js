@@ -29,3 +29,4 @@ app.post('/login', validateEmailOnLogin, validatePasswordOnLogin, loginRouter.lo
 app.get('/user', validateToken, userRouter.getAll);
 app.get('/user/:id', validateToken, userRouter.findByID);
 app.post('/user', validateDisplayName, validateEmail, validatePassword, userRouter.createUser);
+app.delete('user/me', validateToken, userRouter.deleteMe);
