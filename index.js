@@ -37,4 +37,5 @@ app.post('/post/', validateToken, postValidate.validatePost, postRouter.createPo
 app.get('/post', validateToken, postRouter.getAll);
 app.get('/post/:id', validateToken, postRouter.getPostByID);
 app.put('/post/:id', validateToken, postValidate.validatePost, postRouter.update);
-app.get('/post/:searchTerm', validateToken, postRouter.queryParams);
+app.get('/post/:searchTerm', validateToken, postRouter.searchPost);
+app.delete('/post/:id', validateToken, postRouter.deletePost);

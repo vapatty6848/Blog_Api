@@ -70,7 +70,7 @@ const update = async (req, res) => {
   }
 };
 
-const queryParams = async (req, res) => {
+const searchPost = async (req, res) => {
   const searhTerm = `%${req.query.q}%`;
   try {
     const search = await BlogPost.findAll({
@@ -95,10 +95,34 @@ const queryParams = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  const userID = req.user.data.id;
+  const { id } = req.params;
+  try {
+    const post = await BlogPost.findOne({
+      where: { id },
+    });
+    if (post === null) {
+      res.status(404).json({ message: 'Post não existe' });
+    }
+    if (post.userId !== userID) {
+      return res.status(401).json({ message: 'Usuário não autorizado' });
+    }
+    await BlogPost.destroy({
+      where: { id },
+    });
+    return res.status(204).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
+};
+
 module.exports = {
   createPost,
   getAll,
   getPostByID,
   update,
-  queryParams,
+  searchPost,
+  deletePost,
 };
