@@ -10,7 +10,12 @@ const login = async ({ email, password }) => {
     const foundUser = await User.findAll({ where: { email } });
     if (foundUser.length === 0) return { status: 400, message: 'Campos inválidos' };
     if (foundUser[0].password !== password) return { status: 400, message: 'Senha inválida' };
-    return tokenCreator(foundUser);
+    const formatUser = {
+      id: foundUser[0].dataValues.id,
+      displayName: foundUser[0].dataValues.displayName,
+      email: foundUser[0].dataValues.email,
+    };
+    return tokenCreator(formatUser);
   } catch (e) {
     console.log(e);
   }

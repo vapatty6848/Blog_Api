@@ -29,4 +29,7 @@ const TokenValidation = async (req, res, next) => {
   }
 };
 
-module.exports = { TokenValidation, secret };
+module.exports = {
+  TokenValidation,
+  secret,
+};

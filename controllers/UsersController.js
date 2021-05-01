@@ -45,10 +45,17 @@ router.post('/', async (req, res) => {
 //   res.status(200).json({});
 // });
 
-// router.delete('/:id', async (req, res) => {
-//   const { id } = req.params;
+router.delete('/me', TokenValidation, async (req, res) => {
+  const { id } = req.tokenUser;
 
-//   res.status(200).json({});
-// });
+  try {
+    const response = await User.deleteMe({ id });
+    if (response.status) return res.status(response.status).json({ message: response.message });
+
+    return res.status(204).json({});
+  } catch (e) {
+    console.error(e);
+  }
+});
 
 module.exports = router;

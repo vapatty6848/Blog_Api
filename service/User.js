@@ -37,8 +37,20 @@ const getOne = async ({ id }) => {
   }
 };
 
+const deleteMe = async ({ id }) => {
+  try {
+    await User.destroy({ where: { id } });
+    return true;
+  } catch (e) {
+    console.log(e);
+    const { status, msg } = errorFormatter(e);
+    return { status, message: msg };
+  }
+};
+
 module.exports = {
   createUser,
   getAll,
   getOne,
+  deleteMe,
 };
