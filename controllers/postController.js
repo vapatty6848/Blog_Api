@@ -103,7 +103,7 @@ const deletePost = async (req, res) => {
       where: { id },
     });
     if (post === null) {
-      res.status(404).json({ message: 'Post não existe' });
+      return res.status(404).json({ message: 'Post não existe' });
     }
     if (post.userId !== userID) {
       return res.status(401).json({ message: 'Usuário não autorizado' });
