@@ -76,18 +76,17 @@ const queryParams = async (req, res) => {
     const search = await BlogPost.findAll({
       where: {
         [Op.or]: [
-          {
-            title: {
-              [Op.like]: searhTerm,
-            },
+          { title: {
+            [Op.like]: searhTerm,
           },
-          {
-            content: {
-              [Op.like]: searhTerm,
-            },
+          },
+          { content: {
+            [Op.like]: searhTerm,
+          },
           },
         ],
       },
+      include: 'user',
     });
     return res.status(200).json(search);
   } catch (error) {
@@ -103,6 +102,3 @@ module.exports = {
   update,
   queryParams,
 };
-
-// title: { [Op.like]: searhTerm },
-//         content: { [Op.like]: searhTerm },
