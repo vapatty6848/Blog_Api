@@ -13,6 +13,10 @@ const errorFormatter = (e) => {
       return { status: 400, msg: '"password" is required' };
     case 'Users.email must be unique':
       return { status: 409, msg: 'Usuário já existe' };
+    case 'Field \'title\' doesn\'t have a default value':
+      return { status: 400, msg: '"title" is required' };
+    case 'Field \'content\' doesn\'t have a default value':
+      return { status: 400, msg: '"content" is required' };
     default:
       return message;
   }
