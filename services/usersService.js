@@ -11,7 +11,7 @@ const findAllUsers = async () => {
 
 const findUserById = async (id) => {
   const foundUser = await Users.findOne({ where: { id } });
-  if (!foundUser.id) {
+  if (!foundUser) {
     return {
       status: NOT_FOUND,
       message: 'Usuário não existe',
@@ -39,8 +39,8 @@ const usersCreate = async ({ displayName, email, password, image }) => {
   return newUser;
 };
 
-const deleteUsers = async (id) => {
-  const deleteUser = await Users.destroy({ where: { id } });
+const deleteUsers = async (email) => {
+  const deleteUser = await Users.destroy({ where: { email } });
 
   return deleteUser;
 };

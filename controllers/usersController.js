@@ -9,6 +9,7 @@ const router = Router();
 
 const CREATE = 201;
 const OK = 200;
+const NO_CONTENT = 204;
 
 router.get('/', tokenIsValid, async (_req, res) => {
   const foundUsers = await usersService.findAllUsers();
@@ -16,10 +17,13 @@ router.get('/', tokenIsValid, async (_req, res) => {
   res.status(OK).json(foundUsers);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', tokenIsValid, async (req, res) => {
   const { id } = req.params;
 
   const foundUser = await usersService.findUserById(id);
+  if (foundUser.isError) {
+    res.status(foundUser.status).json({ message: foundUser.message });
+  }
 
   res.status(OK).json(foundUser);
 });
@@ -32,11 +36,11 @@ router.post('/', validateUser, validateEmail, async (req, res) => {
   res.status(CREATE).json({ token });
 });
 
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
-  await usersService.deleteUsers(id);
+router.delete('/me', tokenIsValid, async (req, res) => {
+  const { email } = req.user;
+  await usersService.deleteUsers(email);
 
-  res.status(OK).end();
+  res.status(NO_CONTENT).end();
 });
 
 module.exports = router;
