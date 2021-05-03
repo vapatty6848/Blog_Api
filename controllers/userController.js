@@ -21,7 +21,8 @@ router.get('/', (_req, res) => {
 
 router.post('/', validationUser, generateToken, (req, res) => {
   const { email, password, displayName, image } = req.body;
-  User.create({ email, password, displayName, image }).then((user) => res.status(201).json(req.token))
+  User.create({ email, password, displayName, image })
+    .then(() => res.status(201).json(req.token))
     .catch((e) => {
       console.log(e.message);
       res.status(500).send({ message: 'Algo deu errado' });
