@@ -4,10 +4,6 @@ const conflict = 409;
 const intServerError = 500;
 
 const emailDuplicatedVerify = (req, res, next) => {
-  const { method } = req;
-
-  if (method === 'GET') return next();
-
   const { email } = req.body;
 
   User.findOne({ where: { email } }).then((foundUser) => {

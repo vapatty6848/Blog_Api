@@ -1,13 +1,15 @@
 const { Router } = require('express');
 const { User } = require('../models');
 const { createToken } = require('../services/CreateToken');
+const { verifyRegister } = require('../middlewares/VerifyRegister');
+const { passwordLoginValidation, emailLoginValidation } = require('../middlewares/LoginValidate');
 
 const ControllerLogin = new Router();
 const success = 200;
 const badRequest = 400;
 const intServerError = 500;
 
-ControllerLogin.post('/', (req, res) => {
+ControllerLogin.post('/', passwordLoginValidation, emailLoginValidation, verifyRegister, (req, res) => {
   const { password, email } = req.body;
 
   User.findOne({ where: { email } })

@@ -1,10 +1,6 @@
 const badRequest = 400;
 
 const displayNameValidation = (req, res, next) => {
-  const { method } = req;
-
-  if (method === 'GET') return next();
-
   const { displayName } = req.body;
 
   if (displayName) {
@@ -25,16 +21,11 @@ const displayNameValidation = (req, res, next) => {
 };
 
 const passwordValidation = (req, res, next) => {
-  const { method } = req;
-
-  if (method === 'GET') return next();
-
   const { password } = req.body;
-  const MINIMUM_PASSWORD_LENGTH = 6;
 
   if (password) {
-    let valid = password.length >= MINIMUM_PASSWORD_LENGTH;
-    if (typeof password !== 'string') valid = JSON.stringify(password).length >= MINIMUM_PASSWORD_LENGTH;
+    let valid = password.length >= 6;
+    if (typeof password !== 'string') valid = JSON.stringify(password).length >= 6;
 
     if (!valid) {
       const message = '"password" length must be 6 characters long';
@@ -50,10 +41,6 @@ const passwordValidation = (req, res, next) => {
 };
 
 const emailValidation = (req, res, next) => {
-  const { method } = req;
-
-  if (method === 'GET') return next();
-
   const { email } = req.body;
 
   if (email) {
@@ -74,10 +61,6 @@ const emailValidation = (req, res, next) => {
 };
 
 const imageValidation = (req, res, next) => {
-  const { method } = req;
-
-  if (method === 'GET') return next();
-
   const { image } = req.body;
 
   if (image) {
