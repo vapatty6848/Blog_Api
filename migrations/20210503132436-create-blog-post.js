@@ -11,6 +11,30 @@ module.exports = {
       title: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      content: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      published: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
+      updated: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: new Date(),
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        onUpdate:'CASCADE',
+        onDelete: 'CASCADE',
+        references: {
+          model: 'User',
+          key: 'id'
+        },
       }
     });
   },
