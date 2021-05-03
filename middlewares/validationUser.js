@@ -11,7 +11,7 @@ const validationUser = async (req, res, next) => {
   if (password.length < 6) return res.status(400).json({ message: '"password" length must be 6 characters long' });
 
   const findUser = await User.findAll({ where: { email } });
-  if (findUser[0]) return res.status(409).json({ message: 'Usuário já existe' });
+  if (findUser.length > 0) return res.status(409).json({ message: 'Usuário já existe' });
   next();
 };
 
