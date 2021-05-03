@@ -1,4 +1,4 @@
-const { BlogPosts } = require('../models');
+const { BlogPosts, User } = require('../models');
 const errorFormatter = require('../middleware/errorFormatter');
 
 const createPost = async ({ title, content, userId }) => {
@@ -14,6 +14,21 @@ const createPost = async ({ title, content, userId }) => {
   }
 };
 
+const getAll = async (res) => {
+  try {
+    const usersList = await BlogPosts.findAll({
+      include: [{
+        model: User, as: 'user', attributes: { exclude: ['password'] },
+      }],
+    });
+    return usersList;
+  } catch (e) {
+    const { status, msg } = errorFormatter(e);
+    return res.status(status).json({ message: msg });
+  }
+};
+
 module.exports = {
   createPost,
+  getAll,
 };

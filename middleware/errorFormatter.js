@@ -1,4 +1,5 @@
 const errorFormatter = (e) => {
+  console.log('error getting posts: ', e);
   const message = e.errors ? e.errors[0].message : e.parent.sqlMessage;
   switch (message) {
     case 'Validation len on displayName failed':
