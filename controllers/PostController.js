@@ -26,4 +26,15 @@ router.get('/', TokenValidation, async (req, res) => {
   }
 });
 
+router.get('/:id', TokenValidation, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await Post.getOne({ id });
+    if (response.status) return res.status(response.status).json({ message: response.message });
+    return res.status(200).json(response);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
 module.exports = router;
