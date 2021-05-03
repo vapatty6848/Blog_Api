@@ -3,15 +3,13 @@ const express = require('express');
 const { User } = require('../models');
 
 const generateToken = require('../middlewares/generateToken');
+const validateToken = require('../middlewares/validateToken');
 
 const validationUser = require('../middlewares/validationUser');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  const { authorization } = req.headers;
-  if (!authorization || authorization === '') return res.status(401).json({ message: 'Token não encontrado' });
-
+router.get('/', validateToken, (_req, res) => {
   User.findAll()
     .then((users) => {
       res.status(200).json(users);
