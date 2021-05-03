@@ -69,9 +69,23 @@ const editOne = async ({ id, title, content, userId }) => {
   }
 };
 
+const deleteOne = async ({ id, userId }) => {
+  try {
+    const post = await BlogPosts.findByPk(id);
+    if (post === null) return { status: 404, message: 'Post não existe' };
+    if (post.userId !== userId) return { status: 401, message: 'Usuário não autorizado' };
+    await BlogPosts.destroy({ where: { id } });
+    return true;
+  } catch (e) {
+    const { status, msg } = errorFormatter(e);
+    return { status, message: msg };
+  }
+};
+
 module.exports = {
   createPost,
   getAll,
   getOne,
   editOne,
+  deleteOne,
 };

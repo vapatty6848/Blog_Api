@@ -50,4 +50,17 @@ router.put('/:id', TokenValidation, async (req, res) => {
   }
 });
 
+router.delete('/:id', TokenValidation, async (req, res) => {
+  try {
+    const { id: userId } = req.tokenUser;
+    const { id } = req.params;
+    const response = await Post.deleteOne({ id, userId });
+
+    if (response.status) return res.status(response.status).json({ message: response.message });
+    return res.status(204).send();
+  } catch (e) {
+    console.error(e);
+  }
+});
+
 module.exports = router;
