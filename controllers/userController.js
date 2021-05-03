@@ -10,8 +10,8 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   const { authorization } = req.headers;
-  if(!authorization || authorization === '') return res.status(401).json({ message: 'Token não encontrado'});
-  
+  if (!authorization || authorization === '') return res.status(401).json({ message: 'Token não encontrado' });
+
   User.findAll()
     .then((users) => {
       res.status(200).json(users);
