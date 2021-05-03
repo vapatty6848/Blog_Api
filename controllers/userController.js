@@ -20,7 +20,7 @@ UserRouter.post('/', validateRegister, async (req, res) => {
     return res.status(CONFLICT).json({ message: 'Usuário já existe' });
   }
   const user = await models.User.create(req.body);
-  const tokenResponse = await auth.createToken(user);
+  const tokenResponse = auth.createToken(user);
 
   return res.status(CREATED).json({ token: tokenResponse });
 });

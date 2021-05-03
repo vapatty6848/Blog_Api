@@ -5,7 +5,10 @@ const config = { algorithm: 'HS256', expiresIn: '7d' };
 
 const UNAUTHORIZED = 401;
 
-const createToken = (payload) => jwt.sign(payload.dataValues, SECRET, config);
+const createToken = (payload) => {
+  const { email, displayName, id } = payload.dataValues;
+  return jwt.sign({ email, displayName, id }, SECRET, config);
+};
 
 const verifyToken = (token) => jwt.verify(token, SECRET);
 
