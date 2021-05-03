@@ -45,8 +45,33 @@ const getOne = async ({ id }) => {
   }
 };
 
+const editOne = async ({ id, title, content, userId }) => {
+  try {
+    const post = await BlogPosts.findByPk(id);
+    if (!title) return { status: 400, message: '"title" is required' };
+    if (!content) return { status: 400, message: '"content" is required' };
+    if (post === null) return { status: 404, message: 'Post não existe' };
+    if (post.userId !== userId) return { status: 401, message: 'Usuário não autorizado' };
+    await BlogPosts.update(
+      {
+        title,
+        content,
+        updated: new Date(),
+      },
+      {
+        where: { id },
+      },
+    );
+    return { title, content, userId };
+  } catch (e) {
+    const { status, msg } = errorFormatter(e);
+    return { status, message: msg };
+  }
+};
+
 module.exports = {
   createPost,
   getAll,
   getOne,
+  editOne,
 };
