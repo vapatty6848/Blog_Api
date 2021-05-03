@@ -3,13 +3,14 @@ const usersService = require('../services/usersService');
 const createToken = require('../auth/createToken');
 const validateUser = require('../middlewares/usersValidation');
 const validateEmail = require('../middlewares/emailValidation');
+const tokenIsValid = require('../middlewares/tokenValidation');
 
 const router = Router();
 
 const CREATE = 201;
 const OK = 200;
 
-router.get('/', async (_req, res) => {
+router.get('/', tokenIsValid, async (_req, res) => {
   const foundUsers = await usersService.findAllUsers();
 
   res.status(OK).json(foundUsers);

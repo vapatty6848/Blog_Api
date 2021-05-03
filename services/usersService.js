@@ -1,16 +1,23 @@
 const { Users } = require('../models');
 
 const BAD_REQUEST = 400;
+const NOT_FOUND = 404;
 
 const findAllUsers = async () => {
-  const foundUsers = await Users.findAll({});
+  const foundUsers = await Users.findAll();
 
   return foundUsers;
 };
 
 const findUserById = async (id) => {
   const foundUser = await Users.findOne({ where: { id } });
-
+  if (!foundUser.id) {
+    return {
+      status: NOT_FOUND,
+      message: 'Usuário não existe',
+      isError: true,
+    };
+  }
   return foundUser;
 };
 
