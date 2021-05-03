@@ -1,5 +1,4 @@
 const decodeToken = require('../auth/decodeToken');
-// const verifyToken = require('../auth/verifyToken');
 
 const UNAUTHORIZED = 401;
 const MISSING_BAD_MESSAGE = 'Token não encontrado';

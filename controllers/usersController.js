@@ -30,10 +30,15 @@ router.get('/:id', tokenIsValid, async (req, res) => {
 
 router.post('/', validateUser, validateEmail, async (req, res) => {
   const { displayName, email, password, image } = req.body;
-  const newUser = await usersService.usersCreate({ displayName, email, password, image });
+  try {
+    const newUser = await usersService.usersCreate({ displayName, email, password, image });
 
-  const token = createToken(newUser.dataValues);
-  res.status(CREATE).json({ token });
+    const token = createToken(newUser.dataValues);
+    res.status(CREATE).json({ token });
+  } catch (error) {
+    console.log('ERRO', error.message);
+    res.status(400).end();
+  }
 });
 
 router.delete('/me', tokenIsValid, async (req, res) => {
