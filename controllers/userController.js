@@ -20,6 +20,21 @@ router.get('/', validateToken, (_req, res) => {
     });
 });
 
+router.get('/:id', validateToken, (req, res) => {
+  const { id } = req.params;
+  User.findByPk(id)
+    .then((user) => {
+      if (user === null) {
+        return res.status(404).send({ message: 'Usuário não existe' });
+      }
+      res.status(200).json(user);
+    })
+    .catch((e) => {
+      console.log(e.message);
+      res.status(500).json({ message: 'Algo deu errado' });
+    });
+});
+
 router.post('/', validationUser, generateToken, (req, res) => {
   const { email, password, displayName, image } = req.body;
   User.create({ email, password, displayName, image })
