@@ -6,7 +6,7 @@ const User = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
   });
 
-  return User;
+  return Users;
 };
 
-module.exports = Users;
+module.exports = User;

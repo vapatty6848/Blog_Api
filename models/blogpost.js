@@ -6,8 +6,8 @@ const BlogPost = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     published: DataTypes.DATE,
   });
-  
-  return BlogPost;
+
+  return BlogPosts;
 };
 
-module.exports = BlogPosts;
+module.exports = BlogPost;
