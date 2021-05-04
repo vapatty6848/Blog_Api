@@ -12,12 +12,10 @@ router.post('/', validateToken, validationPost, (req, res) => {
   const { title, content } = req.body;
   const { email } = req.user;
 
-  let userId;
-
   User.findOne({ where: { email } })
     .then((user) => {
       BlogPost.create({ title, content, userId: user.id })
-        .then(() => res.status(201).json({ title, content, userId }))
+        .then(() => res.status(201).json({ title, content, userId: user.id }))
         .catch((e) => {
           console.log(e.message);
           res.status(500).send({ message: 'Algo deu errado' });
