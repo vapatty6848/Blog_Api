@@ -42,7 +42,7 @@ router.put('/:id', validateToken, validationPost, (req, res) => {
   BlogPost.update({ title, content }, { where: { id } })
     .then((post) => {
       const { userId } = post;
-      if (req.user.id === userId) res.status(401).json({ message: 'Usuário não autorizado' });
+      if (req.user.id !== userId) res.status(401).json({ message: 'Usuário não autorizado' });
       res.status(200).json({ title, content, userId });
     })
     .catch((e) => {
