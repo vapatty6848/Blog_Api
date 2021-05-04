@@ -1,4 +1,5 @@
 const express = require('express');
+const { Op } = require('sequelize');
 
 const { User, BlogPost } = require('../models');
 
@@ -12,6 +13,21 @@ router.get('/', validateToken, (_req, res) => {
   BlogPost.findAll({
     include: { association: 'user', attributes: { exclude: ['password'] } },
     attributes: { exclude: ['userId'] },
+  })
+    .then((posts) => {
+      res.status(200).json(posts);
+    })
+    .catch((e) => {
+      console.log(e.message);
+      res.status(500).json({ message: 'Algo deu errado' });
+    });
+});
+
+router.get('/search', validateToken, (req, res) => {
+  const { q } = req.query;
+  BlogPost.findAll({
+    where: { [Op.or]: [{ title: { [Op.like]: `%${q}%` } }, { content: { [Op.like]: `%${q}%` } }] },
+    include: { association: 'user', attributes: { exclude: ['password'] } },
   })
     .then((posts) => {
       res.status(200).json(posts);
