@@ -1,5 +1,5 @@
 const user = require('./userRoute');
-const session = require('./session.router');
+const session = require('./sessionRouter');
 
 module.exports = {
   user,

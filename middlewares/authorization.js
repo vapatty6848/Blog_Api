@@ -1,4 +1,4 @@
-const { validateToken } = require('../security');
+const { validateToken } = require('../token');
 
 module.exports = (req, _res, next) => {
   const { authorization: token } = req.headers;
