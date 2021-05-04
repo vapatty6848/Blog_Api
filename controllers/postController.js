@@ -3,6 +3,7 @@ const models = require('../models');
 const auth = require('../middlewares/auth');
 const { validatePost } = require('../middlewares/validadePost');
 
+const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
 const SUCCESS = 200;
 const CREATED = 201;
@@ -41,6 +42,22 @@ PostRouter.get('/:id', auth.validateToken, async (req, res) => {
   });
   if (!posts) return res.status(404).json({ message: 'Post não existe' });
   return res.status(200).json(posts);
+});
+
+PostRouter.put('/:id', auth.validateToken, validatePost, async (req, res) => {
+  const { title, content } = req.body;
+  const { id: userId } = req.payload;
+  const { id } = req.params;
+
+  const post = await models.BlogPosts.findOne({ where: { id } });
+  // console.log(post);
+  if (post.userId !== userId) {
+    return res.status(UNAUTHORIZED).json({ message: 'Usuário não autorizado' });
+  }
+  post.title = title;
+  post.content = content;
+  await post.save();
+  return res.status(SUCCESS).json({ title, content, userId });
 });
 
 module.exports = PostRouter;
