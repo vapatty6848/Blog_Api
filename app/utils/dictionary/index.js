@@ -1,0 +1,11 @@
+const BAD_IMPLEMENTATION = 500;
+const NO_CONTENT = 204;
+const CREATED = 201;
+const SUCCESS = 200;
+
+module.exports = {
+  BAD_IMPLEMENTATION,
+  NO_CONTENT,
+  CREATED,
+  SUCCESS,
+};
