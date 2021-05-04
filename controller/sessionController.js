@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { session } = require('../services');
+const { session } = require('../service');
 
 const login = async (req, res, next) => {
   try {
