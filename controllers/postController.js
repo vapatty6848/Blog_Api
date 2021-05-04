@@ -36,19 +36,17 @@ router.get('/:id', validateToken, (req, res) => {
     });
 });
 
-router.put('/:id', validateToken, validationPost, (req, res) => {
+router.put('/:id', validateToken, validationPost, async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
-  BlogPost.update({ title, content }, { where: { id } })
-    .then((post) => {
-      const { userId } = post;
-      if (req.user.id !== userId) res.status(401).json({ message: 'Usuário não autorizado' });
-      res.status(200).json({ title, content, userId });
-    })
-    .catch((e) => {
-      console.log(e.message);
-      res.status(500).send({ message: 'Algo deu errado' });
-    });
+  const { userId } = await BlogPost.findByPk(id);
+
+  if (req.user.id !== userId) return res.status(401).json({ message: 'Usuário não autorizado' });
+
+  await BlogPost.update({ title, content }, { where: { id } })
+
+  res.status(200).json({ title, content, userId });
+
 });
 
 router.post('/', validateToken, validationPost, (req, res) => {
