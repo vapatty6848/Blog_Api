@@ -43,10 +43,9 @@ router.put('/:id', validateToken, validationPost, async (req, res) => {
 
   if (req.user.id !== userId) return res.status(401).json({ message: 'Usuário não autorizado' });
 
-  await BlogPost.update({ title, content }, { where: { id } })
+  await BlogPost.update({ title, content }, { where: { id } });
 
   res.status(200).json({ title, content, userId });
-
 });
 
 router.post('/', validateToken, validationPost, (req, res) => {
