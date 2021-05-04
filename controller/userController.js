@@ -1,11 +1,12 @@
-const { StatusCode } = require('http-status-codes');
-const user = require('../service');
+const { StatusCodes } = require('http-status-codes');
+const { user } = require('../service');
 
 const createUser = async (req, res, next) => {
   try {
-    const { body } = req.body;
-    const token = await user.createUser(body);
-    return res.status(StatusCode.CREATED).json({ token });
+    const { displayName, email, password, image } = req.body;
+    const token = await user.createUser(displayName, email, password, image);
+
+    return res.status(StatusCodes.CREATED).json({ token });
   } catch (err) {
     return next(err);
   }
