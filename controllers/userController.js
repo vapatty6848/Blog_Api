@@ -44,4 +44,15 @@ router.post('/', validationUser, generateToken, (req, res) => {
       res.status(500).send({ message: 'Algo deu errado' });
     });
 });
+
+router.delete('/me', validateToken, (req, res) => {
+  const { email } = req.user;
+  User.destroy({ where: { email } })
+    .then(() => res.status(204).end())
+    .catch((e) => {
+      console.log(e.message);
+      res.status(500).send({ message: 'Algo deu errado' });
+    });
+});
+
 module.exports = router;
