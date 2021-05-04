@@ -56,8 +56,9 @@ router.put('/:id', validateToken, validationPost, async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
   const { userId } = await BlogPost.findByPk(id);
+  const user = await User.findOne({ where: { email: req.user.email } });
 
-  if (req.user.id !== userId) return res.status(401).json({ message: 'Usuário não autorizado' });
+  if (user.id !== userId) return res.status(401).json({ message: 'Usuário não autorizado' });
 
   await BlogPost.update({ title, content }, { where: { id } });
 
