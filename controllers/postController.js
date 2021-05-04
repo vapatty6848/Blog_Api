@@ -9,7 +9,10 @@ const validationPost = require('../middlewares/validationPost');
 const router = express.Router();
 
 router.get('/', validateToken, (_req, res) => {
-  BlogPost.findAll()
+  BlogPost.findAll({
+    include: { association: 'user', attributes: { exclude: ['password'] } },
+    attributes: { exclude: ['userId'] },
+  })
     .then((posts) => {
       res.status(200).json(posts);
     })
@@ -19,13 +22,27 @@ router.get('/', validateToken, (_req, res) => {
     });
 });
 
+router.get('/:id', validateToken, (req, res) => {
+  const { id } = req.params;
+  BlogPost.findByPk(id, {
+    include: { association: 'user', attributes: { exclude: ['password'] } },
+    attributes: { exclude: ['userId'] },
+  })
+    .then((post) => {
+      if (post === null) {
+        return res.status(404).send({ message: 'Post não existe' });
+      }
+      res.status(200).json(post);
+    });
+});
+
 router.post('/', validateToken, validationPost, (req, res) => {
   const { title, content } = req.body;
   const { email } = req.user;
 
   User.findOne({ where: { email } })
     .then((user) => {
-      BlogPost.create({ title, content, user })
+      BlogPost.create({ title, content, userId: user.id })
         .then(() => res.status(201).json({ title, content, userId: user.id }))
         .catch((e) => {
           console.log(e.message);
