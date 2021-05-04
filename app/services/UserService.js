@@ -1,4 +1,3 @@
-
 const { User } = require('../database/models');
 
 const { generateToken } = require('../utils');
