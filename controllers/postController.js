@@ -7,6 +7,7 @@ const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
 const SUCCESS = 200;
 const CREATED = 201;
+const NO_CONTENT = 204;
 
 const PostRouter = new Router();
 
@@ -58,6 +59,19 @@ PostRouter.put('/:id', auth.validateToken, validatePost, async (req, res) => {
   post.content = content;
   await post.save();
   return res.status(SUCCESS).json({ title, content, userId });
+});
+
+PostRouter.delete('/:id', auth.validateToken, async (req, res) => {
+  const { id: userId } = req.payload;
+  const { id } = req.params;
+
+  const post = await models.BlogPosts.findOne({ where: { id } });
+  if (!post) return res.status(NOT_FOUND).json({ message: 'Post não existe' });
+  if (post.userId !== userId) {
+    return res.status(UNAUTHORIZED).json({ message: 'Usuário não autorizado' });
+  }
+  await models.BlogPosts.destroy({ where: { id } });
+  return res.status(NO_CONTENT).send();
 });
 
 module.exports = PostRouter;
