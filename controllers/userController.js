@@ -9,8 +9,6 @@ const createUser = async (req, res) => {
     return res
       .status(201)
       .json({ token });
-    // .json({ message: 'Usuário criado' });
-    // .json({ token: 'blá-blá-blá' });
   } catch (error) {
     console.log(error);
     if (error.original.code === 'ER_DUP_ENTRY') {
