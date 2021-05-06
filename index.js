@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+require('dotenv/config');
 
 const { handleError } = require('./middlewares');
 const routes = require('./router.js');
@@ -16,4 +17,6 @@ app.get('/', (request, response) => {
 app.use(routes);
 app.use(handleError);
 
-app.listen(3000, () => console.log('ouvindo porta 3000!'));
+const PORT = process.env.PORT || 3000;
+
+app.listen(3000, () => console.log(`Listening on port ${PORT}`));
