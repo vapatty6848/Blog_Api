@@ -19,27 +19,24 @@ post.post('/', postValidation, tokenValidation, async (req, res) => {
 
   try {
     const newPost = await models.BlogPosts.create({ title, content, userId: id });
-
     return res.status(CREATED).json(newPost);
-
   } catch (err) {
     return res.status(NOT_FOUND).json(
       {
-        message: err.message
-      }
+        message: err.message,
+      },
     );
-  }
-}
-);
+  };
+});
 
-post.get('/',tokenValidation, async (req, res) => {
+post.get('/', tokenValidation, async (req, res) => {
   const getAllPosts = await models.BlogPosts.findAll({
     attributes: { exclude: 'userId' },
     include: { model: models.User, as: 'user', attributes: { exclude: 'password' } },
   });
 
   return res.status(SUCCESS).json(getAllPosts);
-  
+
 });
 
 post.get('/:id', tokenValidation, async (req, res) => {
@@ -54,17 +51,17 @@ post.get('/:id', tokenValidation, async (req, res) => {
 
   if (!getOnePost) {
     return res.status(404).json(
-    {
-      message: 'Post não existe',
-    }
-   );
+      {
+        message: 'Post não existe',
+      },
+    );
   }
 
   return res.status(200).json(getOnePost);
 }
 );
 
-post.put('/:id',tokenValidation, postValidation, async (req, res) => {
+post.put('/:id', tokenValidation, postValidation, async (req, res) => {
   const { title, content } = req.body;
   const { id: userId } = req.payload;
   const { id } = req.params;
@@ -73,9 +70,9 @@ post.put('/:id',tokenValidation, postValidation, async (req, res) => {
 
   if (updatedPost.userId !== userId) {
     return res.status(NOT_AUTHORIZED).json(
-      { 
+      {
         message: 'Usuário não autorizado',
-      }
+      },
     );
   }
   updatedPost.title = title;
@@ -95,15 +92,15 @@ post.delete('/:id', tokenValidation, async (req, res) => {
     return res.status(NOT_FOUND).json(
       {
         message: 'Post não existe',
-      }
+      },
     );
   }
 
   if (destroyedPost.userId !== userId) {
     return res.status(NOT_AUTHORIZED).json(
-      { 
+      {
         message: 'Usuário não autorizado',
-      }
+      },
     );
   }
   await models.BlogPosts.destroy({ where: { id } });

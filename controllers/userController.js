@@ -43,7 +43,7 @@ user.get('/:id', tokenValidation, async (req, res) => {
     return res.status(NOT_FOUND).json(
       {
         message: 'Usuário não existe',
-      }
+      },
     );
   }
   return res.status(SUCCESS).json(getOneUser);

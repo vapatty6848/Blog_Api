@@ -19,14 +19,14 @@ login.post('/', loginValidation, async (req, res) => {
     return res.status(BAD_REQUEST).json(
       {
         message: INVALID_FIELD,
-      }
+      },
     );
   }
   if (password !== user.dataValues.password) {
     return res.status(BAD_REQUEST).json(
       {
         mensage: INVALID_FIELD,
-      }
+      },
     );
   }
   const token = await createToken(user);
