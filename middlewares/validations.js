@@ -1,9 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
 // const { User } = require('../models');
 
-const regEx = /\w{3,20}@[a-z]{2,8}.[a-z]{2,8}/gm;
+const regEx = /[A-Za-z0-9]+@[A-Za-z]+[A-z]*(\.\w{2,3})+/;
 
-const validateUser = async (req, res, next) => {
+const validateUser = (req, res, next) => {
   const { displayName, email, password } = req.body;
   if (displayName.length < 8) {
     return res.status(StatusCodes.BAD_REQUEST).json({ message: '"displayName" length must be at least 8 characters long' });
