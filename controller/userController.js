@@ -1,7 +1,7 @@
 const rescue = require('express-rescue');
 const { Router } = require('express');
 
-const { validateUser } = require('../middlewares/validateUser');
+const validateUser = require('../middlewares/validateUser');
 const { validateCreateUser } = require('../service/userService');
 const { CONFLICT, CREATED } = require('../utils/statusCodeHandler');
 

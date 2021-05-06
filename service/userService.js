@@ -2,12 +2,12 @@ const { User } = require('../models');
 const { createToken } = require('../utils/token');
 
 const validateCreateUser = async (query) => {
-  // const isUserAlreadyExists = await UserModel.findOne({
-  //   attributes: ['email'],
-  //   where: { email: query.email },
-  // });
+  const isUserAlreadyExists = await User.findOne({
+    attributes: ['email'],
+    where: { email: query.email },
+  });
 
-  // if (isUserAlreadyExists.includes(query.email)) return null;
+  if (isUserAlreadyExists) return null;
 
   const userCreated = await User.create(query);
   const { password, email, ...user } = userCreated;

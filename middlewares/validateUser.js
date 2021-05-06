@@ -1,6 +1,8 @@
 const rescue = require('express-rescue');
 
 const { emailTypeValidation } = require('../utils/regexEmail');
+const { invalidName, invalidPassword } = require('../utils/validations');
+
 const { BAD_REQUEST } = require('../utils/statusCodeHandler');
 
 const validateUser = rescue(async (request, response, next) => {
@@ -9,7 +11,7 @@ const validateUser = rescue(async (request, response, next) => {
 
   const { code, message } = BAD_REQUEST;
 
-  if (displayName.lenght < 8) {
+  if (invalidName(displayName)) {
     return response.status(code).json({ message: message.invalidDisplayName });
   }
 
@@ -17,11 +19,13 @@ const validateUser = rescue(async (request, response, next) => {
 
   if (!isRegexTrue) return response.status(code).json({ message: message.invalidEmail });
 
-  if (password.lenght < 6) return response.status(code).json({ message: message.invaliPassword });
-
   if (!password) return response.status(code).json({ message: message.requiredPassword });
+
+  if (invalidPassword(password)) {
+    return response.status(code).json({ message: message.invalidPassword });
+  }
 
   next();
 });
 
-module.exports = { validateUser };
+module.exports = validateUser;

@@ -9,7 +9,7 @@ const BAD_REQUEST = {
     invalidDisplayName: '"displayName" length must be at least 8 characters long',
     invalidEmail: '"email" must be a valid email',
     requiredEmail: '"email" is required',
-    invaliPassword: '"password" length must be 6 characters long',
+    invalidPassword: '"password" length must be 6 characters long',
     requiredPassword: '"password" is required',
   },
 };
