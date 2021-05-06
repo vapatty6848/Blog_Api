@@ -26,7 +26,7 @@ post.post('/', postValidation, tokenValidation, async (req, res) => {
         message: err.message,
       },
     );
-  };
+  }
 });
 
 post.get('/', tokenValidation, async (req, res) => {
@@ -34,9 +34,7 @@ post.get('/', tokenValidation, async (req, res) => {
     attributes: { exclude: 'userId' },
     include: { model: models.User, as: 'user', attributes: { exclude: 'password' } },
   });
-
   return res.status(SUCCESS).json(getAllPosts);
-
 });
 
 post.get('/:id', tokenValidation, async (req, res) => {
@@ -58,8 +56,7 @@ post.get('/:id', tokenValidation, async (req, res) => {
   }
 
   return res.status(200).json(getOnePost);
-}
-);
+});
 
 post.put('/:id', tokenValidation, postValidation, async (req, res) => {
   const { title, content } = req.body;
@@ -80,8 +77,7 @@ post.put('/:id', tokenValidation, postValidation, async (req, res) => {
   await updatedPost.save();
 
   return res.status(SUCCESS).json({ title, content, userId });
-}
-);
+});
 
 post.delete('/:id', tokenValidation, async (req, res) => {
   const { id: userId } = req.payload;
@@ -106,7 +102,6 @@ post.delete('/:id', tokenValidation, async (req, res) => {
   await models.BlogPosts.destroy({ where: { id } });
 
   return res.status(NO_CONTENT_FOUNDED).send();
-}
-);
+});
 
 module.exports = post;
