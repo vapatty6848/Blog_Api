@@ -5,11 +5,13 @@ const {
   validateUser,
 } = require('../middlewares/validations');
 
+const verify = require('../middlewares/verifyEmail');
+
 const { User } = require('../models');
 
 const router = express.Router();
 
-router.post('/', validateUser, async (req, res) => {
+router.post('/', validateUser, verify, async (req, res) => {
   const { body } = req;
   // const verifyemail = await User.findOne({ where: { email: body.email } });
   // if (verifyemail) {
