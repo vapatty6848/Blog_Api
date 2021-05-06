@@ -6,8 +6,14 @@ const validatePost = require('../middlewares/blogpostValidation');
 const router = Router();
 
 const CREATE = 201;
-// const OK = 200;
+const OK = 200;
 // const NO_CONTENT = 204;
+
+router.get('/', tokenIsValid, async (req, res) => {
+  const foundPost = await blogPostService.findAllPosts();
+
+  res.status(OK).json(foundPost);
+});
 
 router.post('/', tokenIsValid, validatePost, async (req, res) => {
   const { title, content } = req.body;

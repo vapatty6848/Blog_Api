@@ -10,10 +10,10 @@ const createUsers = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
-  Users.associate = (models) => {
-    Users.hasOne(models.BlogPosts,
-      { foreignKey: 'userId', as: 'blogposts' });
-  };
+  // Users.associate = (models) => {
+  //  Users.hasOne(models.BlogPosts,
+  //    { foreignKey: 'userId', as: 'user' });
+  // };
 
   return Users;
 };

@@ -1,8 +1,9 @@
 const { BlogPosts } = require('../models');
 
 const findAllPosts = async () => {
-  const foundPosts = await BlogPosts.findAll();
-
+  const foundPosts = await BlogPosts.findAll({
+    include: { association: 'user', attributes: { exclude: ['password'] } },
+  });
   return foundPosts;
 };
 
