@@ -21,7 +21,8 @@ user.post('/', registerValidation, async (req, res) => {
     return res.status(CONFLICT).json(
       {
         message: 'Usuário já existe',
-      });
+      },
+    );
   }
   const newUser = await models.User.create(req.body);
   const tokenResponse = createToken(newUser);
@@ -32,7 +33,6 @@ user.post('/', registerValidation, async (req, res) => {
 user.get('/', tokenValidation, async (req, res) => {
   const getAllUsers = await models.User.findAll({});
   return res.status(200).json(getAllUsers);
-
 });
 
 user.get('/:id', tokenValidation, async (req, res) => {
@@ -47,15 +47,13 @@ user.get('/:id', tokenValidation, async (req, res) => {
     );
   }
   return res.status(SUCCESS).json(getOneUser);
-}
-);
+});
 
 user.delete('/me', tokenValidation, async (req, res) => {
   const { email } = req.payload;
   const destroyedUser = await models.User.destroy({ where: { email } });
 
   return res.status(NO_CONTENT_FOUNDED).json(destroyedUser);
-}
-);
+});
 
 module.exports = user;
