@@ -13,7 +13,8 @@ const findAllPosts = async () => {
 const findPostsById = async (id) => {
   const foundPosts = await BlogPosts.findOne({
     where: { id },
-    include: { association: 'user', attributes: { exclude: ['password'] } } });
+    include: { association: 'user', attributes: { exclude: ['password'] } },
+  });
 
   if (!foundPosts) {
     return { status: NOT_FOUND, message: 'Post não existe', isError: true };
@@ -49,10 +50,22 @@ const updatePost = async (id, title, content, userId) => {
   return { title, content, userId };
 };
 
-const deletePost = async (email) => {
-  const postDeleted = await BlogPosts.destroy({ where: { email } });
+const deletePosts = async (id, userId) => {
+  const findPost = await BlogPosts.findOne({
+    where: { id },
+    include: { association: 'user', attributes: { exclude: ['password'] } },
+  });
 
-  return postDeleted;
+  if (!findPost) {
+    return { findStatus: NOT_FOUND, findMessage: 'Post não existe', findError: true };
+  }
+
+  if (findPost.userId !== userId) {
+    return { userStatus: UNAUTHORIZED, userMessage: 'Usuário não autorizado', userError: true };
+  }
+
+  const deletePost = await BlogPosts.destroy({ where: { id } });
+  return deletePost;
 };
 
 module.exports = {
@@ -60,5 +73,5 @@ module.exports = {
   findPostsById,
   createPost,
   updatePost,
-  deletePost,
+  deletePosts,
 };

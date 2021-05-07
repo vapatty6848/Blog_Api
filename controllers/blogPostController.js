@@ -7,7 +7,7 @@ const router = Router();
 
 const CREATE = 201;
 const OK = 200;
-// const NO_CONTENT = 204;
+const NO_CONTENT = 204;
 
 router.get('/', tokenIsValid, async (req, res) => {
   const foundPost = await blogPostService.findAllPosts();
@@ -42,6 +42,21 @@ router.put('/:id', tokenIsValid, validatePost, async (req, res) => {
   }
 
   return res.status(OK).json(updatePost);
+});
+
+router.delete('/:id', tokenIsValid, async (req, res) => {
+  const { id } = req.params;
+  const { id: userId } = req.user;
+  const deletePost = await blogPostService.deletePosts(id, userId);
+
+  if (deletePost.findError) {
+    return res.status(deletePost.findStatus).json({ message: deletePost.findMessage });
+  }
+
+  if (deletePost.userError) {
+    return res.status(deletePost.userStatus).json({ message: deletePost.userMessage });
+  }
+  return res.status(NO_CONTENT).end();
 });
 
 module.exports = router;
