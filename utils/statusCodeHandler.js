@@ -1,7 +1,19 @@
-const OK = { code: 200 };
-const CREATED = { code: 201 };
-const NO_CONTENT = { code: 204 };
-const CONFLICT = { code: 409, message: 'Usuário já existe' };
+const OK = {
+  code: 200,
+};
+
+const CREATED = {
+  code: 201,
+};
+
+const NO_CONTENT = {
+  code: 204,
+};
+
+const CONFLICT = {
+  code: 409,
+  message: 'Usuário já existe',
+};
 
 const BAD_REQUEST = {
   code: 400,
@@ -11,6 +23,9 @@ const BAD_REQUEST = {
     requiredEmail: '"email" is required',
     invalidPassword: '"password" length must be 6 characters long',
     requiredPassword: '"password" is required',
+    emptyPassword: '"password" is not allowed to be empty',
+    emptyEmail: '"email" is not allowed to be empty',
+    invalidLogin: 'Campos inválidos',
   },
 };
 
