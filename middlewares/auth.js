@@ -18,18 +18,17 @@ const tokenValidation = async (req, res, next) => {
     return res.status(UNAUTHORIZED).json(
       {
         message: 'Token não encontrado',
-      }
+      },
     );
   }
   try {
     const payload = verifyToken(authorization, SECRET);
     req.payload = payload;
   } catch (error) {
-
     return res.status(UNAUTHORIZED).json(
       {
         message: 'Token expirado ou inválido',
-      }
+      },
     );
   }
 

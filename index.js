@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/user', UserRouter);
 app.use('/login', login);
 app.use('/post', post);
-const PORT = process.env.PORT;
+const PORT = 3000;
 
 app.listen(PORT, () => console.log(`hearing on the ${PORT}th door, mate!`));
 // não remova esse endpoint, e para o avaliador funcionar
