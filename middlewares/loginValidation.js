@@ -16,7 +16,6 @@ const loginValidation = (req, res, next) => {
   }
   if (email === undefined) {
     message = EMAIL_REQUIRED;
-  
     return res.status(BAD_REQUEST).json({ message });
   }
   if (!emailValidation(email)) {
@@ -33,5 +32,4 @@ const loginValidation = (req, res, next) => {
   }
   return next();
 };
-
 module.exports = { loginValidation };

@@ -6,16 +6,16 @@ const postValidation = (req, res, next) => {
   if (!title) {
     return res.status(BAD_REQUEST).json(
       {
-        message: '"title" is required'
-      }
+        message: '"title" is required',
+      },
     );
   }
-    
+
   if (!content) {
     return res.status(BAD_REQUEST).json(
       {
-        message: '"content" is required'
-      }
+        message: '"content" is required',
+      },
     );
   }
   return next();
