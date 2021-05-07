@@ -12,7 +12,7 @@ const OK = 200;
 router.get('/', tokenIsValid, async (req, res) => {
   const foundPost = await blogPostService.findAllPosts();
 
-  res.status(OK).json(foundPost);
+  return res.status(OK).json(foundPost);
 });
 
 router.get('/:id', tokenIsValid, async (req, res) => {
@@ -38,10 +38,10 @@ router.put('/:id', tokenIsValid, validatePost, async (req, res) => {
   const { title, content } = req.body;
   const updatePost = await blogPostService.updatePost(id, title, content, userId);
   if (updatePost.isError) {
-    res.status(updatePost.status).json({ message: updatePost.message });
+    return res.status(updatePost.status).json({ message: updatePost.message });
   }
 
-  res.status(OK).json(updatePost);
+  return res.status(OK).json(updatePost);
 });
 
 module.exports = router;
