@@ -1,7 +1,7 @@
 const { BlogPosts } = require('../models');
 
 const NOT_FOUND = 404;
-const UNAUTHORIZED = 401; 
+const UNAUTHORIZED = 401;
 
 const findAllPosts = async () => {
   const foundPosts = await BlogPosts.findAll({
