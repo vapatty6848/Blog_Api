@@ -4,7 +4,7 @@ const emailValidation = (email) => {
   return emailCheck;
 };
 
-const MIN_NAME_LENTGH = 8;
+const minLength = 8;
 const BAD_REQUEST = 400;
 
 const registerValidation = (req, res, next) => {
@@ -19,7 +19,7 @@ const registerValidation = (req, res, next) => {
     passIsInvalid: '"password" length must be 6 characters long',
 
   };
-  if (displayName.length < MIN_NAME_LENTGH) {
+  if (displayName.length < minLength) {
     return res.status(BAD_REQUEST).json(
       {
         message: message.displayName
