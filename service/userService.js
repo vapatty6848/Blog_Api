@@ -11,7 +11,7 @@ const validateCreateUser = async (query) => {
 
   const userCreated = await User.create(query);
   const { password, email, ...user } = userCreated;
-  console.log(user);
+
   const token = createToken(user);
 
   return token;
@@ -19,18 +19,27 @@ const validateCreateUser = async (query) => {
 
 const getAllUsers = async () => {
   const allUsers = await User.findAll();
+
   return allUsers;
 };
 
 const getUSerById = async (id) => {
   const userByID = await User.findOne({ where: { id } });
+
   if (!userByID) return null;
 
   return userByID;
+};
+
+const deleteUser = async (id) => {
+  const deletedUser = await User.destroy({ where: { id } });
+
+  return deletedUser;
 };
 
 module.exports = {
   validateCreateUser,
   getAllUsers,
   getUSerById,
+  deleteUser,
 };

@@ -26,6 +26,8 @@ const BAD_REQUEST = {
     emptyPassword: '"password" is not allowed to be empty',
     emptyEmail: '"email" is not allowed to be empty',
     invalidLogin: 'Campos inválidos',
+    requiredTitle: '"title" is required',
+    requiredContent: '"content" is required',
   },
 };
 
@@ -41,6 +43,7 @@ const NOT_FOUND = {
   code: 404,
   message: {
     userNotFound: 'Usuário não existe',
+    postNotFound: 'Post não existe',
   },
 };
 
