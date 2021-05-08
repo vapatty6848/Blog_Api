@@ -32,9 +32,15 @@ const BAD_REQUEST = {
 const UNAUTHORIZED = {
   code: 401,
   message: {
-    requiredField: 'All fields must be filled',
-    incorrectField: 'Incorrect username or password',
-    invalidToken: 'Invalid token: not allowed to update this recipe',
+    tokenNotFound: 'Token não encontrado',
+    invalidToken: 'Token expirado ou inválido',
+  },
+};
+
+const NOT_FOUND = {
+  code: 404,
+  message: {
+    userNotFound: 'Usuário não existe',
   },
 };
 
@@ -45,4 +51,5 @@ module.exports = {
   CONFLICT,
   UNAUTHORIZED,
   NO_CONTENT,
+  NOT_FOUND,
 };
