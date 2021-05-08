@@ -22,7 +22,7 @@ const getPostById = async (id) => {
     include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }],
   });
 
-  if (!post) return null;
+  if (post.length === 0) return null;
 
   return post;
 };

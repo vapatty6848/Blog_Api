@@ -28,10 +28,10 @@ postsController.get('/:id', verifyToken, rescue(async (request, response) => {
   const getPost = await getPostById(id);
 
   if (!getPost) {
-    return response.status(NOT_FOUND.code).json({ message: NOT_FOUND.message.userNotFound });
+    return response.status(NOT_FOUND.code).json({ message: NOT_FOUND.message.postNotFound });
   }
 
-  response.status(OK.code).json(getPost);
+  response.status(OK.code).json(getPost[0]);
 }));
 
 module.exports = postsController;
