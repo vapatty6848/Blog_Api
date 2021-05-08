@@ -29,6 +29,26 @@ const validateUser = (req, res, next) => {
   next();
 };
 
+const validateLogin = (req, res, next) => {
+  const { email, password } = req.body;
+
+  // const testReg = regEx.test(email);
+  if (email === '') {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: '"email" is not allowed to be empty' });
+  }
+  if (password === '') {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: '"password" is not allowed to be empty' });
+  }
+  if (!email) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: '"email" is required' });
+  }
+  if (!password) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: '"password" is required' });
+  }
+  next();
+};
+
 module.exports = {
   validateUser,
+  validateLogin,
 };

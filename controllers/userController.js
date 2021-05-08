@@ -5,7 +5,7 @@ const {
   validateUser,
 } = require('../middlewares/validations');
 
-const verify = require('../middlewares/verifyEmail');
+const { verify } = require('../middlewares/verifyEmail');
 
 const { User } = require('../models');
 
