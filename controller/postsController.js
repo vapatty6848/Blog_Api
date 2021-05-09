@@ -3,7 +3,7 @@ const { Router } = require('express');
 
 const { validatePost } = require('../middlewares/validatePost');
 const { verifyToken } = require('../auth/validateJWT');
-const { createPost, getAllPosts, getPostById, updatePost } = require('../service/postService');
+const { createPost, getAllPosts, getPostById, updatePost, searchPostsByQuery } = require('../service/postService');
 
 const { CREATED, OK, NOT_FOUND, UNAUTHORIZED } = require('../utils/statusCodeHandler');
 
@@ -21,6 +21,14 @@ postsController.post('/', verifyToken, validatePost, rescue(async (request, resp
 postsController.get('/', verifyToken, rescue(async (request, response) => {
   const getPosts = await getAllPosts();
   response.status(OK.code).json(getPosts);
+}));
+
+postsController.get('/search', verifyToken, rescue(async (request, response) => {
+  const { q } = request.query;
+
+  const search = await searchPostsByQuery(q);
+
+  response.status(OK.code).json(search);
 }));
 
 postsController.get('/:id', verifyToken, rescue(async (request, response) => {
