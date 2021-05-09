@@ -23,12 +23,23 @@ router.post('/', validateUser, verify, async (req, res) => {
   });
 });
 
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', verifyToken, async (_req, res) => {
   await User.findAll().then((users) => {
-    const usersList = users.map((user) => user.dataValues);
+    const usersList = users.map((user) => {
+      const { password: _, ...userInfo } = user.dataValues;
+      return userInfo;
+    });
 
     return res.status(StatusCodes.OK).json(usersList);
   });
+});
+
+router.get('/:id', verifyToken, async (req, res) => {
+  const { id } = req.params;
+  await User.findByPk(id).then((user) => {
+    const { password: _, ...userInfo } = user.dataValues;
+    return res.status(StatusCodes.OK).json(userInfo);
+  }).catch((_e) => res.status(StatusCodes.NOT_FOUND).json({ message: 'Usuário não existe' }));
 });
 
 module.exports = router;
