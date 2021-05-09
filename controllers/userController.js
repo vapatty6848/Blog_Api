@@ -34,6 +34,11 @@ router.get('/', verifyToken, async (_req, res) => {
   });
 });
 
+router.delete('/me', verifyToken, async (req, res) => {
+  const { id } = req.payload;
+  await User.destroy({ where: { id } }).then(() => res.status(StatusCodes.NO_CONTENT).json());
+});
+
 router.get('/:id', verifyToken, async (req, res) => {
   const { id } = req.params;
   await User.findByPk(id).then((user) => {
