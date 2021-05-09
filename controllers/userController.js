@@ -1,6 +1,6 @@
 const express = require('express');
 const { StatusCodes } = require('http-status-codes');
-const { createToken } = require('../middlewares/tokenJWT');
+const { createToken, verifyToken } = require('../middlewares/tokenJWT');
 const {
   validateUser,
 } = require('../middlewares/validations');
@@ -18,8 +18,16 @@ router.post('/', validateUser, verify, async (req, res) => {
   //   return res.status(StatusCodes.CONFLICT).json({ message: 'Usuário já existe' });
   // }
   await User.create(body).then((user) => {
-    const token = createToken(user);
+    const token = createToken(user.dataValues);
     return res.status(StatusCodes.CREATED).json({ token });
+  });
+});
+
+router.get('/', verifyToken, async (req, res) => {
+  await User.findAll().then((users) => {
+    const usersList = users.map((user) => user.dataValues);
+
+    return res.status(StatusCodes.OK).json(usersList);
   });
 });
 

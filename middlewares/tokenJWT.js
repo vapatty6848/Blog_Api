@@ -5,6 +5,7 @@ require('dotenv').config();
 const secret = process.env.SECRET || 'milhoVerde';
 
 const createToken = (user) => {
+  console.log(user);
   const { password: _, ...payload } = user;
   const configRole = {
     expiresIn: '6h',
@@ -17,14 +18,14 @@ const createToken = (user) => {
 const verifyToken = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'missing auth token' });
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Token não encontrado' });
   }
   try {
     const payload = jwt.verify(authorization, secret);
     req.payload = payload;
     return next();
   } catch (error) {
-    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'jwt malformed' });
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
   }
 };
 
