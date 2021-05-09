@@ -36,6 +36,7 @@ const UNAUTHORIZED = {
   message: {
     tokenNotFound: 'Token não encontrado',
     invalidToken: 'Token expirado ou inválido',
+    userNotAuth: 'Usuário não autorizado',
   },
 };
 

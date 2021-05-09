@@ -1,15 +1,15 @@
 const rescue = require('express-rescue');
 const { Router } = require('express');
 
-const { validateCreatePost } = require('../middlewares/validatePost');
+const { validatePost } = require('../middlewares/validatePost');
 const { verifyToken } = require('../auth/validateJWT');
-const { createPost, getAllPosts, getPostById } = require('../service/postService');
+const { createPost, getAllPosts, getPostById, updatePost } = require('../service/postService');
 
-const { CREATED, OK, NOT_FOUND } = require('../utils/statusCodeHandler');
+const { CREATED, OK, NOT_FOUND, UNAUTHORIZED } = require('../utils/statusCodeHandler');
 
 const postsController = Router();
 
-postsController.post('/', verifyToken, validateCreatePost, rescue(async (request, response) => {
+postsController.post('/', verifyToken, validatePost, rescue(async (request, response) => {
   const { id } = request.user.dataValues;
   const { title, content } = request.body;
 
@@ -32,6 +32,22 @@ postsController.get('/:id', verifyToken, rescue(async (request, response) => {
   }
 
   response.status(OK.code).json(getPost[0]);
+}));
+
+postsController.put('/:id', verifyToken, validatePost, rescue(async (request, response) => {
+  const { id } = request.params;
+  const { title, content } = request.body;
+  const { id: userId } = request.user.dataValues;
+
+  const updatedPost = await updatePost(title, content, userId, id);
+
+  if (!updatedPost) {
+    return response
+      .status(UNAUTHORIZED.code)
+      .json({ message: UNAUTHORIZED.message.userNotAuth });
+  }
+
+  response.status(OK.code).json(updatedPost);
 }));
 
 module.exports = postsController;
