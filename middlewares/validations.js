@@ -48,7 +48,20 @@ const validateLogin = (req, res, next) => {
   next();
 };
 
+const validatePost = (req, res, next) => {
+  const { body } = req;
+
+  if (!body.title) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: '"title" is required' });
+  }
+  if (!body.content) {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: '"content" is required' });
+  }
+  next();
+};
+
 module.exports = {
   validateUser,
   validateLogin,
+  validatePost,
 };
