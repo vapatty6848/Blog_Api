@@ -9,26 +9,20 @@ const PASSWORD_REQUIRED = '"password" is required';
 
 const loginValidation = (req, res, next) => {
   const { email, password } = req.body;
-  let message;
   if (email === '') {
-    message = NOT_ALLOWED;
-    return res.status(BAD_REQUEST).json({ message });
+    return res.status(BAD_REQUEST).json({ message: NOT_ALLOWED });
   }
   if (email === undefined) {
-    message = EMAIL_REQUIRED;
-    return res.status(BAD_REQUEST).json({ message });
+    return res.status(BAD_REQUEST).json({ message: EMAIL_REQUIRED });
   }
   if (!emailValidation(email)) {
-    message = EMAIL_VALID;
-    return res.status(BAD_REQUEST).json({ message });
+    return res.status(BAD_REQUEST).json({ message: EMAIL_VALID });
   }
   if (password === '') {
-    message = PASSWORD_EMPTY;
-    return res.status(BAD_REQUEST).json({ message });
+    return res.status(BAD_REQUEST).json({ message: PASSWORD_EMPTY });
   }
   if (password === undefined) {
-    message = PASSWORD_REQUIRED;
-    return res.status(BAD_REQUEST).json({ message });
+    return res.status(BAD_REQUEST).json({ message: PASSWORD_REQUIRED });
   }
   return next();
 };

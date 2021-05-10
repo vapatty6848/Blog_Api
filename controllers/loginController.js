@@ -2,7 +2,8 @@ const { Router } = require('express');
 
 const models = require('../models');
 const { loginValidation } = require('../middlewares/loginValidation');
-const { createToken } = require('../middlewares/loginValidation');
+const { createToken } = require('../middlewares/auth');
+
 
 const SUCCESS = 200;
 const BAD_REQUEST = 400;

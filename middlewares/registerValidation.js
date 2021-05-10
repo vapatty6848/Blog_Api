@@ -3,17 +3,19 @@ const emailValidation = (email) => {
   const emailCheck = regex.test(email);
   return emailCheck;
 };
+
 const minLength = 8;
 const BAD_REQUEST = 400;
+
 const registerValidation = (req, res, next) => {
   const { displayName, email, password } = req.body;
 
   if (displayName.length < minLength) {
     return res.status(BAD_REQUEST).json({ message: '"displayName" length must be at least 8 characters long' });
   } if (!email) {
-    return res.status(BAD_REQUEST).json({ message: '"email" is required' });
+    return res.status(BAD_REQUEST).json({ message: '"email" is required'});
   } if (!emailValidation(email)) {
-    return res.status(BAD_REQUEST).json({ message: '"email" must be a valid email' });
+    return res.status(BAD_REQUEST).json({ message: '"email" must be a valid email', });
   } if (!password) {
     return res.status(BAD_REQUEST).json({ message: '"password" is required' });
   } if (String(password).length < 6) {

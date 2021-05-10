@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const SECRET = 'CanYouKeepASecret';
-const config = { algorithm: 'HS256', expiresIn: '7d' };
+const config = { algorithm: 'HS256', expiresIn: '30d' };
 
 const UNAUTHORIZED = 401;
 
