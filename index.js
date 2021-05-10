@@ -12,11 +12,9 @@ app.use('/login', login);
 app.use('/post', post);
 const PORT = 3000;
 
-
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.send();
 });
-
 
 app.listen(PORT, () => console.log(`hearing on the ${PORT}th door, mate!`));

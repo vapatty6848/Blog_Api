@@ -4,7 +4,6 @@ const models = require('../models');
 const { loginValidation } = require('../middlewares/loginValidation');
 const { createToken } = require('../middlewares/auth');
 
-
 const SUCCESS = 200;
 const BAD_REQUEST = 400;
 const INVALID_FIELD = 'Campos inválidos';
@@ -30,7 +29,7 @@ login.post('/', loginValidation, async (req, res) => {
       },
     );
   }
-  const token = await createToken(user);
+  const token = createToken(user);
 
   return res.status(SUCCESS).json({ token });
 });
