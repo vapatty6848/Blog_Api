@@ -9,3 +9,5 @@ user.delete('/me', authorization, User.destroyUser);
 user.get('/:id', authorization, User.getById);
 user.get('/', authorization, User.getAllUsers);
 user.post('/', User.createUser);
+
+module.exports = user;
