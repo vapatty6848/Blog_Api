@@ -15,7 +15,7 @@ const registerValidation = (req, res, next) => {
   } if (!email) {
     return res.status(BAD_REQUEST).json({ message: '"email" is required' });
   } if (!emailValidation(email)) {
-    return res.status(BAD_REQUEST).json({ message: '"email" must be a valid email'});
+    return res.status(BAD_REQUEST).json({ message: '"email" must be a valid email' });
   } if (!password) {
     return res.status(BAD_REQUEST).json({ message: '"password" is required' });
   } if (String(password).length < 6) {
