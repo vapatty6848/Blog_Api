@@ -1,4 +1,5 @@
 const express = require('express');
+const { Op } = require('sequelize');
 const { BlogPost, User } = require('../models');
 const { registerPost } = require('../middlewares/PostMid');
 const { verifyToken } = require('../middlewares/UserMid');
@@ -24,7 +25,6 @@ postRouter.get('/', verifyToken, async (req, res) => {
     });
     return res.status(200).json(posts);
   } catch (error) {
-    console.log(error.message);
     return res.status(500).json({ message: 'Algo deu errado' });
   }
 });
@@ -35,6 +35,32 @@ postRouter.get('/:id', verifyToken, async (req, res) => {
     const post = await BlogPost.findOne({ where: { id }, include: [{ model: User, as: 'user' }] });
     if (post) return res.status(200).json(post);
     return res.status(404).json({ message: 'Post não existe' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Algo deu errado' });
+  }
+});
+
+postRouter.get('/search', verifyToken, async (req, res) => {
+  try {
+    const searchTerm = req.query.q;
+    const { email } = req.userData;
+    const user = await User.findOne({ where: { email } });
+    const idUser = user.dataValues.id;
+    const posts = await BlogPost.findAll({
+      include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+      where: { idUser, [Op.or]: [
+        { title: { [Op.like]: `%${searchTerm}%` } },
+        { content: { [Op.like]: `${searchTerm}%` } },
+      ],
+      } });
+    if (searchTerm === '') {
+      const allPosts = await BlogPost.findAll({
+        include: { model: User, as: 'user', attributes: { exclude: 'password' } },
+        where: { userId: idUser },
+      });
+      return res.status(200).json(allPosts);
+    }
+    return res.status(200).json(posts);
   } catch (error) {
     return res.status(500).json({ message: 'Algo deu errado' });
   }
@@ -61,7 +87,6 @@ postRouter.delete('/:id', verifyToken, async (req, res) => {
 postRouter.put('/:id', registerPost, verifyToken, async (req, res) => {
   try {
     const { title: titlePost, content: contentPost } = req.body;
-    console.log(titlePost, contentPost, 'title e contentttt');
     const { userData } = req;
     const tokenUserId = userData.id; // id do user
     const { id: idPost } = req.params; // id do post

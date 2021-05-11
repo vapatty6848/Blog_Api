@@ -15,7 +15,6 @@ userRouter.get('/', verifyToken, async (_req, res) => {
     const users = await User.findAll();
     return res.status(200).json(users);
   } catch (error) {
-    console.log(error.message);
     return res.status(500).json({ message: 'Algo deu errado' });
   }
 });
