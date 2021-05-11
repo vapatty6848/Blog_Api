@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-// const { User } = require('../models');
+const { BlogPost } = require('../models');
 
 const regEx = /[A-Za-z0-9]+@[A-Za-z]+[A-z]*(\.\w{2,3})+/;
 
@@ -60,8 +60,21 @@ const validatePost = (req, res, next) => {
   next();
 };
 
+const confirmUser = async (req, res, next) => {
+  const { params: { id }, payload: { id: userIdPayload } } = req;
+  const postResult = await BlogPost.findByPk(id);
+  const userIdPost = postResult.dataValues.userId;
+  console.log('id params: ', id, '| id user: ', userIdPayload);
+  console.log('resultado da query: ', postResult.dataValues.userId);
+  if (userIdPayload !== userIdPost) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Usuário não autorizado' });
+  }
+  next();
+};
+
 module.exports = {
   validateUser,
   validateLogin,
   validatePost,
+  confirmUser,
 };

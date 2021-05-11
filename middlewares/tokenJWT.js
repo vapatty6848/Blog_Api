@@ -5,7 +5,6 @@ require('dotenv').config();
 const secret = process.env.SECRET || 'milhoVerde';
 
 const createToken = (user) => {
-  console.log(user);
   const { password: _, ...payload } = user;
   const configRole = {
     expiresIn: '6h',

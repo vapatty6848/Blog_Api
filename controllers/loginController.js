@@ -17,7 +17,6 @@ router.post('/', validateLogin, verifyLogin, async (req, res) => {
   await User.findOne({
     where: body,
   }).then((login) => {
-    console.log('login aqui:', login);
     const token = createToken(login.dataValues);
     return res.status(StatusCodes.OK).json({ token });
   }).catch(() => res.status(StatusCodes.BAD_REQUEST).json({ message: 'Campos inválidos' }));
