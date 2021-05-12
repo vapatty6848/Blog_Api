@@ -1,13 +1,13 @@
 const DISPLAY_NAME_MIN_LENGTH = 8;
 const PASSWORD_MIN_LENGTH = 6;
 
-const validEmail = (email) => /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/.test(email);
-const validName = (name) => name.length < DISPLAY_NAME_MIN_LENGTH;
+const validateName = (name) => name.length < DISPLAY_NAME_MIN_LENGTH;
+const validateEmail = (email) => /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+$/.test(email);
 
-const validUserData = (request, response, next) => {
+const validateUserData = (request, response, next) => {
   const { displayName, email, password } = request.body;
   let message;
-  if (validName(displayName)) {
+  if (validateName(displayName)) {
     message = '"displayName" length must be at least 8 characters long';
     return response.status(400).json({ message });
   }
@@ -23,14 +23,14 @@ const validUserData = (request, response, next) => {
     message = '"password" length must be 6 characters long';
     return response.status(400).json({ message });
   }
-  if (!validEmail(email)) {
+  if (!validateEmail(email)) {
     message = '"email" must be a valid email';
     return response.status(400).json({ message });
   }
   next();
 };
 
-const validLogin = (request, response, next) => {
+const validateLogin = (request, response, next) => {
   const { email, password } = request.body;
   let message;
   if (!email && email !== '') {
@@ -52,4 +52,7 @@ const validLogin = (request, response, next) => {
   next();
 };
 
-module.exports = { validUserData, validLogin };
+module.exports = {
+  validateUserData,
+  validateLogin,
+};
