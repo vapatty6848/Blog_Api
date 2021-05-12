@@ -1,39 +1,51 @@
 const { Router } = require('express');
 
-const { User } = require('../models');
-const { validateUserData } = require('../middlewares/validateUserData');
+const UserService = require('../services/userService');
+const { validateUser } = require('../middlewares/validateUserData');
 const { createToken, validateToken } = require('../auth/token');
-const { createUser } = require('../services/UserService');
 
-const UserController = new Router();
+const router = new Router();
 
-UserController.get('/', validateToken, async (request, response) => {
-  const users = await User.findAll({});
-  response.status(200).json(users);
-});
+router.post('/', validateUser, async (req, res) => {
+  const { displayName, email, password, image } = req.body;
 
-UserController.get('/:id', async (request, response) => {
-  response.status(200).json({ message: 'UserController' });
-});
-
-UserController.post('/', validateUserData, async (request, response) => {
-  const { displayName, email, password, image } = request.body;
-
-  const user = await User.findOne({ where: { email } });
+  const user = await UserService.getUserByEmail(email);
 
   if (user) {
-    return response.status(409).json({ message: 'Usuário já existe' });
+    return res.status(409).json({ message: 'Usuário já existe' });
   }
 
-  await createUser(displayName, email, password, image);
+  await UserService.createUser(displayName, email, password, image);
 
   const token = createToken(email);
 
-  return response.status(201).json({ token });
+  return res.status(201).json({ token });
 });
 
-UserController.delete('/me', async (request, response) => {
-  response.status(200).json({ message: 'UserController' });
+router.get('/', validateToken, async (_req, res) => {
+  const users = await UserService.getAllUsers();
+
+  return res.status(200).json(users);
 });
 
-module.exports = UserController;
+router.get('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+
+  const user = await UserService.getUserById(id);
+
+  if (!user) {
+    return res.status(404).json({ message: 'Usuário não existe' });
+  }
+
+  return res.status(200).json(user);
+});
+
+router.delete('/me', validateToken, async (req, res) => {
+  const { email } = req.user;
+
+  await UserService.deleteUserByEmail(email);
+
+  return res.status(204).json({});
+});
+
+module.exports = router;

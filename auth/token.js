@@ -1,27 +1,31 @@
-const UNAUTHORIZED = 401;
-
 const jwt = require('jsonwebtoken');
 
-const SECRET = 'mySecretKey';
 const config = { algorithm: 'HS256', expiresIn: '1d' };
+const tokenPassword = '123456';
 
 const createToken = (email) => {
-  const token = jwt.sign({ user: { email } }, config, SECRET);
+  const token = jwt.sign({ user: { email } }, tokenPassword, config);
   return token;
 };
 
-const validateToken = async (request, response, next) => {
-  const token = request.headers.authorization;
+const validateToken = async (req, res, next) => {
+  const token = req.headers.authorization;
+
   if (!token) {
-    return response.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
+    return res.status(401).json({ message: 'Token não encontrado' });
   }
+
   try {
-    const decoded = jwt.verify(token, SECRET);
-    request.user = decoded.user;
+    const decoded = jwt.verify(token, tokenPassword);
+    req.user = decoded.user;
   } catch (err) {
-    return response.status(UNAUTHORIZED).json({ message: 'Token expirado ou inválido' });
+    return res.status(401).json({ message: 'Token expirado ou inválido' });
   }
+
   next();
 };
 
-module.exports = { createToken, validateToken };
+module.exports = {
+  createToken,
+  validateToken,
+};

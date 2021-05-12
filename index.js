@@ -1,20 +1,25 @@
 const express = require('express');
 
-const UserController = require('./controllers/UserController');
-const LoginController = require('./controllers/LoginController');
-const PostController = require('./controllers/PostController');
+const {
+  UserController,
+  LoginController,
+  PostController,
+} = require('./controllers');
 
 const app = express();
+const PORT = 3000;
 
 app.use(express.json());
 
 // não remova esse endpoint, e para o avaliador funcionar
-app.get('/', (request, response) => {
+app.get('/', (_request, response) => {
   response.send();
 });
 
 app.use('/user', UserController);
+
 app.use('/login', LoginController);
+
 app.use('/post', PostController);
 
-app.listen(3000, () => console.log('ouvindo na porta 3000!'));
+app.listen(PORT, () => console.log(`ouvindo porta ${PORT}!`));

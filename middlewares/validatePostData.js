@@ -1,12 +1,14 @@
-const validatePostData = (request, response, next) => {
-  const { title, content } = request.body;
+const validatePost = (req, res, next) => {
+  const { title, content } = req.body;
+
   if (!title) {
-    return response.status(400).json({ message: '"title" is required' });
+    return res.status(400).json({ message: '"title" is required' });
   }
   if (!content) {
-    return response.status(400).json({ message: '"content" is required' });
+    return res.status(400).json({ message: '"content" is required' });
   }
+
   next();
 };
 
-module.exports = { validatePostData };
+module.exports = { validatePost };

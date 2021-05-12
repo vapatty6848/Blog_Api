@@ -1,22 +1,23 @@
 const { Router } = require('express');
 
-const { findUserByEmail } = require('../services/LoginService');
+const UserService = require('../services/userService');
 const { validateLogin } = require('../middlewares/validateUserData');
 const { createToken } = require('../auth/token');
 
-const LoginController = new Router();
+const router = new Router();
 
-LoginController.post('/', validateLogin, async (request, response) => {
-  const { email } = request.body;
+router.post('/', validateLogin, async (req, res) => {
+  const { email } = req.body;
 
-  const user = await findUserByEmail(email);
+  const user = await UserService.getUserByEmail(email);
 
   if (!user) {
-    return response.status(400).json({ message: 'Campos inválidos' });
+    return res.status(400).json({ message: 'Campos inválidos' });
   }
 
   const token = createToken(email);
-  return response.status(200).json({ token });
+
+  return res.status(200).json({ token });
 });
 
-module.exports = LoginController;
+module.exports = router;

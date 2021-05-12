@@ -1,5 +1,9 @@
-import LoginController from './LoginController';
-import PostController from './PostController';
-import UserController from './UserController';
+const UserController = require('./UserController');
+const LoginController = require('./LoginController');
+const PostController = require('./PostController');
 
-export { LoginController, PostController, UserController };
+module.exports = {
+  UserController,
+  LoginController,
+  PostController,
+};

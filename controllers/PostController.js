@@ -1,81 +1,97 @@
 const { Router } = require('express');
 
-const { validatePostData } = require('../middlewares/validatePostData');
+const BlogPostService = require('../services/BlogPostService');
+const UserService = require('../services/userService');
+const { validatePost } = require('../middlewares/validatePostData');
 const { validateToken } = require('../auth/token');
-const { getUserByEmail } = require('../services/UserService');
-const { getAllPostsByUser, getUserPostsBySearchTerm, getUserPostById, createPost, updateUserPostById, deleteUserPostById } = require('../services/BlogPostService');
 
-const PostController = new Router();
+const router = new Router();
 
-PostController.get('/', validateToken, async (request, response) => {
-  const { email } = request.user;
-  const user = await getUserByEmail(email);
+router.post('/', validateToken, validatePost, async (req, res) => {
+  const { title, content } = req.body;
+  const { email } = req.user;
+
+  const user = await UserService.getUserByEmail(email);
+
   const userId = user.dataValues.id;
-  const posts = await getAllPostsByUser(userId);
-  return response.status(200).json(posts);
+
+  const post = await BlogPostService.createPost(userId, title, content);
+
+  return res.status(201).json(post);
 });
 
-PostController.get('/search', validateToken, async (request, response) => {
-  const searchTerm = request.query.q;
-  const { email } = request.user;
-  const user = await getUserByEmail(email);
+router.get('/', validateToken, async (req, res) => {
+  const { email } = req.user;
+
+  const user = await UserService.getUserByEmail(email);
+
   const userId = user.dataValues.id;
-  const posts = await getUserPostsBySearchTerm(userId, searchTerm);
-  return response.status(200).json(posts);
+
+  const posts = await BlogPostService.getAllPostsByUser(userId);
+
+  return res.status(200).json(posts);
 });
 
-PostController.get('/:id', validateToken, async (request, response) => {
-  const { id } = request.params;
-  const { email } = request.user;
-  const user = await getUserByEmail(email);
+router.get('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const { email } = req.user;
+
+  const user = await UserService.getUserByEmail(email);
+
   const userId = user.dataValues.id;
-  const post = await getUserPostById(id);
+
+  const post = await BlogPostService.getUserPostById(id);
+
   if (!post || post.dataValues.userId !== userId) {
-    return response.status(404).json({ message: 'Post não existe' });
+    return res.status(404).json({ message: 'Post não existe' });
   }
-  return response.status(200).json(post);
+
+  return res.status(200).json(post);
 });
 
-PostController.post('/', validateToken, validatePostData, async (request, response) => {
-  const { title, content } = request.body;
-  const { email } = request.user;
-  const user = await getUserByEmail(email);
-  const userId = user.dataValues.id;
-  const post = await createPost(userId, title, content);
-  return response.status(201).json(post);
-});
+router.put('/:id', validateToken, validatePost, async (req, res) => {
+  const { title, content } = req.body;
+  const { email } = req.user;
+  const { id } = req.params;
 
-PostController.put('/:id', validateToken, validatePostData, async (request, response) => {
-  const { title, content } = request.body;
-  const { email } = request.user;
-  const { id } = request.params;
-  const user = await getUserByEmail(email);
+  const user = await UserService.getUserByEmail(email);
+
   const userId = user.dataValues.id;
-  const post = await getUserPostById(id);
+
+  const post = await BlogPostService.getUserPostById(id);
+
   if (!post) {
-    return response.status(404).json({ message: 'Post não existe' });
+    return res.status(404).json({ message: 'Post não existe' });
   }
   if (post.dataValues.userId !== userId) {
-    return response.status(401).json({ message: 'Usuário não autorizado' });
+    return res.status(401).json({ message: 'Usuário não autorizado' });
   }
-  await updateUserPostById(userId, id, title, content);
-  return response.status(200).json({ title, content, userId });
+
+  await BlogPostService.updateUserPostById(userId, id, title, content);
+
+  return res.status(200).json({ title, content, userId });
 });
 
-PostController.delete('/:id', validateToken, async (request, response) => {
-  const { email } = request.user;
-  const { id } = request.params;
-  const user = await getUserByEmail(email);
+router.delete('/:id', validateToken, async (req, res) => {
+  const { email } = req.user;
+  const { id } = req.params;
+
+  const user = await UserService.getUserByEmail(email);
+
   const userId = user.dataValues.id;
-  const post = await getUserPostById(id);
+
+  const post = await BlogPostService.getUserPostById(id);
+
   if (!post) {
-    return response.status(404).json({ message: 'Post não existe' });
+    return res.status(404).json({ message: 'Post não existe' });
   }
   if (post.dataValues.userId !== userId) {
-    return response.status(401).json({ message: 'Usuário não autorizado' });
+    return res.status(401).json({ message: 'Usuário não autorizado' });
   }
-  await deleteUserPostById(userId, id);
-  return response.status(204).json();
+
+  await BlogPostService.deleteUserPostById(userId, id);
+
+  return res.status(204).json();
 });
 
-module.exports = PostController;
+module.exports = router;
