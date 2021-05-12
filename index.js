@@ -1,9 +1,9 @@
 const express = require('express');
 
 const {
-  UserController,
-  LoginController,
-  PostController,
+  userController,
+  loginController,
+  postController,
 } = require('./controllers');
 
 const app = express();
@@ -16,10 +16,10 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.use('/user', UserController);
+app.use('/user', userController);
 
-app.use('/login', LoginController);
+app.use('/login', loginController);
 
-app.use('/post', PostController);
+app.use('/post', postController);
 
 app.listen(PORT, () => console.log(`ouvindo porta ${PORT}!`));
