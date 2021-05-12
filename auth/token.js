@@ -1,7 +1,9 @@
 require('dotenv').config();
+
 const UNAUTHORIZED = 401;
 
 const jwt = require('jsonwebtoken');
+
 const SECRET = process.env.SECRET || 'mySecretKey';
 const config = { algorithm: 'HS256', expiresIn: '1d' };
 

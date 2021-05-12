@@ -2,12 +2,12 @@ const { Router } = require('express');
 
 const { validateUserData } = require('../middlewares/validateUserData');
 const { createToken, validateToken } = require('../auth/token');
-const { 
-  getAllUsers, 
-  createUser, 
-  deleteUserByEmail, 
-  getUserByEmail, 
-  getUserById 
+const {
+  getAllUsers,
+  createUser,
+  deleteUserByEmail,
+  getUserByEmail,
+  getUserById,
 } = require('../services/UserService');
 
 const UserController = new Router();

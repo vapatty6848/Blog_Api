@@ -2,7 +2,7 @@ const express = require('express');
 
 const PostController = require('./controllers/PostController');
 const UserController = require('./controllers/UserController');
-onst LoginController = require('./controllers/LoginController');
+const LoginController = require('./controllers/LoginController');
 const app = express();
 
 // não remova esse endpoint, e para o avaliador funcionar
