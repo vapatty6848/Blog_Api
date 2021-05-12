@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const UserService = require('../services/userService');
+const userService = require('../services/userService');
 const { validateLogin } = require('../middlewares/validateUserData');
 const { createToken } = require('../auth/token');
 
@@ -9,7 +9,7 @@ const router = new Router();
 router.post('/', validateLogin, async (req, res) => {
   const { email } = req.body;
 
-  const user = await UserService.getUserByEmail(email);
+  const user = await userService.getUserByEmail(email);
 
   if (!user) {
     return res.status(400).json({ message: 'Campos inválidos' });
