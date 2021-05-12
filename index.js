@@ -9,6 +9,8 @@ app.get('/', (_req, res) => {
   res.send();
 });
 app.use(express.json());
+app.enable('strict routing');
+app.set('strict routing', true);
 
 app.use('/user', users);
 app.use('/post', posts);
