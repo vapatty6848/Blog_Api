@@ -7,7 +7,7 @@ const { BlogPost, User } = require('../models');
 const { verifyToken } = require('../middlewares/tokenJWT');
 const { validatePost, confirmUser } = require('../middlewares/validations');
 
-const router = express.Router({ strict: true });
+const router = express.Router();
 
 router.post('/', verifyToken, validatePost, async (req, res) => {
   const { body, payload } = req;
@@ -51,7 +51,6 @@ router.put('/:id', verifyToken, confirmUser, validatePost, async (req, res) => {
     params: { id },
     payload: { id: userId },
   } = req;
-  console.log(id, 'usuario', userId);
   await BlogPost.update({ title, content }, { where: { id } })
     .then(() => {
       res.status(StatusCodes.OK).json({ title, content, userId });

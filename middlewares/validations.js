@@ -63,11 +63,11 @@ const validatePost = (req, res, next) => {
 const confirmUser = async (req, res, next) => {
   const { params: { id }, payload: { id: userIdPayload } } = req;
   const postResult = await BlogPost.findByPk(id);
-  const userIdPost = postResult.dataValues.userId;
-  console.log('id params: ', id, '| id user: ', userIdPayload);
-  console.log('resultado da query: ', postResult.dataValues.userId);
-  if (userIdPayload !== userIdPost) {
-    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Usuário não autorizado' });
+  if (postResult) {
+    const userIdPost = postResult.dataValues.userId;
+    if (userIdPayload !== userIdPost) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Usuário não autorizado' });
+    }
   }
   next();
 };

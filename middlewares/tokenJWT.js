@@ -14,7 +14,7 @@ const createToken = (user) => {
   return token;
 };
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) {
     return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Token não encontrado' });
