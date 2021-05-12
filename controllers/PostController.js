@@ -2,7 +2,7 @@ const { Router } = require('express');
 
 const BlogPostService = require('../services/blogPostService');
 const UserService = require('../services/userService');
-const { validatePost } = require('../middlewares/validatePost');
+const { validatePost } = require('../middlewares/validatePostData');
 const { validateToken } = require('../auth/token');
 
 const router = new Router();
