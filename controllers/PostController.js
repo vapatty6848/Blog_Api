@@ -1,8 +1,8 @@
 const { Router } = require('express');
 
-const BlogPostService = require('../services/BlogPostService');
-const userService = require('../services/userService');
-const { validatePost } = require('../middlewares/validatePostData');
+const BlogPostService = require('../services/blogPostService');
+const UserService = require('../services/userService');
+const { validatePost } = require('../middlewares/validatePost');
 const { validateToken } = require('../auth/token');
 
 const router = new Router();
@@ -11,7 +11,7 @@ router.post('/', validateToken, validatePost, async (req, res) => {
   const { title, content } = req.body;
   const { email } = req.user;
 
-  const user = await userService.getUserByEmail(email);
+  const user = await UserService.getUserByEmail(email);
 
   const userId = user.dataValues.id;
 
@@ -23,7 +23,7 @@ router.post('/', validateToken, validatePost, async (req, res) => {
 router.get('/', validateToken, async (req, res) => {
   const { email } = req.user;
 
-  const user = await userService.getUserByEmail(email);
+  const user = await UserService.getUserByEmail(email);
 
   const userId = user.dataValues.id;
 
@@ -36,7 +36,7 @@ router.get('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
   const { email } = req.user;
 
-  const user = await userService.getUserByEmail(email);
+  const user = await UserService.getUserByEmail(email);
 
   const userId = user.dataValues.id;
 
@@ -54,7 +54,7 @@ router.put('/:id', validateToken, validatePost, async (req, res) => {
   const { email } = req.user;
   const { id } = req.params;
 
-  const user = await userService.getUserByEmail(email);
+  const user = await UserService.getUserByEmail(email);
 
   const userId = user.dataValues.id;
 
@@ -76,7 +76,7 @@ router.delete('/:id', validateToken, async (req, res) => {
   const { email } = req.user;
   const { id } = req.params;
 
-  const user = await userService.getUserByEmail(email);
+  const user = await UserService.getUserByEmail(email);
 
   const userId = user.dataValues.id;
 
