@@ -26,9 +26,9 @@ router.get('/', validateToken, (_req, res) => {
 router.get('/search', validateToken, (req, res) => {
   const { q } = req.query;
   BlogPost.findAll({
-    where: { 
+    where: {
       [Op.or]: [{ title: { [Op.like]: `%${q}%` } },
-      { content: { [Op.like]: `%${q}%` } }] 
+        { content: { [Op.like]: `%${q}%` } }],
     },
     include: { association: 'user', attributes: { exclude: ['password'] } },
   })
