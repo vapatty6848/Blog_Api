@@ -1,5 +1,8 @@
 const frisby = require('frisby');
 const shell = require('shelljs');
+require('dotenv/config');
+
+console.log('teste', process.env.MYSQL_USER)
 
 const url = 'http://localhost:3000';
 
