@@ -22,7 +22,7 @@ LoginController.post('/', async (req, res) => {
   if (!loggingEmail) { return res.status(BAD_REQUEST).json({ message: '"email" is required' }); }
   if (!password) { return res.status(BAD_REQUEST).json({ message: '"password" is required' }); }
   const isEmailValid = emailValidator(loggingEmail);
-  const isEmailRegistered = await User.findOne({ where: { loggingEmail } });
+  const isEmailRegistered = await User.findOne({ where: { email: loggingEmail } });
   if (isEmailRegistered === null) {
     return res.status(BAD_REQUEST).json(invalidEntries);
   }
