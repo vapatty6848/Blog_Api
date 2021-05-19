@@ -15,6 +15,7 @@ const BlogPost = (sequelize, DataTypes) => {
   return blogPost;
 };
 
-// Olhei o PR do Lugh
+// Olhei o PR do Lugh, link:
+// https://github.com/tryber/sd-06-project-blogs-api/pull/93
 
 module.exports = BlogPost;
