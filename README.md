@@ -15,18 +15,14 @@ Começando pela API,  alguns endpoints (seguindo os princípios do REST)  conect
   * `npm install`
 
 ### Execução de testes unitários
-
 Vamos usar o Jest para executar os testes, use o comando a seguir para executar todos os testes: 
-
 ```sh
 npm test
 ```
 Caso queria executar só um arquivo de test use o seguinte comando, considerado que quer testar o arquivo `tests/createPost.test.js`:
-
 ```sh
 npm test tests/createPost.test.js
 ``
-
 # Como desenvolver
 ## Linter
 
@@ -54,7 +50,7 @@ Todas as "respostas" devem respeitar os [status do protocolo HTTP](https://devel
 
 ## Lista de Requisitos:
 
-### 1 - Sua aplicação deve ter o endpoint POST `/user`
+### 1 - A aplicação tem o endpoint POST `/user`
 - cadastrar um usuário com sucesso
 ![Cadastro com sucesso](./public/cadastrodeusuario.png)
 - não cadastrar usuário com o campo `displayName` menor que 8 caracteres]**
@@ -71,7 +67,7 @@ Todas as "respostas" devem respeitar os [status do protocolo HTTP](https://devel
 - não é possível cadastrar um usuário com email já existente
 ![Usuário Existente](./public/usuariojaexistente.png)
 
-### 2 - Sua aplicação deve ter o endpoint POST `/login`
+### 2 - A aplicação tem o endpoin POST `/login`
 - Caso algum desses campos seja inválido ou não exista um usuário correspondente no banco de dados, retorne um código de status 400 com o corpo `{ message: "Campos inválidos" }`
 - Caso esteja tudo certo com o login, a resposta deve ser um token `JWT`
 - com email, senha obrigatórios
@@ -81,7 +77,7 @@ Todas as "respostas" devem respeitar os [status do protocolo HTTP](https://devel
 ![Senha em branco](./public/senhabrancologin.png)
 ![Usuário não existe](./public/usuarionaoexiste.png)
 
-### 3 - Sua aplicação deve ter o endpoint GET `/user`
+### 3 - A aplicação tem o endpoint GET `/user`
 - A requisição deve ter token de autenticação nos headers e, caso contrário, retorne um código de `status 401
 ![Listar usuários](./public/listarusuarios.png)
 ![Token Vazio](./public/tokenvazio.png)
@@ -103,9 +99,7 @@ Todas as "respostas" devem respeitar os [status do protocolo HTTP](https://devel
 
 ### 6 - A aplicação tem o endpoint POST `/post`
 ![Criar blogspot com sucesso](./public/criarblogpost.png)
-
 ![blogpost sem content](./public/camposemtitle.png)
-
 ![blogpost sem content](./public/semcampocontent.png)
 ![blogpost sem token ](./public/criarpostsemtoken.png)
 ![blogpost com token inválido](./public/criarposttokeninvalido.png)
